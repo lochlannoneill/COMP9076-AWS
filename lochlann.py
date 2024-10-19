@@ -27,12 +27,12 @@ def load_users():
 # Authenticate existing user
 def login_user(users):
     while True:
-        username = input("Username (leave blank to exit): ")
+        username = read_nonempty_string("Username (leave blank to exit): ")
         if not username:
             print("Exiting program...")
             exit()
 
-        password = input("Password: ")
+        password = read_nonempty_string("Password: ")
         
         # Validate credentials
         if username in users and users[username]["password"] == password:
