@@ -1,5 +1,6 @@
 import os
 from reading_from_user import read_nonempty_string
+from reading_from_user import read_range_integer
 
 FILE_PASSWORDS = "passwords.txt"
 
@@ -54,15 +55,19 @@ def main():
     users = load_users()
     
     while True:
-        print("\n1. Login")
-        print("2. Register")
-        choice = input("Select (1 or 2): ")
+        MENU_OPTIONS = {
+            "Login": 1,
+            "Register": 2
+        }
         
-        if choice == "1":
+        # Use read_range_integer with dictionary values
+        choice = read_range_integer("Select valid option: ", min(MENU_OPTIONS.values()), max(MENU_OPTIONS.values()))
+        
+        if choice == MENU_OPTIONS["Login"]:
             if user_credentials:
                 print("Welcome, {user_credentials['username']}!")
                 return user_credentials
-        elif choice == "2":
+        elif choice == MENU_OPTIONS["Register"]:
             register_user()
         else:
             print("Invalid option. Please choose 1 or 2.")
