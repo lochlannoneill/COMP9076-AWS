@@ -51,38 +51,35 @@ def register_user():
     print(f"User '{username}' registered successfully.")
 
 # Display menu options and get user's option
-def display_menu():
+def handle_menu(users):
     MENU_OPTIONS = {
         "Login": 1,
         "Register": 2
     }
-    
+
     # Print menu options
     print("Press 'ctrl+c' to return/exit.")
     for option, number in MENU_OPTIONS.items():
-        print(f"{number}. {option}")
-    
+        print(f"{number}.\t{option}")
+
     # Get menu option
     option = read_range_integer("Select from menu: ", min(MENU_OPTIONS.values()), max(MENU_OPTIONS.values()))
-    return option
 
-# Handle menu
-def handle_menu(option, users):
-    if option == 1:  # Login
+    # Handle the user's choice
+    if option == MENU_OPTIONS["Login"]:  # Login
         user_credentials = login_user(users)
         if user_credentials:
             return user_credentials
-    elif option == 2:  # Register
+    elif option == MENU_OPTIONS["Register"]:  # Register
         register_user()
     else:
         print("Invalid menu option.")
-        
+ 
 def main():
     users = load_users()
     
     while True:
-        option = display_menu()
-        handle_menu(option, users)
+        handle_menu(users)
 
 if __name__ == "__main__":
     main()
