@@ -51,7 +51,7 @@ def register_user():
     
     # Append new user to file
     with open(FILE_PASSWORDS, "a") as file:
-        file.write(f"{username}\t{password}\t{access_key}\t{secret_key}\n")
+        file.write(f"\n{username}\t{password}\t{access_key}\t{secret_key}")
     
     print(f"User '{username}' registered successfully.")
 
