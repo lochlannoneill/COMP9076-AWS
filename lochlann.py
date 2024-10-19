@@ -33,6 +33,8 @@ def register_user():
 
 # Main function to control the login and registration flow
 def main():
+    users = load_users()
+    
     while True:
         print("\n1. Login")
         print("2. Register")
