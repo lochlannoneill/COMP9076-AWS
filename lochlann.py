@@ -18,6 +18,24 @@ def load_users():
                     }
     return users
 
+# Function to authenticate an existing user
+def login_user(users):
+    while True:
+        username = input("Username (leave blank to exit): ")
+        if not username:
+            print("Exiting program...")
+            exit()
+
+        password = input("Password: ")
+        
+        # Validate credentials
+        if username in users and users[username]["password"] == password:
+            print(f"Welcome, {username}!")
+            return users[username]
+        else:
+            print("Invalid username or password. Please try again.")
+
+
 # Register a new user
 def register_user():
     username = read_nonempty_string("Enter a new username: ")
@@ -42,7 +60,8 @@ def main():
         
         if choice == "1":
             if user_credentials:
-                print("To do: Implement user login")
+                print("Welcome, {user_credentials['username']}!")
+                return user_credentials
         elif choice == "2":
             register_user()
         else:
