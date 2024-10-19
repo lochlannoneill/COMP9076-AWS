@@ -10,13 +10,18 @@ def load_users():
     if os.path.exists(FILE_PASSWORDS):
         with open(FILE_PASSWORDS, "r") as file:
             for line in file:
-                if line.strip():
-                    username, password, access_key, secret_key = line.strip().split("\t")
-                    users[username] = {
-                        "password": password,
-                        "access_key": access_key,
-                        "secret_key": secret_key
-                    }
+                stripped_line = line.strip()
+                if stripped_line:  # Only process non-empty lines
+                    parts = stripped_line.split()  # Split by whitespace
+                    if len(parts) == 4:  # Ensure there are exactly 4 parts
+                        username, password, access_key, secret_key = parts
+                        users[username] = {
+                            "password": password,
+                            "access_key": access_key,
+                            "secret_key": secret_key
+                        }
+                    else:
+                        print(f"Skipping line due to incorrect format: {stripped_line}")
     return users
 
 # Function to authenticate an existing user
