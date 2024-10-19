@@ -1,10 +1,16 @@
-def read_input(prompt, validation_func, error_message):
+def read_input(prompt, validation_func, exception_type):
     while True:
-        user_input = input(prompt)
-        if validation_func(user_input):
-            return user_input
-        else:
-            print(error_message)
+        try:
+            user_input = input(prompt)
+            if validation_func(user_input):
+                return user_input
+            else:
+                print("Invalid input. Please try again.")
+        except exception_type:
+            print("An error occurred while reading input. Please try again.")
+        except KeyboardInterrupt:
+            print("\nInput interrupted. Exiting...")
+            exit()
 
 def read_nonempty_string(prompt):
     return read_input(
@@ -24,7 +30,7 @@ def read_integer(prompt):
     return int(read_input(
         prompt, 
         lambda s: s.isdigit() or (s.startswith('-') and s[1:].isdigit()), 
-        "Must be numeric..."
+        ValueError  # Pass the exception type
     ))
 
 def read_positive_integer(prompt):
@@ -49,11 +55,11 @@ def read_range_integer(prompt, min_range, max_range):
         print("Values out of range...please try again...")
 
 def read_float(prompt):
-    while True:
-        try:
-            return float(input(prompt))
-        except ValueError:
-            print("Must be numeric...")
+    return float(read_input(
+        prompt, 
+        lambda s: s.replace('.', '', 1).isdigit() or (s.startswith('-') and s[1:].replace('.', '', 1).isdigit()), 
+        ValueError  # Pass the exception type
+    ))
 
 def read_nonnegative_float(prompt):
     while True:
