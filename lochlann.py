@@ -27,7 +27,7 @@ def main():
             if user_credentials:
                 print("To do: Implement user login")
         elif choice == "2":
-            print("To do: Implement user registration")
+            register_user()
         else:
             print("Invalid option. Please choose 1 or 2.")
 
