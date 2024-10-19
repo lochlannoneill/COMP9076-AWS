@@ -58,11 +58,12 @@ def display_menu():
     }
     
     # Print menu options
+    print("Press 'ctrl+c' to return/exit.")
     for option, number in MENU_OPTIONS.items():
         print(f"{number}. {option}")
     
     # Get menu option
-    option = read_range_integer("Select valid option: ", min(MENU_OPTIONS.values()), max(MENU_OPTIONS.values()))
+    option = read_range_integer("Select from menu: ", min(MENU_OPTIONS.values()), max(MENU_OPTIONS.values()))
     return option
 
 # Handle menu
