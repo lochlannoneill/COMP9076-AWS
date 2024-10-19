@@ -64,11 +64,12 @@ def main():
             "Register": 2
         }
         
+        # Print menu options
         for option, number in MENU_OPTIONS.items():
             print(f"{number}. {option}")
         
+        # Get menu choice
         choice = read_range_integer("Select valid option: ", min(MENU_OPTIONS.values()), max(MENU_OPTIONS.values()))
-        
         if choice == MENU_OPTIONS["Login"]:
             if user_credentials:
                 print("Welcome, {user_credentials['username']}!")
