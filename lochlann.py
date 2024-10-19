@@ -6,8 +6,8 @@ FILE_PASSWORDS = "passwords.txt"
 # Function to load existing users from the passwords file
 def load_users():
     users = {}
-    if os.path.exists(PASSWORDS_FILE):
-        with open(PASSWORDS_FILE, "r") as file:
+    if os.path.exists(FILE_PASSWORDS):
+        with open(FILE_PASSWORDS, "r") as file:
             for line in file:
                 if line.strip():
                     username, password, access_key, secret_key = line.strip().split("\t")
