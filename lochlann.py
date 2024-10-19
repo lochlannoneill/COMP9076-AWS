@@ -67,8 +67,8 @@ def main():
         # Get menu choice
         choice = read_range_integer("Select valid option: ", min(MENU_OPTIONS.values()), max(MENU_OPTIONS.values()))
         if choice == MENU_OPTIONS["Login"]:
+            user_credentials = login_user(users)
             if user_credentials:
-                print("Welcome, {user_credentials['username']}!")
                 return user_credentials
         elif choice == MENU_OPTIONS["Register"]:
             register_user()
