@@ -65,6 +65,9 @@ def main():
             "Register": 2
         }
         
+        for option, number in MENU_OPTIONS.items():
+            print(f"{number}. {option}")
+        
         # Use read_range_integer with dictionary values
         choice = read_range_integer("Select valid option: ", min(MENU_OPTIONS.values()), max(MENU_OPTIONS.values()))
         
