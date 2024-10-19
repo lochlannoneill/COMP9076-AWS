@@ -1,135 +1,73 @@
 def read_input(prompt, validation_func, error_message):
     while True:
-        try:
-            user_input = input(prompt)
-            if validation_func(user_input):
-                return user_input
-            else:
-                print(error_message)
-        except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+        user_input = input(prompt)
+        if validation_func(user_input):
+            return user_input
+        else:
+            print(error_message)
 
 def read_nonempty_string(prompt):
-    while True:
-        s = input(prompt)
-        s_with_no_spaces = s.replace(' ', '')
-        if len(s_with_no_spaces) > 0 :
-            break
-        else:
-            print("Please type letters only")
-    return s
+    return read_input(
+        prompt, 
+        lambda s: len(s.replace(' ', '')) > 0, 
+        "Please type letters only"
+    )
 
 def read_nonempty_alphabetical_string(prompt):
-    something_is_wrong = True
-    while something_is_wrong:
-        s = input(prompt)
-        copy_without_spaces = s.replace(" ", "")
-        if len(s) > 0 and copy_without_spaces.isalpha():
-            something_is_wrong = False
-        else:
-            print("Letters only please...")
-    return s
-
-
-def read_positive_integer(prompt):
-    something_is_wrong= True
-    while something_is_wrong:
-        try:
-            number = int(input(prompt))
-            something_is_wrong = number <= 0
-            if number <= 0:
-                print("Number must be positive")
-        except:
-            print("Must be numeric...")
-    return number
-
+    return read_input(
+        prompt, 
+        lambda s: len(s) > 0 and s.replace(" ", "").isalpha(), 
+        "Letters only please..."
+    )
 
 def read_integer(prompt):
-    something_is_wrong= True
-    while something_is_wrong:
-        try:
-            number = int(input(prompt))
-            something_is_wrong = False
-        except:
-            print("Must be numeric...")
-    return number
+    return int(read_input(
+        prompt, 
+        lambda s: s.isdigit() or (s.startswith('-') and s[1:].isdigit()), 
+        "Must be numeric..."
+    ))
 
-
-def read_range_integer(prompt, min_range, max_range):
-    something_is_wrong = True
-    while something_is_wrong:
-        try:
-            number = int(input(prompt))
-            if min_range <= number <= max_range:
-                something_is_wrong = False
-            else:
-                print("Values out of range...please try again...")
-        except:
-            print("Must be numeric...")
-    return number
+def read_positive_integer(prompt):
+    while True:
+        number = read_integer(prompt)
+        if number > 0:
+            return number
+        print("Number must be positive")
 
 def read_nonnegative_integer(prompt):
-    something_is_wrong = True
-    while something_is_wrong:
-        try:
-            number = int(input(prompt))
-            if number >= 0:
-                something_is_wrong = False
-            else:
-                print("Non-negative numbers please...")
-        except:
-            print("Must be numeric...")
-    return number
+    while True:
+        number = read_integer(prompt)
+        if number >= 0:
+            return number
+        print("Non-negative numbers please...")
 
+def read_range_integer(prompt, min_range, max_range):
+    while True:
+        number = read_integer(prompt)
+        if min_range <= number <= max_range:
+            return number
+        print("Values out of range...please try again...")
 
 def read_float(prompt):
-    something_is_wrong = True
-    while something_is_wrong:
+    while True:
         try:
-            number = float(input(prompt))
-            something_is_wrong = False
-        except:
+            return float(input(prompt))
+        except ValueError:
             print("Must be numeric...")
-    return number
-
 
 def read_nonnegative_float(prompt):
-    something_is_wrong = True
-    while something_is_wrong:
-        try:
-            number = float(input(prompt))
-            if number >= 0:
-                something_is_wrong = False
-            else:
-                print("Non-negative numbers please...")
-        except:
-            print("Must be numeric...")
-    return number
-
+    while True:
+        number = read_float(prompt)
+        if number >= 0:
+            return number
+        print("Non-negative numbers please...")
 
 def read_range_float(prompt, min_range, max_range):
-    something_is_wrong = True
-    while something_is_wrong:
-        try:
-            number = float(input(prompt))
-            if min_range <= number <= max_range:
-                something_is_wrong = False
-            else:
-                print("Values out of range...please try again...")
-        except:
-            print("Must be numeric...")
-    return number
-
+    while True:
+        number = read_float(prompt)
+        if min_range <= number <= max_range:
+            return number
+        print("Values out of range...please try again...")
 
 def read_percentage_float(prompt):
-    something_is_wrong = True
-    while something_is_wrong:
-        try:
-            number = float(input(prompt))
-            if 100 >= number >= 0:
-                something_is_wrong = False
-            else:
-                print("Non-negative numbers please...")
-        except:
-            print("Must be numeric...")
-    return number
+    return read_range_float(prompt, 0.0, 100.0)
