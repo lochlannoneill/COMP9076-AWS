@@ -4,7 +4,7 @@ from reading_from_user import read_range_integer
 
 FILE_PASSWORDS = "passwords.txt"
 
-# Function to load existing users from the passwords file
+# Load existing users from passwords file
 def load_users():
     users = {}
     if os.path.exists(FILE_PASSWORDS):
@@ -24,7 +24,7 @@ def load_users():
                         print(f"Skipping line due to incorrect format: {stripped_line}")
     return users
 
-# Function to authenticate an existing user
+# Authenticate existing user
 def login_user(users):
     while True:
         username = input("Username (leave blank to exit): ")
@@ -42,7 +42,7 @@ def login_user(users):
             print("Invalid username or password. Please try again.")
 
 
-# Register a new user
+# Register new user
 def register_user():
     username = read_nonempty_string("Enter a new username: ")
     password = read_nonempty_string("Enter a password: ")
@@ -55,7 +55,6 @@ def register_user():
     
     print(f"User '{username}' registered successfully.")
 
-# Main function to control the login and registration flow
 def main():
     users = load_users()
     
@@ -68,7 +67,6 @@ def main():
         for option, number in MENU_OPTIONS.items():
             print(f"{number}. {option}")
         
-        # Use read_range_integer with dictionary values
         choice = read_range_integer("Select valid option: ", min(MENU_OPTIONS.values()), max(MENU_OPTIONS.values()))
         
         if choice == MENU_OPTIONS["Login"]:
