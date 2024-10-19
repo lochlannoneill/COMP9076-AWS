@@ -31,11 +31,13 @@ def login_user(users):
         password = read_nonempty_string("Password: ")
         
         # Validate credentials
-        if username in users and users[username]["password"] == password:
+        valid_user = username in users and users[username]["password"] == password
+        
+        if valid_user:
             print(f"Welcome, {username}!")
             return users[username]
-        else:
-            print("Invalid username or password. Please try again.")
+        
+        print("Invalid username or password. Please try again.")
 
 # Register new user
 def register_user():
