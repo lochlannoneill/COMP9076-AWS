@@ -3,6 +3,21 @@ from reading_from_user import read_nonempty_string
 
 FILE_PASSWORDS = "passwords.txt"
 
+# Function to load existing users from the passwords file
+def load_users():
+    users = {}
+    if os.path.exists(PASSWORDS_FILE):
+        with open(PASSWORDS_FILE, "r") as file:
+            for line in file:
+                if line.strip():
+                    username, password, access_key, secret_key = line.strip().split("\t")
+                    users[username] = {
+                        "password": password,
+                        "access_key": access_key,
+                        "secret_key": secret_key
+                    }
+    return users
+
 # Register a new user
 def register_user():
     username = read_nonempty_string("Enter a new username: ")
