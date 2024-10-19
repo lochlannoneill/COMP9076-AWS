@@ -16,21 +16,21 @@ def read_nonempty_string(prompt):
     return read_input(
         prompt, 
         lambda s: len(s.replace(' ', '')) > 0, 
-        "Please type letters only"
+        ValueError  # Pass the exception type
     )
 
 def read_nonempty_alphabetical_string(prompt):
     return read_input(
         prompt, 
         lambda s: len(s) > 0 and s.replace(" ", "").isalpha(), 
-        "Letters only please..."
+        ValueError  # Pass the exception type
     )
 
 def read_integer(prompt):
     return int(read_input(
         prompt, 
         lambda s: s.isdigit() or (s.startswith('-') and s[1:].isdigit()), 
-        ValueError  # Pass the exception type
+        (ValueError, TypeError)  # Pass the exception types
     ))
 
 def read_positive_integer(prompt):
@@ -58,7 +58,7 @@ def read_float(prompt):
     return float(read_input(
         prompt, 
         lambda s: s.replace('.', '', 1).isdigit() or (s.startswith('-') and s[1:].replace('.', '', 1).isdigit()), 
-        ValueError  # Pass the exception type
+        (ValueError, TypeError)  # Pass the exception types
     ))
 
 def read_nonnegative_float(prompt):
