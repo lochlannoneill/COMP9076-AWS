@@ -37,7 +37,6 @@ def login_user(users):
         else:
             print("Invalid username or password. Please try again.")
 
-
 # Register new user
 def register_user():
     username = read_nonempty_string("Enter a new username: ")
@@ -51,29 +50,38 @@ def register_user():
     
     print(f"User '{username}' registered successfully.")
 
+# Display menu options and get user's option
+def display_menu():
+    MENU_OPTIONS = {
+        "Login": 1,
+        "Register": 2
+    }
+    
+    # Print menu options
+    for option, number in MENU_OPTIONS.items():
+        print(f"{number}. {option}")
+    
+    # Get menu option
+    option = read_range_integer("Select valid option: ", min(MENU_OPTIONS.values()), max(MENU_OPTIONS.values()))
+    return option
+
+# Handle menu
+def handle_menu(option, users):
+    if option == 1:  # Login
+        user_credentials = login_user(users)
+        if user_credentials:
+            return user_credentials
+    elif option == 2:  # Register
+        register_user()
+    else:
+        print("Invalid menu option.")
+        
 def main():
     users = load_users()
     
     while True:
-        MENU_OPTIONS = {
-            "Login": 1,
-            "Register": 2
-        }
-        
-        # Print menu options
-        for option, number in MENU_OPTIONS.items():
-            print(f"{number}. {option}")
-        
-        # Get menu choice
-        choice = read_range_integer("Select valid option: ", min(MENU_OPTIONS.values()), max(MENU_OPTIONS.values()))
-        if choice == MENU_OPTIONS["Login"]:
-            user_credentials = login_user(users)
-            if user_credentials:
-                return user_credentials
-        elif choice == MENU_OPTIONS["Register"]:
-            register_user()
-        else:
-            print("Invalid option. Please choose 1 or 2.")
+        option = display_menu()
+        handle_menu(option, users)
 
 if __name__ == "__main__":
     main()
