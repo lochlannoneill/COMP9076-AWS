@@ -58,7 +58,7 @@ def handle_menu(users):
     }
 
     # Print menu options
-    print("Press 'ctrl+c' to return/exit.")
+    print("Press 'ctrl+c' to exit.")
     for option, number in MENU_OPTIONS.items():
         print(f"{number}.\t{option}")
 
