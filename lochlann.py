@@ -2,6 +2,7 @@ import os
 from reading_from_user import read_nonempty_string, read_range_integer
 
 FILE_PASSWORDS = "passwords.txt"
+FILE_FIELDS_COUNT = 4
 
 # Load existing users from passwords file
 def load_users():
@@ -12,7 +13,7 @@ def load_users():
                 stripped_line = line.strip()
                 if stripped_line:  # Only process non-empty lines
                     parts = stripped_line.split()  # Split by whitespace
-                    if len(parts) == 4:  # Ensure there are exactly 4 parts
+                    if len(parts) == FILE_FIELDS_COUNT:  # Ensure there are exactly 4 parts
                         username, password, access_key, secret_key = parts
                         users[username] = {
                             "password": password,
