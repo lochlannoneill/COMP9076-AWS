@@ -12,18 +12,23 @@ def read_input(prompt, validation_func, exception_type):
             print("\nInput interrupted. Exiting...")
             exit()
 
-def read_nonempty_string(prompt):
+def read_string(prompt, validation_func):
     return read_input(
         prompt, 
-        lambda s: len(s.replace(' ', '')) > 0, 
+        validation_func, 
         ValueError  # Pass the exception type
     )
 
-def read_nonempty_alphabetical_string(prompt):
-    return read_input(
+def read_nonempty_string(prompt):
+    return read_string(
         prompt, 
-        lambda s: len(s) > 0 and s.replace(" ", "").isalpha(), 
-        ValueError  # Pass the exception type
+        lambda s: len(s.replace(' ', '')) > 0
+    )
+
+def read_nonempty_alphabetical_string(prompt):
+    return read_string(
+        prompt, 
+        lambda s: len(s) > 0 and s.replace(" ", "").isalpha()
     )
 
 def read_integer(prompt):
