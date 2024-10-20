@@ -1,6 +1,5 @@
 import os
-from reading_from_user import read_nonempty_string
-from reading_from_user import read_range_integer
+from reading_from_user import read_nonempty_string, read_range_integer
 
 FILE_PASSWORDS = "passwords.txt"
 
