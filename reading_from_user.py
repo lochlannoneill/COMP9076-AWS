@@ -43,21 +43,21 @@ def read_positive_integer(prompt):
         number = read_integer(prompt)
         if number > 0:
             return number
-        print("Number must be positive")
+        print("Number must be positive.")
 
 def read_nonnegative_integer(prompt):
     while True:
         number = read_integer(prompt)
         if number >= 0:
             return number
-        print("Non-negative numbers please...")
+        print("Non-negative numbers please.")
 
 def read_range_integer(prompt, min_range, max_range):
     while True:
         number = read_integer(prompt)
         if min_range <= number <= max_range:
             return number
-        print("Values out of range...please try again...")
+        print("Values out of range. Please try again.")
 
 def read_float(prompt):
     return float(read_input(
@@ -71,14 +71,14 @@ def read_nonnegative_float(prompt):
         number = read_float(prompt)
         if number >= 0:
             return number
-        print("Non-negative numbers please...")
+        print("Non-negative numbers please.")
 
 def read_range_float(prompt, min_range, max_range):
     while True:
         number = read_float(prompt)
         if min_range <= number <= max_range:
             return number
-        print("Values out of range...please try again...")
+        print("Values out of range. Please try again.")
 
 def read_percentage_float(prompt):
     return read_range_float(prompt, 0.0, 100.0)
