@@ -1,3 +1,4 @@
+# validation parent
 def read_input(prompt, validation_func, exception_type):
     while True:
         try:
@@ -12,6 +13,7 @@ def read_input(prompt, validation_func, exception_type):
             print("\nInput interrupted. Exiting...")
             exit()
 
+# string validation parent
 def read_string(prompt, validation_func):
     return read_input(
         prompt, 
@@ -31,11 +33,12 @@ def read_nonempty_alphabetical_string(prompt):
         lambda s: len(s) > 0 and s.replace(" ", "").isalpha()
     )
 
+# integer validation parent
 def read_integer(prompt):
     return int(read_input(
         prompt, 
         lambda s: s.isdigit() or (s.startswith('-') and s[1:].isdigit()), 
-        (ValueError, TypeError)  # Pass the exception types
+        (ValueError, TypeError)
     ))
 
 def read_positive_integer(prompt):
@@ -59,11 +62,12 @@ def read_range_integer(prompt, min_range, max_range):
             return number
         print("Values out of range. Please try again.")
 
+# float validation parent
 def read_float(prompt):
     return float(read_input(
         prompt, 
-        lambda s: s.replace('.', '', 1).isdigit() or (s.startswith('-') and s[1:].replace('.', '', 1).isdigit()), 
-        (ValueError, TypeError)  # Pass the exception types
+        lambda s: (s.replace('.', '', 1).isdigit() or (s.startswith('-') and s[1:].replace('.', '', 1).isdigit())),
+        (ValueError, TypeError)
     ))
 
 def read_nonnegative_float(prompt):

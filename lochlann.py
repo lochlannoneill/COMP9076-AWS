@@ -63,10 +63,10 @@ def handle_menu(users):
     for option, number in MENU_OPTIONS.items():
         print(f"{number}.\t{option}")
 
-    # Get menu option
+    # Get menu options
     option = read_range_integer("Select from menu: ", min(MENU_OPTIONS.values()), max(MENU_OPTIONS.values()))
 
-    # Handle the user's choice
+    # Handle the user menu option
     if option == MENU_OPTIONS["Login"]:
         user_credentials = login_user(users)
         if user_credentials:
