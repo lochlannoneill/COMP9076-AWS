@@ -30,7 +30,6 @@ def login_user(users):
         username = read_nonempty_string("Username: ")
         password = read_nonempty_string("Password: ")
         
-        # Validate credentials
         valid_user = username in users and users[username]["password"] == password
         
         if valid_user:
@@ -68,11 +67,11 @@ def handle_menu(users):
     option = read_range_integer("Select from menu: ", min(MENU_OPTIONS.values()), max(MENU_OPTIONS.values()))
 
     # Handle the user's choice
-    if option == MENU_OPTIONS["Login"]:  # Login
+    if option == MENU_OPTIONS["Login"]:
         user_credentials = login_user(users)
         if user_credentials:
             return user_credentials
-    elif option == MENU_OPTIONS["Register"]:  # Register
+    elif option == MENU_OPTIONS["Register"]:
         register_user()
     else:
         print("Invalid menu option.")
