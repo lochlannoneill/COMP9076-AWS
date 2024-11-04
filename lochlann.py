@@ -9,8 +9,8 @@ class UserManager:
         self.file_path = file_path
         self.users = self.load_users()
 
-    # Load existing users from passwords file
     def load_users(self):
+        """Load existing users from the password file."""
         users = {}
         if os.path.exists(self.file_path):
             with open(self.file_path, "r") as file:
@@ -29,8 +29,8 @@ class UserManager:
                             print(f"Skipping line due to incorrect format: {stripped_line}")
         return users
 
-    # Authenticate existing user
     def login_user(self):
+        """Authenticate an existing user."""
         while True:
             username = read_nonempty_string("Username: ")
             password = read_nonempty_string("Password: ")
@@ -41,8 +41,8 @@ class UserManager:
                 return self.users[username]
             print("Invalid username or password. Please try again.")
 
-    # Register new user
     def register_user(self):
+        """Register a new user and add them to the password file."""
         username = read_nonempty_string("Enter a new username: ")
         password = read_nonempty_string("Enter a password: ")
         access_key = read_nonempty_string("Enter your AWS Access Key ID: ")
@@ -69,14 +69,14 @@ class App:
     def __init__(self, user_manager):
         self.user_manager = user_manager
 
-     # Print menu options
     def display_menu(self):
+        """Display the main menu options to the user."""
         print("Press 'ctrl+c' to exit.")
         for option, number in self.MENU_OPTIONS.items():
             print(f"{number}. {option}")
 
-    # Handle the user menu option
     def handle_menu(self):
+        """Handle the user's menu selection."""
         while True:
             self.display_menu()
             option = read_range_integer(
