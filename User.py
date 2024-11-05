@@ -4,7 +4,7 @@ from reading_from_user import read_nonempty_string
 
 FILE_FIELDS_COUNT = 4
 
-class User:
+class UserManager:
     def __init__(self, file_path):
         self.file_path = file_path
         self.users = self.load_users()
