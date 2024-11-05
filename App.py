@@ -32,7 +32,7 @@ class App:
             if option == self.MENU_OPTIONS["Login"]:
                 user_credentials = self.user_manager.login_user()
                 if user_credentials:
-                    # Pass user_credentials to AWS handling functions if needed
+                    # TODO - Pass user_credentials to AWS handling functions if needed
                     break  # Exit the menu after successful login
             elif option == self.MENU_OPTIONS["Register"]:
                 self.user_manager.register_user()
