@@ -1,6 +1,6 @@
 import boto3
 import datetime
-from reading_from_user import read_nonnegative_integer, read_nonempty_string, read_nonnegative_float
+from utils.reading_from_user import read_nonnegative_integer, read_nonempty_string, read_nonnegative_float
 
 class CWController:
     def __init__(self, session):

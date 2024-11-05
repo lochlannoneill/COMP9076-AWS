@@ -1,5 +1,5 @@
 import boto3
-from reading_from_user import read_nonempty_string
+from utils.reading_from_user import read_nonempty_string
 
 class EC2:
     def __init__(self, session):

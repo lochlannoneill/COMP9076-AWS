@@ -1,6 +1,6 @@
 # User.py
 import os
-from reading_from_user import read_nonempty_string
+from utils.reading_from_user import read_nonempty_string
 
 FILE_FIELDS_COUNT = 4
 

@@ -1,8 +1,8 @@
-# Menu.py
-from reading_from_user import read_range_integer
-from User import UserManager
+from os.path import join
+from utils.reading_from_user import read_range_integer
+from models.User import UserManager
 
-FILE_PASSWORDS = "passwords.txt"
+FILE_PASSWORDS = join("config", "passwords.txt")
 
 class App:
     MENU_OPTIONS = {
