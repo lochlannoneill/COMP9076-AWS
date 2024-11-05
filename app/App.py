@@ -4,7 +4,8 @@ from models.User import UserManager
 class App:
     MENU_OPTIONS = {
         "Login": 1,
-        "Register": 2
+        "Register": 2,
+        "Exit": 3
     }
 
     def __init__(self, user_manager):
@@ -12,7 +13,6 @@ class App:
 
     def display_menu(self):
         """Display the main menu options to the user."""
-        print("Press 'ctrl+c' to exit.")
         for option, number in self.MENU_OPTIONS.items():
             print(f"{number}. {option}")
 
@@ -33,6 +33,9 @@ class App:
                     break  # Exit the menu after successful login
             elif option == self.MENU_OPTIONS["Register"]:
                 self.user_manager.register_user()
+            elif option == self.MENU_OPTIONS["Exit"]:
+                print("Exiting...")
+                exit()
             else:
                 print("Invalid menu option.")
 
