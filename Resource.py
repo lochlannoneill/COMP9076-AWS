@@ -1,4 +1,5 @@
 import boto3
+from reading_from_user import read_nonempty_string
 
 class Resource:
     def __init__(self, session):
@@ -32,27 +33,27 @@ class Resource:
 
     def list_objects(self):
         """List all objects in a specified bucket."""
-        bucket_name = input("Enter the bucket name: ")
+        bucket_name = read_nonempty_string("Enter the bucket name: ")
         bucket = self.s3.Bucket(bucket_name)
         for obj in bucket.objects.all():
             print(f"Key: {obj.key}")
 
     def create_volume(self):
         """Create a new EBS volume."""
-        size = int(input("Enter the size of the volume (GiB): "))
-        az = input("Enter the Availability Zone: ")
+        size = int(read_nonempty_string("Enter the size of the volume (GiB): "))
+        az = read_nonempty_string("Enter the Availability Zone: ")
         volume = self.ec2.create_volume(Size=size, AvailabilityZone=az)
         print(f"Volume created: {volume.id}")
 
     def create_bucket(self):
         """Create a new bucket."""
-        bucket_name = input("Enter the bucket name: ")
+        bucket_name = read_nonempty_string("Enter the bucket name: ")
         bucket = self.s3.create_bucket(Bucket=bucket_name)
         print(f"Created bucket: {bucket.name}")
 
     def delete_bucket(self):
         """Delete a bucket."""
-        bucket_name = input("Enter the bucket name: ")
+        bucket_name = read_nonempty_string("Enter the bucket name: ")
         bucket = self.s3.Bucket(bucket_name)
         bucket.delete()
         print(f"Deleted bucket: {bucket_name}")
