@@ -1,5 +1,6 @@
 import boto3
 import datetime
+from reading_from_user import read_nonnegative_integer, read_nonempty_string, read_nonnegative_float
 
 class CWController:
     def __init__(self, session):
@@ -17,13 +18,13 @@ class CWController:
 
     def get_metric_data(self):
         """Get metric data for a specified metric."""
-        namespace = input("Enter the Namespace: ")
-        metric_name = input("Enter the Metric Name: ")
-        dimensions = input("Enter the Dimensions (comma-separated key=value): ")
+        namespace = read_nonempty_string("Enter the Namespace: ")
+        metric_name = read_nonempty_string("Enter the Metric Name: ")
+        dimensions = read_nonempty_string("Enter the Dimensions (comma-separated key=value): ")
         dimensions = [d.split('=') for d in dimensions.split(',')]
-        start_time = input("Enter the Start Time (YYYY-MM-DD HH:MM:SS): ")
-        end_time = input("Enter the End Time (YYYY-MM-DD HH:MM:SS): ")
-        period = int(input("Enter the Period (in seconds): "))
+        start_time = read_nonempty_string("Enter the Start Time (YYYY-MM-DD HH:MM:SS): ")
+        end_time = read_nonempty_string("Enter the End Time (YYYY-MM-DD HH:MM:SS): ") #TODO - data validation
+        period = read_nonnegative_integer("Enter the Period (in seconds): ")
         response = self.cloudwatch.get_metric_data(
             MetricDataQueries=[
                 {
@@ -47,12 +48,12 @@ class CWController:
 
     def put_metric_data(self):
         """Put metric data for a specified metric."""
-        namespace = input("Enter the Namespace: ")
-        metric_name = input("Enter the Metric Name: ")
-        dimensions = input("Enter the Dimensions (comma-separated key=value): ")
+        namespace = read_nonempty_string("Enter the Namespace: ")
+        metric_name = read_nonempty_string("Enter the Metric Name: ")
+        dimensions = read_nonempty_string("Enter the Dimensions (comma-separated key=value): ")
         dimensions = [d.split('=') for d in dimensions.split(',')]
-        value = float(input("Enter the Value: "))
-        timestamp = input("Enter the Timestamp (YYYY-MM-DD HH:MM:SS): ")
+        value = read_nonnegative_float("Enter the Value: ")
+        timestamp = read_nonempty_string("Enter the Timestamp (YYYY-MM-DD HH:MM:SS): ")
         response = self.cloudwatch.put_metric_data(
             Namespace=namespace,
             MetricData=[
