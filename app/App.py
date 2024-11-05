@@ -1,8 +1,5 @@
-from os.path import join
 from utils.reading_from_user import read_range_integer
 from models.User import UserManager
-
-FILE_PASSWORDS = join("config", "passwords.txt")
 
 class App:
     MENU_OPTIONS = {
@@ -40,7 +37,7 @@ class App:
                 print("Invalid menu option.")
 
 def main():
-    user_manager = UserManager(FILE_PASSWORDS)
+    user_manager = UserManager()
     app = App(user_manager)
     app.handle_menu()
 
