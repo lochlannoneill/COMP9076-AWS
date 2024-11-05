@@ -1,5 +1,5 @@
 pip install boto3
 
-cd /assignment1
+cd /COMP9076-CloudAutomationAndOrchestration-Assignment1
 
 python -m app.App
