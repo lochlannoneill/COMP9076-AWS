@@ -40,7 +40,7 @@ class App:
                 print("Invalid menu option.")
 
 def main():
-    user_manager = UserManager(FILE_PASSWORDS)
+    user_manager = User(FILE_PASSWORDS)
     app = App(user_manager)
     app.handle_menu()
 
