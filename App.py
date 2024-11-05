@@ -1,6 +1,6 @@
 # Menu.py
 from reading_from_user import read_range_integer
-import UserManager
+import User
 
 FILE_PASSWORDS = "passwords.txt"
 

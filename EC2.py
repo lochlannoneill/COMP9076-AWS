@@ -1,7 +1,7 @@
 import boto3
 from reading_from_user import read_nonempty_string
 
-class EC2Manager:
+class EC2:
     def __init__(self, session):
         """Initialize with a boto3 session."""
         self.ec2 = session.client('ec2')
