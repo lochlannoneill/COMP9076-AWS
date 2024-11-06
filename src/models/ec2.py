@@ -1,10 +1,12 @@
 import boto3
-from reading_from_user import read_nonempty_string
+from src.utils.reading_from_user import read_nonempty_string
 
-class EC2:
-    def __init__(self, session):
+class ec2:
+    def __init__(self, session, region):
         """Initialize with a boto3 session."""
-        self.ec2 = session.client('ec2')
+        self.session = session
+        self.region = region
+        self.ec2 = session.client('ec2', region_name=self.region)
 
     def list_instances(self):
         """List all EC2 instances, grouped by running and stopped."""
@@ -37,12 +39,14 @@ class EC2:
 
     def start_instance(self):
         """Start a specified EC2 instance."""
+        self.list_instances()
         instance_id = read_nonempty_string("Enter the Instance ID to start: ")
         self.ec2.start_instances(InstanceIds=[instance_id])
         print(f"Starting instance {instance_id}...")
 
     def stop_instance(self):
         """Stop a specified EC2 instance."""
+        self.list_instances()
         instance_id = read_nonempty_string("Enter the Instance ID to stop: ")
         self.ec2.stop_instances(InstanceIds=[instance_id])
         print(f"Stopping instance {instance_id}...")

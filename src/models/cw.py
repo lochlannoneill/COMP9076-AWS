@@ -1,8 +1,8 @@
 import boto3
 import datetime
-from reading_from_user import read_nonnegative_integer, read_nonempty_string, read_nonnegative_float
+from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string, read_nonnegative_float
 
-class CWController:
+class cw:
     def __init__(self, session):
         """Initialize with a boto3 session."""
         self.cloudwatch = session.client('cloudwatch')

@@ -1,1 +1,5 @@
+# Ignore all __pycache__ directories
 __pycache__/
+
+# Ignore __pycache__ directories within the utils folder
+utils/__pycache__/

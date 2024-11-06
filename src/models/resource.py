@@ -1,7 +1,7 @@
 import boto3
-from reading_from_user import read_nonempty_string
+from src.utils.reading_from_user import read_nonempty_string
 
-class Resource:
+class resource:
     def __init__(self, session):
         """Initialize with a boto3 session."""
         self.ec2 = session.resource('ec2')
