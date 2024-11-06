@@ -15,6 +15,7 @@ class App:
 
     def display_menu(self):
         """Display the main menu options to the user."""
+        print("\nMain Menu")
         for option, number in self.MENU_OPTIONS.items():
             print(f"{number}. {option}")
 
