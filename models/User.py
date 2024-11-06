@@ -4,7 +4,7 @@ from utils.reading_from_user import read_nonempty_string
 FILE_PASSWORDS = join("config", "passwords.txt")
 FILE_FIELDS_COUNT = 4
 
-class UserManager:
+class userManager:
     def __init__(self, file_path=FILE_PASSWORDS):
         self.file_path = file_path
         self.users = self.load_users()

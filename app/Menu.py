@@ -1,6 +1,6 @@
 from utils.reading_from_user import read_range_integer
 
-class MainMenu:
+class mainMenu:
     MENU_OPTIONS = {
         "Login": 1,
         "Register": 2,
@@ -32,7 +32,7 @@ class MainMenu:
                 print("Invalid menu option.")
 
 
-class AwsMainMenu:
+class awsMenu:
     def display(self):
         print("\nAWS Main Menu")
         print("1. EC2 Instances")
@@ -49,7 +49,7 @@ class AwsMainMenu:
             return False
 
 
-class EC2Menu:
+class ec2Menu:
     def display(self):
         print("\nEC2 Instance Menu")
         print("1. List All Instances")

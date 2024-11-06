@@ -1,7 +1,7 @@
 import boto3
 from utils.reading_from_user import read_nonempty_string
 
-class EC2:
+class ec2:
     def __init__(self, session, region):
         """Initialize with a boto3 session."""
         self.session = session

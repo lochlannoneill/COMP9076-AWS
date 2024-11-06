@@ -1,14 +1,14 @@
 import boto3
-from models.User import UserManager
-from models.EC2 import EC2
-from Menu import MainMenu, AwsMainMenu, EC2Menu
+from models.user import userManager
+from models.ec2 import ec2
+from app.menu import mainMenu, awsMenu, ec2Menu
 
 class App:
     def __init__(self, user_manager):
         self.user_manager = user_manager
-        self.main_menu = MainMenu()
-        self.aws_main_menu = AwsMainMenu()
-        self.ec2_menu = EC2Menu()
+        self.main_menu = mainMenu()
+        self.aws_menu = awsMenu()
+        self.ec2_menu = ec2Menu()
 
     def run(self):
         while True:
@@ -27,10 +27,18 @@ class App:
         
         while True:
             # Display AWS main menu and handle it
-            if not self.aws_main_menu.handle(ec2_service):
+            if not self.aws_menu.handle(ec2_service):
                 break
 
             while True:
                 # Display EC2-specific menu and handle it
                 if not self.ec2_menu.handle(ec2_service):
                     break
+
+def main():
+    user_manager = userManager()  # Initialize the user manager
+    app = App(user_manager)       # Initialize the App with the user manager
+    app.run()                     # Start the application
+
+if __name__ == "__main__":
+    main()  # Run the main function when the script is executed

@@ -1,7 +1,7 @@
 import boto3
 from utils.reading_from_user import read_nonempty_string
 
-class S3:
+class s3:
     def __init__(self, session):
         """Initialize with a boto3 session."""
         self.s3 = session.client('s3')

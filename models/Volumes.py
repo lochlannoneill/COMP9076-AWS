@@ -1,7 +1,7 @@
 import boto3
 from utils.reading_from_user import read_nonnegative_integer, read_nonempty_string
 
-class Volumes:
+class volumes:
     def __init__(self, session):
         """Initialize with a boto3 session."""
         self.ec2 = session.client('ec2')
