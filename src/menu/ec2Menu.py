@@ -11,7 +11,7 @@ class ec2Menu:
         print("6. Back")
 
     def handle(self, ec2_service):
-        choice = read_range_integer("Select from menu: ", 1, 6)
+            choice = read_range_integer("Select from menu: ", 1, 6)
 
         if choice == 1:
             ec2_service.list_instances()

@@ -21,7 +21,7 @@ class App:
                     aws_access_key_id=user_credentials["access_key"],
                     aws_secret_access_key=user_credentials["secret_key"]
                 )
-                self.aws_menu(session)
+                self.aws_menu.handle(session, self.ec2_menu)
 
     def aws_menu(self, session):
         REGION = "eu-west-1" # TODO - should this be user input ???
