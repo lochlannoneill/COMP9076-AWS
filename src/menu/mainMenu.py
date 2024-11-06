@@ -15,18 +15,18 @@ class mainMenu:
     def handle(self, user_manager):
         while True:
             self.display()
-            option = read_range_integer(
+            choice = read_range_integer(
                 "Select from menu: ",
                 min(self.MENU_OPTIONS.values()),
                 max(self.MENU_OPTIONS.values())
             )
 
-            if option == self.MENU_OPTIONS["Login"]:
+            if choice == self.MENU_OPTIONS["Login"]:
                 return user_manager.login_user()
-            elif option == self.MENU_OPTIONS["Register"]:
+            elif choice == self.MENU_OPTIONS["Register"]:
                 user_manager.register_user()
-            elif option == self.MENU_OPTIONS["Exit"]:
+            elif choice == self.MENU_OPTIONS["Exit"]:
                 print("Exiting...")
                 exit()
             else:
-                print("Invalid menu option.")
+                print("Invalid menu choice.")

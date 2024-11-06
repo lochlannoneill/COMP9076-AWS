@@ -1,32 +1,41 @@
 from src.utils.reading_from_user import read_range_integer
 
 class ec2Menu:
+    MENU_OPTIONS = {
+        "List All Instances": 1,
+        "Start Instance": 2,
+        "Stop Instance": 3,
+        "Create AMI": 4,
+        "Delete AMI": 5,
+        "Back": 6
+    }
+    
     def display(self):
         print("\nEC2 Instance Menu")
-        print("1. List All Instances")
-        print("2. Start Instance")
-        print("3. Stop Instance")
-        print("4. Create AMI")
-        print("5. Delete AMI")
-        print("6. Back")
+        for option, number in self.MENU_OPTIONS.items():
+            print(f"{number}. {option}")
 
     def handle(self, ec2_service):
         while True:
             self.display()
-            choice = read_range_integer("Select from menu: ", 1, 6)
+            choice = read_range_integer(
+                "Select from menu: ",
+                min(self.MENU_OPTIONS.values()),
+                max(self.MENU_OPTIONS.values())
+            )
 
-            if choice == 1:
+            if choice == self.MENU_OPTIONS["List All Instances"]:
                 ec2_service.list_instances()
-            elif choice == 2:
+            elif choice == self.MENU_OPTIONS["Start Instance"]:
                 ec2_service.start_instance()
-            elif choice == 3:
+            elif choice == self.MENU_OPTIONS["Stop Instance"]:
                 ec2_service.stop_instance()
-            elif choice == 4:
+            elif choice == self.MENU_OPTIONS["Create AMI"]:
                 ec2_service.create_ami()
-            elif choice == 5:
+            elif choice == self.MENU_OPTIONS["Delete AMI"]:
                 ec2_service.delete_ami()
-            elif choice == 6:
+            elif choice == self.MENU_OPTIONS["Back"]:
                 return False
             else:
-                print("Invalid option.")
+                print("Invalid menu choice.")
             return True
