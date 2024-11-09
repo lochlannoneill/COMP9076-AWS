@@ -6,7 +6,8 @@ class ec2:
         """Initialize with a boto3 session."""
         self.session = session
         self.region = region
-        self.ec2 = session.client('ec2', region_name=self.region)
+        self.ec2 = session.resource('ec2', region_name=self.region)
+
 
     def list_instances(self):
         """List all EC2 instances, grouped by running and stopped."""
@@ -41,14 +42,16 @@ class ec2:
         """Start a specified EC2 instance."""
         self.list_instances()
         instance_id = read_nonempty_string("Enter the Instance ID to start: ")
-        self.ec2.start_instances(InstanceIds=[instance_id])
+        instance = self.ec2.Instance(instance_id)
+        instance.start()
         print(f"Starting instance {instance_id}...")
 
     def stop_instance(self):
         """Stop a specified EC2 instance."""
         self.list_instances()
         instance_id = read_nonempty_string("Enter the Instance ID to stop: ")
-        self.ec2.stop_instances(InstanceIds=[instance_id])
+        instance = self.ec2.Instance(instance_id)
+        instance.stop()
         print(f"Stopping instance {instance_id}...")
 
     def create_ami(self):
