@@ -12,10 +12,8 @@ class ec2:
     def list_instances(self):
         """List all EC2 instances, grouped by running and stopped."""
         response = self.ec2.describe_instances()
-        running_instances = []
-        stopped_instances = []
-        
-        # Parse instances
+        instances = {"running": [], "stopped": []}
+
         for reservation in response['Reservations']:
             for instance in reservation['Instances']:
                 instance_info = {
@@ -25,17 +23,14 @@ class ec2:
                     "Region": instance['Placement']['AvailabilityZone'],
                     "Launch Time": instance['LaunchTime'].strftime("%Y-%m-%d %H:%M:%S")
                 }
-                if instance['State']['Name'] == 'running':
-                    running_instances.append(instance_info)
-                else:
-                    stopped_instances.append(instance_info)
-        
+                instances[instance['State']['Name']].append(instance_info)
+
         print("\nRunning Instances:")
-        for inst in running_instances:
+        for inst in instances['running']:
             print(inst)
-        
+
         print("\nStopped Instances:")
-        for inst in stopped_instances:
+        for inst in instances['stopped']:
             print(inst)
 
     def start_instance(self):
