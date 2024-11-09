@@ -1,5 +1,5 @@
 import boto3
-from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string
+from utils.reading_from_user import read_nonnegative_integer, read_nonempty_string
 
 class volumes:
     def __init__(self, session):

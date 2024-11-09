@@ -1,7 +1,7 @@
 from os.path import join, exists
-from src.utils.reading_from_user import read_nonempty_string
+from utils.reading_from_user import read_nonempty_string
 
-FILE_PASSWORDS = join("src", "config", "passwords.txt")
+FILE_PASSWORDS = join("config", "passwords.txt")
 FILE_FIELDS_COUNT = 4
 
 class userManager:
