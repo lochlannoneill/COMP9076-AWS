@@ -61,3 +61,13 @@ class ec2:
         ami_id = read_nonempty_string("Enter the AMI ID to delete: ")
         self.ec2.deregister_image(ImageId=ami_id)
         print(f"Deleted AMI: {ami_id}")
+
+    def add_tags(self, instance_id, tags):
+        instance = self.ec2.Instance(instance_id)
+        instance.create_tags(Tags=tags)
+        print(f"Tags added to instance {instance_id}")
+
+    def delete_tags(self, instance_id, tags):
+        instance = self.ec2.Instance(instance_id)
+        instance.delete_tags(Tags=tags)
+        print(f"Tags removed from instance {instance_id}")
