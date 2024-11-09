@@ -53,7 +53,8 @@ class ec2:
         """Create an AMI from a specified EC2 instance."""
         instance_id = read_nonempty_string("Enter the Instance ID to create AMI from: ")
         ami_name = read_nonempty_string("Enter a name for the AMI: ")
-        response = self.ec2.create_image(InstanceId=instance_id, Name=ami_name)
+        ami_description = read_nonempty_string("Enter a description for the AMI: ")
+        response = self.ec2.create_image(InstanceId=instance_id, Name=ami_name, Description=ami_description)
         print(f"AMI created: {response['ImageId']}")
 
     def delete_ami(self):
