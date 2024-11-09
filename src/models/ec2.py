@@ -33,21 +33,25 @@ class ec2:
         for inst in instances['stopped']:
             print(inst)
 
+    def change_instance_state(self, action):
+        """Start or stop a specified EC2 instance based on the action parameter."""
+        self.list_instances()
+        instance_id = read_nonempty_string(f"Enter the Instance ID to {action}: ")
+        instance = self.ec2.Instance(instance_id)
+        if action == 'start':
+            instance.start()
+            print(f"Starting instance {instance_id}...")
+        elif action == 'stop':
+            instance.stop()
+            print(f"Stopping instance {instance_id}...")
+
     def start_instance(self):
         """Start a specified EC2 instance."""
-        self.list_instances()
-        instance_id = read_nonempty_string("Enter the Instance ID to start: ")
-        instance = self.ec2.Instance(instance_id)
-        instance.start()
-        print(f"Starting instance {instance_id}...")
+        self.change_instance_state('start')
 
     def stop_instance(self):
         """Stop a specified EC2 instance."""
-        self.list_instances()
-        instance_id = read_nonempty_string("Enter the Instance ID to stop: ")
-        instance = self.ec2.Instance(instance_id)
-        instance.stop()
-        print(f"Stopping instance {instance_id}...")
+        self.change_instance_state('stop')
 
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
