@@ -1,4 +1,4 @@
-from utils.reading_from_user import read_range_integer
+from src.utils.reading_from_user import read_range_integer
 
 class ec2Menu:
     MENU_OPTIONS = {

@@ -1,5 +1,5 @@
 import boto3
-from utils.reading_from_user import read_nonempty_string
+from src.utils.reading_from_user import read_nonempty_string
 
 class s3:
     def __init__(self, session):

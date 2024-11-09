@@ -1,9 +1,9 @@
 import boto3
-from models.user import userManager
-from models.ec2 import ec2
-from menu.mainMenu import mainMenu
-from menu.awsMenu import awsMenu
-from menu.ec2Menu import ec2Menu
+from src.models.user import userManager
+from src.models.ec2 import ec2
+from src.menu.mainMenu import mainMenu
+from src.menu.awsMenu import awsMenu
+from src.menu.ec2Menu import ec2Menu
 
 class App:
     def __init__(self, user_manager):
