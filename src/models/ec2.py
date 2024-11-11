@@ -6,15 +6,14 @@ class ec2:
         """Initialize with a boto3 session."""
         self.session = session
         self.region = region
-        self.ec2 = session.client('ec2', region_name=self.region)
+        self.ec2 = session.resource('ec2', region_name=self.region)
+
 
     def list_instances(self):
         """List all EC2 instances, grouped by running and stopped."""
         response = self.ec2.describe_instances()
-        running_instances = []
-        stopped_instances = []
-        
-        # Parse instances
+        instances = {"running": [], "stopped": []}
+
         for reservation in response['Reservations']:
             for instance in reservation['Instances']:
                 instance_info = {
@@ -24,38 +23,42 @@ class ec2:
                     "Region": instance['Placement']['AvailabilityZone'],
                     "Launch Time": instance['LaunchTime'].strftime("%Y-%m-%d %H:%M:%S")
                 }
-                if instance['State']['Name'] == 'running':
-                    running_instances.append(instance_info)
-                else:
-                    stopped_instances.append(instance_info)
-        
+                instances[instance['State']['Name']].append(instance_info)
+
         print("\nRunning Instances:")
-        for inst in running_instances:
+        for inst in instances['running']:
             print(inst)
-        
+
         print("\nStopped Instances:")
-        for inst in stopped_instances:
+        for inst in instances['stopped']:
             print(inst)
+
+    def change_instance_state(self, action):
+        """Start or stop a specified EC2 instance based on the action parameter."""
+        self.list_instances()
+        instance_id = read_nonempty_string(f"Enter the Instance ID to {action}: ")
+        instance = self.ec2.Instance(instance_id)
+        if action == 'start':
+            instance.start()
+            print(f"Starting instance {instance_id}...")
+        elif action == 'stop':
+            instance.stop()
+            print(f"Stopping instance {instance_id}...")
 
     def start_instance(self):
         """Start a specified EC2 instance."""
-        self.list_instances()
-        instance_id = read_nonempty_string("Enter the Instance ID to start: ")
-        self.ec2.start_instances(InstanceIds=[instance_id])
-        print(f"Starting instance {instance_id}...")
+        self.change_instance_state('start')
 
     def stop_instance(self):
         """Stop a specified EC2 instance."""
-        self.list_instances()
-        instance_id = read_nonempty_string("Enter the Instance ID to stop: ")
-        self.ec2.stop_instances(InstanceIds=[instance_id])
-        print(f"Stopping instance {instance_id}...")
+        self.change_instance_state('stop')
 
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
         instance_id = read_nonempty_string("Enter the Instance ID to create AMI from: ")
         ami_name = read_nonempty_string("Enter a name for the AMI: ")
-        response = self.ec2.create_image(InstanceId=instance_id, Name=ami_name)
+        ami_description = read_nonempty_string("Enter a description for the AMI: ")
+        response = self.ec2.create_image(InstanceId=instance_id, Name=ami_name, Description=ami_description)
         print(f"AMI created: {response['ImageId']}")
 
     def delete_ami(self):
@@ -63,3 +66,13 @@ class ec2:
         ami_id = read_nonempty_string("Enter the AMI ID to delete: ")
         self.ec2.deregister_image(ImageId=ami_id)
         print(f"Deleted AMI: {ami_id}")
+
+    def add_tags(self, instance_id, tags):
+        instance = self.ec2.Instance(instance_id)
+        instance.create_tags(Tags=tags)
+        print(f"Tags added to instance {instance_id}")
+
+    def delete_tags(self, instance_id, tags):
+        instance = self.ec2.Instance(instance_id)
+        instance.delete_tags(Tags=tags)
+        print(f"Tags removed from instance {instance_id}")

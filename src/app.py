@@ -24,7 +24,7 @@ class App:
                 self.aws_menu.handle(session, self.ec2_menu)
 
     def aws_menu(self, session):
-        REGION = "eu-west-1" # TODO - should this be user input ???
+        REGION = "eu-west-1"  # TODO - should this be user input ???
         ec2_service = ec2(session, REGION)
         
         while True:
