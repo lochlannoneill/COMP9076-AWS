@@ -10,9 +10,7 @@
 1. Install **boto3**
    ```bash
    npm install boto3
-2. Navigate to the entrypoint directory
-    ```bash
-   cd src
-4. Execute the application
+
+2. Execute the application
    ```bash
-   python -m app
+   python -m src.app
