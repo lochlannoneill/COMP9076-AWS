@@ -1,7 +1,7 @@
 from src.utils.reading_from_user import read_range_integer
 from src.menu.ec2Menu import ec2Menu
 from src.menu.volumeMenu import volumeMenu
-from src.models.volumes import volumes
+from src.models.volumes import Volumes
 from src.models.ec2 import EC2Controller
 
 class awsMenu:
@@ -29,7 +29,10 @@ class awsMenu:
         )
         
         # Volumes
-        vol = volumes(session._create_client("ec2"))
+        vol = Volumes(
+            session._create_client("ec2"),
+            session.get_ec2_resource()
+        )
         
         while True:
             self._display()

@@ -7,7 +7,7 @@ class volumeMenu:
             "Create New Volume": 2,
             "Attach Volume To Instance": 3,
             "Modify Volume": 4,
-            "Take Volume Snapshot": 5,
+            "Snapshot Volume": 5,
             "Create Volume From Snapshot": 6,
             "Back": 7
         }
