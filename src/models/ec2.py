@@ -62,6 +62,15 @@ class EC2Controller:
         except Exception as e:
             print(e)
 
+    def delete_instance(self):
+        """Delete a specified EC2 instance."""
+        instance_id = read_nonempty_string("\nEnter the Instance ID to delete: ")
+        try:
+            self.ec2_client.terminate_instances(InstanceIds=[instance_id])
+            print(f"'{instance_id}' deleted.")
+        except Exception as e:
+            print(e)
+
     # COMPLETED
     def list_amis(self):
         """List all AMIs from an EC2 instance."""
