@@ -30,18 +30,27 @@ class awsMenu:
                 max(self.options.values())
             )
             
+            # EC2 Instances
             if choice == self.options["EC2 Instances"]:
                 ec2_controller = EC2Controller(
                     aws_resource.get_ec2_resource(),
                     aws_resource._create_client("ec2")
                 )
                 self.ec2_menu.handle(ec2_controller)
+                
+            # EBS Volumes
             if choice == self.options["EBS Volumes"]:
-                vol = Volumes(aws_resource._create_client("ec2"))
+                vol = volumes(aws_resource._create_client("ec2"))
                 self.volume_menu.handle(vol)
+                
+            # S3 Buckets
             if choice == self.options["S3 Buckets"]:
                 pass  # TODO
+            
+            # Monitoring
             if choice == self.options["Monitoring"]:
                 pass  # TODO
+            
+            # Back
             if choice == self.options["Back"]:
                 return False
