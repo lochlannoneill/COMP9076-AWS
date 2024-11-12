@@ -65,7 +65,7 @@ class EC2Controller:
         except Exception as e:
             print(f"Error stopping instance {instance_id}: {e}")
 
-    # TODO
+    # COMPLETED
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
         instance_id = read_nonempty_string("Enter the Instance ID to create AMI from: ")
@@ -74,9 +74,9 @@ class EC2Controller:
             response = self.ec2_client.create_image(InstanceId=instance_id, Name=ami_name)
             print(f"AMI created: {response['ImageId']}")
         except Exception as e:
-            print(f"Error creating AMI from {instance_id}: {e}")
+            print(e)
 
-    # TODO
+    # COMPLETED
     def delete_ami(self):
         """Delete a specified AMI."""
         ami_id = read_nonempty_string("Enter the AMI ID to delete: ")
@@ -84,4 +84,4 @@ class EC2Controller:
             self.ec2_client.deregister_image(ImageId=ami_id)
             print(f"Deleted AMI: {ami_id}")
         except Exception as e:
-            print(f"Error deleting AMI {ami_id}: {e}")
+            print(e)
