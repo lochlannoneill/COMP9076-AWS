@@ -10,7 +10,7 @@ class mainMenu:
 
     def _display(self):
         """Display the main menu options."""
-        print("\nMain Menu")
+        print("Main Menu")
         for option, number in self.options.items():
             print(f"\t{number}. {option}")
 
