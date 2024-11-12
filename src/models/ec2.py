@@ -8,24 +8,22 @@ class EC2Controller:
 
     def list_instances(self):
         """List all EC2 instances, grouped by running and stopped."""
-        response = self.ec2.describe_instances()
         running_instances = []
         stopped_instances = []
 
         # Parse instances
-        for reservation in response.get('Reservations', []):
-            for instance in reservation['Instances']:
-                instance_info = {
-                    "Instance ID": instance['InstanceId'],
-                    "State": instance['State']['Name'],
-                    "Type": instance['InstanceType'],
-                    "Region": instance['Placement']['AvailabilityZone'],
-                    "Launch Time": instance['LaunchTime'].strftime("%Y-%m-%d %H:%M:%S")
-                }
-                if instance['State']['Name'] == 'running':
-                    running_instances.append(instance_info)
-                else:
-                    stopped_instances.append(instance_info)
+        for instance in self.ec2.instances.all():
+            instance_info = {
+                "Instance ID": instance.instance_id,  # Corrected this line
+                "State": instance.state['Name'],  # Corrected this line
+                "Type": instance.instance_type,  # Corrected this line
+                "Region": instance.placement['AvailabilityZone'],  # Corrected this line
+                "Launch Time": instance.launch_time.strftime("%Y-%m-%d %H:%M:%S")
+            }
+            if instance.state['Name'] == 'running':
+                running_instances.append(instance_info)
+            else:
+                stopped_instances.append(instance_info)
 
         if not running_instances and not stopped_instances:
             print("No EC2 instances detected.")
