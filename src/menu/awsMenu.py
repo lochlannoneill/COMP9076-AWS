@@ -15,7 +15,7 @@ class awsMenu:
             "Monitoring": 4,
             "Back": 5
         }
-        
+
     def _display(self):
         print("\nAWS Main Menu")
         for option, number in self.options.items():

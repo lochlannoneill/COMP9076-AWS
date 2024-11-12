@@ -1,5 +1,3 @@
-import boto3
-
 class resource:
     def __init__(self, region, key_id, secret_key):
         """Initialize with AWS credentials and region."""

@@ -1,4 +1,3 @@
-import boto3
 from src.models.user import userManager
 from src.menu.mainMenu import mainMenu
 from src.menu.awsMenu import awsMenu
@@ -11,7 +10,6 @@ class App:
         self.aws_menu = awsMenu()
 
     def _start(self):
-        # Main Menu
         while True:
             user_credentials = self.main_menu.handle(self.user_manager)
             if user_credentials:
