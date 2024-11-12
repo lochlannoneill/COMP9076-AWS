@@ -1,32 +1,33 @@
 from src.utils.reading_from_user import read_range_integer
 
 class mainMenu:
-    MENU_OPTIONS = {
-        "Login": 1,
-        "Register": 2,
-        "Exit": 3
-    }
+    def __init__(self):
+        self.options = {
+            "Login": 1,
+            "Register": 2,
+            "Exit": 3
+        }
 
     def _display(self):
+        """Display the main menu options."""
         print("\nMain Menu")
-        for option, number in self.MENU_OPTIONS.items():
+        for option, number in self.options.items():
             print(f"{number}. {option}")
 
     def handle(self, user_manager):
+        """Handle the main menu interaction."""
         while True:
             self._display()
-            option = read_range_integer(
+            choice = read_range_integer(
                 "Select from menu: ",
-                min(self.MENU_OPTIONS.values()),
-                max(self.MENU_OPTIONS.values())
+                min(self.options.values()),
+                max(self.options.values())
             )
 
-            if option == self.MENU_OPTIONS["Login"]:
+            if choice == self.options["Login"]:
                 return user_manager.login_user()
-            elif option == self.MENU_OPTIONS["Register"]:
+            elif choice == self.options["Register"]:
                 user_manager.register_user()
-            elif option == self.MENU_OPTIONS["Exit"]:
+            elif choice == self.options["Exit"]:
                 print("Exiting...")
                 exit()
-            else:
-                print("Invalid menu option.")

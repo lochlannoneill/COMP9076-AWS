@@ -2,4 +2,4 @@
 __pycache__/
 
 # Ignore passwords.txt in the config directory
-src/config/passwords.txt
+config/
