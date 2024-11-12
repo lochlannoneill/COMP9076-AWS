@@ -8,20 +8,21 @@ class App:
         self.user_manager = user_manager
         self.main_menu = mainMenu()
         self.aws_menu = awsMenu()
+        self.region = "eu-west-1"
 
     def _start(self):
         while True:
             user_credentials = self.main_menu.handle(self.user_manager)
             if user_credentials:
-                aws_resource = resource(
-                    region="eu-west-1",
+                session = resource(
+                    region=self.region,
                     key_id=user_credentials["access_key"],
                     secret_key=user_credentials["secret_key"]
                 )
             break
 
         while True:
-            if not self.aws_menu.handle(aws_resource):
+            if not self.aws_menu.handle(session):  # TODO - why is input not working on the first time? is this because of how the session is created ???
                 break
 
 def main():

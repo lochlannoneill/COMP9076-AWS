@@ -21,7 +21,16 @@ class awsMenu:
         for option, number in self.options.items():
             print(f"{number}. {option}")
 
-    def handle(self, aws_resource):
+    def handle(self, session):
+        # EC2
+        ec2_controller = EC2Controller(
+            session.get_ec2_resource(),
+            session._create_client("ec2")
+        )
+        
+        # Volumes
+        vol = volumes(session._create_client("ec2"))
+        
         while True:
             self._display()
             choice = read_range_integer(
@@ -32,15 +41,10 @@ class awsMenu:
             
             # EC2 Instances
             if choice == self.options["EC2 Instances"]:
-                ec2_controller = EC2Controller(
-                    aws_resource.get_ec2_resource(),
-                    aws_resource._create_client("ec2")
-                )
                 self.ec2_menu.handle(ec2_controller)
                 
             # EBS Volumes
             if choice == self.options["EBS Volumes"]:
-                vol = volumes(aws_resource._create_client("ec2"))
                 self.volume_menu.handle(vol)
                 
             # S3 Buckets

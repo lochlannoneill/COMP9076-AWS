@@ -1,9 +1,9 @@
 from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string
 
 class volumes:
-    def __init__(self, session):
+    def __init__(self, ec2_client):
         """Initialize with a boto3 session."""
-        self.ec2 = session.client('ec2')
+        self.ec2 = ec2_client
 
     def list_volumes(self):
         """List all EBS volumes."""
