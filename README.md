@@ -15,7 +15,7 @@
    ```bash
    pip install tabulate
 
-3. Include user information in src/config/passwords.txt.  
+3. Include user information in src/config/passwords.txt or register a new account during runtime.  
    See example template below ("Name", "Password", "Access Key", "Secret Key").
    ```bash
    David   12345pass   AKIKAOD798  PPB7952+AmaYUd+824nmW
