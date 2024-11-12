@@ -25,19 +25,26 @@ class EC2Controller:
             else:
                 stopped_instances.append(instance_info)
 
+        # Check if there are no instances
         if not running_instances and not stopped_instances:
             print("No EC2 instances detected.")
         else:
             print("\nRunning Instances:")
-            for inst in running_instances:
-                print(inst)
+            if running_instances:
+                for inst in running_instances:
+                    print(inst)
+            else:
+                print("No running instances detected.")
+
             print("\nStopped Instances:")
-            for inst in stopped_instances:
-                print(inst)
+            if stopped_instances:
+                for inst in stopped_instances:
+                    print(inst)
+            else:
+                print("No stopped instances detected.")
 
     def start_instance(self):
         """Start a specified EC2 instance."""
-        self.list_instances()
         instance_id = read_nonempty_string("Enter the Instance ID to start: ")
         try:
             self.ec2.start_instances(InstanceIds=[instance_id])
@@ -47,7 +54,6 @@ class EC2Controller:
 
     def stop_instance(self):
         """Stop a specified EC2 instance."""
-        self.list_instances()
         instance_id = read_nonempty_string("Enter the Instance ID to stop: ")
         try:
             self.ec2.stop_instances(InstanceIds=[instance_id])
