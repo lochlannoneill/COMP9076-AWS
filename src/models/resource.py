@@ -2,7 +2,7 @@ import boto3
 from src.utils.reading_from_user import read_nonempty_string
 
 class resource:
-    def __init__(self, region="eu-west-1", key_id=None, secret_key=None):  # TODO - pass parameters
+    def __init__(self, region, key_id, secret_key):
         """Initialize with AWS credentials and region."""
         self.region = region
         self.key_id = key_id

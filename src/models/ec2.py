@@ -1,12 +1,10 @@
 import boto3
 from src.utils.reading_from_user import read_nonempty_string
 
-class ec2:
-    def __init__(self, session, region):
-        """Initialize with a boto3 session."""
-        self.session = session
-        self.region = region
-        self.ec2 = session.client('ec2', region_name=self.region)
+class EC2Controller:
+    def __init__(self, resource):
+        """Initialize with a boto3 session and region."""
+        self.ec2 = resource
 
     def list_instances(self):
         """List all EC2 instances, grouped by running and stopped."""
