@@ -1,3 +1,4 @@
+from tabulate import tabulate
 from src.utils.reading_from_user import read_nonempty_string
 
 class EC2Controller:
@@ -8,40 +9,36 @@ class EC2Controller:
 
     # COMPLETED
     def list_instances(self):
-        """List all EC2 instances, grouped by running and stopped."""
-        running_instances = []
-        stopped_instances = []
+            """List all EC2 instances, grouped by running and stopped."""
+            running_instances = []
+            stopped_instances = []
 
-        # Parse instances
-        for instance in self.ec2_resource.instances.all():
-            instance_info = {
-                "Instance ID": instance.instance_id,
-                "Name": next((tag['Value'] for tag in instance.tags if tag['Key'] == 'Name'), ''),
-                "State": instance.state['Name'],
-                "Type": instance.instance_type,
-                "Region": instance.placement['AvailabilityZone'],
-                "Launch Time": instance.launch_time.strftime("%Y-%m-%d %H:%M:%S")
-            }
-            if instance.state['Name'] == 'running':
-                running_instances.append(instance_info)
-            else:
-                stopped_instances.append(instance_info)
+            # Parse instances
+            for instance in self.ec2_resource.instances.all():
+                instance_info = {
+                    "Instance ID": instance.instance_id,
+                    "Name": next((tag['Value'] for tag in instance.tags if tag['Key'] == 'Name'), ''),
+                    "State": instance.state['Name'],
+                    "Type": instance.instance_type,
+                    "Region": instance.placement['AvailabilityZone'],
+                    "Launch Time": instance.launch_time.strftime("%Y-%m-%d %H:%M:%S")
+                }
+                if instance.state['Name'] == 'running':
+                    running_instances.append(instance_info)
+                else:
+                    stopped_instances.append(instance_info)
 
-        # Check if there are no instances
-        if not running_instances and not stopped_instances:
-            print("No EC2 instances detected.")
-        else:
+            # Check if there are running instances
             print("\nRunning Instances:")
             if running_instances:
-                for inst in running_instances:
-                    print(inst)
+                print(tabulate(running_instances, headers="keys", tablefmt="grid"))
             else:
                 print("No running instances detected.")
 
+            # Check if there are stopped instances
             print("\nStopped Instances:")
             if stopped_instances:
-                for inst in stopped_instances:
-                    print(inst)
+                print(tabulate(stopped_instances, headers="keys", tablefmt="grid"))
             else:
                 print("No stopped instances detected.")
 
@@ -81,19 +78,16 @@ class EC2Controller:
                 ]
             )
             
+            # If there are images associated with the instance, print them in tabular format
             if images['Images']:
-                print(f"\nAMIs associated with instance '{instance_id}':")
-                for image in images['Images']:
-                    ami_info = {
-                        "AMI ID": image['ImageId'],
-                        "Name": image['Name'],
-                        "Creation Date": image['CreationDate']
-                    }
-                    print(ami_info)
+                headers = ["AMI ID", "Name", "Creation Date"]
+                table_data = [
+                    [image['ImageId'], image['Name'], image['CreationDate']]
+                    for image in images['Images']
+                ]
+                print(tabulate(table_data, headers=headers, tablefmt="grid"))
             else:
                 print(f"No associated AMIs found for instance '{instance_id}'.")
-   
-
         except Exception as e:
             print(e)
 
