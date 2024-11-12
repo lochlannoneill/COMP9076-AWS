@@ -7,14 +7,14 @@ class mainMenu:
         "Exit": 3
     }
 
-    def display(self):
+    def _display(self):
         print("\nMain Menu")
         for option, number in self.MENU_OPTIONS.items():
             print(f"{number}. {option}")
 
     def handle(self, user_manager):
         while True:
-            self.display()
+            self._display()
             option = read_range_integer(
                 "Select from menu: ",
                 min(self.MENU_OPTIONS.values()),

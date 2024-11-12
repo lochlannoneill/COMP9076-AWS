@@ -1,7 +1,7 @@
 from src.utils.reading_from_user import read_range_integer
 
 class ec2Menu:
-    def display(self):
+    def _display(self):
         print("\nEC2 Instance Menu")
         print("1. List All Instances")
         print("2. Start Instance")
@@ -12,7 +12,7 @@ class ec2Menu:
 
     def handle(self, ec2_service):
         while True:
-            self.display()
+            self._display()
             choice = read_range_integer("Select from menu: ", 1, 6)
 
             if choice == 1:
