@@ -9,6 +9,7 @@ class userManager:
         self.file_path = file_path
         self.users = self.load_users()
 
+    # COMPLETED
     def load_users(self):
         """Load existing users from the password file."""
         users = {}
@@ -29,6 +30,7 @@ class userManager:
                             print(f"Skipping line due to incorrect format: {stripped_line}")
         return users
 
+    # COMPLETED
     def login_user(self):
         """Authenticate an existing user."""
         while True:
@@ -41,6 +43,7 @@ class userManager:
                 return self.users[username]
             print("Invalid username or password. Please try again.")
 
+    # COMPLETED
     def register_user(self):
         """Register a new user and add them to the password file."""
         username = read_nonempty_string("Enter a new username: ")
@@ -53,7 +56,7 @@ class userManager:
             file.write(f"\n{username}\t{password}\t{access_key}\t{secret_key}")
         
         print(f"User '{username}' registered successfully.")
-        # Update in-memory users dictionary
+        # Update in-memory users dictionary  # TODO
         self.users[username] = {
             "password": password,
             "access_key": access_key,

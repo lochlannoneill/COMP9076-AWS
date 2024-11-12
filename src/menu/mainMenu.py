@@ -7,26 +7,26 @@ class mainMenu:
         "Exit": 3
     }
 
-    def display(self):
+    def _display(self):
         print("\nMain Menu")
         for option, number in self.MENU_OPTIONS.items():
             print(f"{number}. {option}")
 
     def handle(self, user_manager):
         while True:
-            self.display()
-            choice = read_range_integer(
+            self._display()
+            option = read_range_integer(
                 "Select from menu: ",
                 min(self.MENU_OPTIONS.values()),
                 max(self.MENU_OPTIONS.values())
             )
 
-            if choice == self.MENU_OPTIONS["Login"]:
+            if option == self.MENU_OPTIONS["Login"]:
                 return user_manager.login_user()
-            elif choice == self.MENU_OPTIONS["Register"]:
+            elif option == self.MENU_OPTIONS["Register"]:
                 user_manager.register_user()
-            elif choice == self.MENU_OPTIONS["Exit"]:
+            elif option == self.MENU_OPTIONS["Exit"]:
                 print("Exiting...")
                 exit()
             else:
-                print("Invalid menu choice.")
+                print("Invalid menu option.")

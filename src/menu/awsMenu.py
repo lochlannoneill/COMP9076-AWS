@@ -1,4 +1,5 @@
 from src.utils.reading_from_user import read_range_integer
+from src.menu.ec2Menu import ec2Menu
 
 class awsMenu:
     MENU_OPTIONS = {
@@ -6,14 +7,17 @@ class awsMenu:
         "Back": 2
     }
     
-    def display(self):
+    def __init__(self):
+        self.ec2_menu = ec2Menu()
+        
+    def _display(self):
         print("\nAWS Main Menu")
         for option, number in self.MENU_OPTIONS.items():
             print(f"{number}. {option}")
 
-    def handle(self, ec2_service, ec2_menu):
+    def handle(self, ec2_service):
         while True:
-            self.display()
+            self._display()
             
             choice = read_range_integer(
                 "Select from menu: ",
@@ -21,9 +25,9 @@ class awsMenu:
                 max(self.MENU_OPTIONS.values())
             )
             
-            if choice == self.MENU_OPTIONS["EC2 Instances"]:
-                return ec2_menu.handle(ec2_service)
-            elif choice == self.MENU_OPTIONS["Back"]:
+            if choice == 1:
+                self.ec2_menu.handle(ec2_service)
+            elif choice == 2:
                 return False
             else:
                 print("Invalid option.")

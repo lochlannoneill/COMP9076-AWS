@@ -2,62 +2,51 @@ import boto3
 from src.utils.reading_from_user import read_nonempty_string
 
 class resource:
-    def __init__(self, session):
-        """Initialize with a boto3 session."""
-        self.ec2 = session.resource('ec2')
-        self.s3 = session.resource('s3')
+    def __init__(self, region, key_id, secret_key):
+        """Initialize with AWS credentials and region."""
+        self.region = region
+        self.key_id = key_id
+        self.secret_key = secret_key
 
-    def list_instances(self):
-        """List all EC2 instances."""
-        for instance in self.ec2.instances.all():
-            print(f"Instance ID: {instance.id}")
-            print(f"State: {instance.state['Name']}")
-            print(f"Type: {instance.instance_type}")
-            print(f"Region: {instance.placement['AvailabilityZone']}")
-            print(f"Launch Time: {instance.launch_time.strftime('%Y-%m-%d %H:%M:%S')}")
-            print()
+    # COMPLETED
+    def _create_resource(self, service_name):
+        """Create and return a resource for the specified AWS service."""
+        try:
+            return boto3.resource(
+                service_name,
+                aws_access_key_id=self.key_id,
+                aws_secret_access_key=self.secret_key,
+                region_name=self.region
+            )
+        except Exception as e:
+            print(f"Error creating resource for {service_name}: {e}")
+            return None
 
-    def list_volumes(self):
-        """List all EBS volumes."""
-        for volume in self.ec2.volumes.all():
-            print(f"Volume ID: {volume.id}")
-            print(f"Size: {volume.size} GiB")
-            print(f"State: {volume.state}")
-            print(f"Availability Zone: {volume.availability_zone}")
-            print()
+    # COMPLETED
+    def _create_client(self, service_name):
+        """Create and return a client for the specified AWS service."""
+        try:
+            return boto3.client(
+                service_name,
+                aws_access_key_id=self.key_id,
+                aws_secret_access_key=self.secret_key,
+                region_name=self.region
+            )
+        except Exception as e:
+            print(f"Error creating client for {service_name}: {e}")
+            return None
 
-    def list_buckets(self):
-        """List all S3 buckets."""
-        for bucket in self.s3.buckets.all():
-            print(f"Bucket: {bucket.name}")
+    # COMPLETED
+    def get_ec2_resource(self):
+        """Get the EC2 resource."""
+        return self._create_resource("ec2")
 
-    def list_objects(self):
-        """List all objects in a specified bucket."""
-        bucket_name = read_nonempty_string("Enter the bucket name: ")
-        bucket = self.s3.Bucket(bucket_name)
-        for obj in bucket.objects.all():
-            print(f"Key: {obj.key}")
+    # TODO
+    def get_s3_resource(self):
+        """Get the S3 resource."""
+        return self._create_resource("s3")
 
-    def create_volume(self):
-        """Create a new EBS volume."""
-        size = int(read_nonempty_string("Enter the size of the volume (GiB): "))
-        az = read_nonempty_string("Enter the Availability Zone: ")
-        volume = self.ec2.create_volume(Size=size, AvailabilityZone=az)
-        print(f"Volume created: {volume.id}")
-
-    def create_bucket(self):
-        """Create a new bucket."""
-        bucket_name = read_nonempty_string("Enter the bucket name: ")
-        bucket = self.s3.create_bucket(Bucket=bucket_name)
-        print(f"Created bucket: {bucket.name}")
-
-    def delete_bucket(self):
-        """Delete a bucket."""
-        bucket_name = read_nonempty_string("Enter the bucket name: ")
-        bucket = self.s3.Bucket(bucket_name)
-        bucket.delete()
-        print(f"Deleted bucket: {bucket_name}")
-
-    def start_instance(self):
-        """Start a specified EC2 instance."""
-        instance_id
+    # TODO
+    def get_cloudwatch_client(self):
+        """Get the CloudWatch client."""
+        return self._create_client("cloudwatch")
