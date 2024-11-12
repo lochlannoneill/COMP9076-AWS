@@ -53,7 +53,7 @@ class EC2Controller:
             self.ec2_client.start_instances(InstanceIds=[instance_id])
             print(f"Starting instance {instance_id}...")
         except Exception as e:
-            print(f"Error starting instance {instance_id}: {e}")
+            print(e)
 
     # COMPLETED
     def stop_instance(self):
@@ -63,7 +63,7 @@ class EC2Controller:
             self.ec2_client.stop_instances(InstanceIds=[instance_id])
             print(f"Stopping instance {instance_id}...")
         except Exception as e:
-            print(f"Error stopping instance {instance_id}: {e}")
+            print(e)
 
     # COMPLETED
     def create_ami(self):
