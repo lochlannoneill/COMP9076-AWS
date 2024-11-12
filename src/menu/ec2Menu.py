@@ -13,7 +13,7 @@ class ec2Menu:
         }
     
     def _display(self):
-        print("\nAWS Main Menu")
+        print("\nEC2 Menu")
         for option, number in self.options.items():
             print(f"\t{number}. {option}")
 

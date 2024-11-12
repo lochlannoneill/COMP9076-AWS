@@ -17,7 +17,7 @@ class awsMenu:
         }
 
     def _display(self):
-        print("\nAWS Main Menu")
+        print("\nAWS Menu")
         for option, number in self.options.items():
             print(f"\t{number}. {option}")
 
