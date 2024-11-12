@@ -29,4 +29,3 @@ class ec2Menu:
                 return False
             else:
                 print("Invalid option.")
-            return True

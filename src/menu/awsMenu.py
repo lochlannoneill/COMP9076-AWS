@@ -15,7 +15,7 @@ class awsMenu:
             self._display()
             choice = read_range_integer("Select from menu: ", 1, 2)
             if choice == 1:
-                return self.ec2_menu.handle(ec2_service)
+                self.ec2_menu.handle(ec2_service)
             elif choice == 2:
                 return False
             else:
