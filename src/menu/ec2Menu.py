@@ -6,9 +6,10 @@ class ec2Menu:
             "List All Instances": 1,
             "Start Instance": 2,
             "Stop Instance": 3,
-            "Create AMI": 4,
-            "Delete AMI": 5,
-            "Back": 6
+            "List AMIs of Instance": 4,
+            "Create AMI": 5,
+            "Delete AMI": 6,
+            "Back": 7
         }
     
     def _display(self):
@@ -31,6 +32,8 @@ class ec2Menu:
                 ec2_service.start_instance()
             elif choice == self.options["Stop Instance"]:
                 ec2_service.stop_instance()
+            elif choice == self.options["List AMIs of Instance"]:
+                ec2_service.list_amis()
             elif choice == self.options["Create AMI"]:
                 ec2_service.create_ami()
             elif choice == self.options["Delete AMI"]:

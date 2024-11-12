@@ -66,15 +66,52 @@ class EC2Controller:
             print(e)
 
     # COMPLETED
+    def list_amis(self):
+        """List all AMIs from an EC2 instance."""
+        instance_id = read_nonempty_string("Enter the Instance ID to list AMIs for: ")
+        try:
+            # Retrieve AMIs that have a tag or description mentioning the instance ID
+            images = self.ec2_client.describe_images(
+                Filters=[
+                    {
+                        'Name': 'tag:InstanceId',
+                        'Values': [instance_id]
+                    }
+                ]
+            )
+            
+            if not images['Images']:
+                print(f"No AMIs found for instance {instance_id}.")
+            else:
+                for image in images['Images']:
+                    ami_info = {
+                        "AMI ID": image['ImageId'],
+                        "Name": image['Name'],
+                        "Creation Date": image['CreationDate']
+                    }
+                    print(ami_info)
+
+        except Exception as e:
+            print(e)
+
+    # COMPLETED
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
         instance_id = read_nonempty_string("Enter the Instance ID to create AMI from: ")
         ami_name = read_nonempty_string("Enter a name for the AMI: ")
         try:
             response = self.ec2_client.create_image(InstanceId=instance_id, Name=ami_name)
-            print(f"AMI created: {response['ImageId']}")
+            ami_id = response['ImageId']
+            
+            # Add a tag with the Instance ID to the new AMI
+            self.ec2_client.create_tags(
+                Resources=[ami_id],
+                Tags=[{'Key': 'InstanceId', 'Value': instance_id}]
+            )
+            print(f"AMI created: {ami_id}")
         except Exception as e:
             print(e)
+
 
     # COMPLETED
     def delete_ami(self):
