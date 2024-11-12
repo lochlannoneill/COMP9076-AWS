@@ -1,5 +1,6 @@
 from tabulate import tabulate
 from src.utils.reading_from_user import read_nonempty_string
+from datetime import datetime
 
 class EC2Controller:
     def __init__(self, resource, client):
@@ -91,7 +92,12 @@ class EC2Controller:
             if images['Images']:
                 headers = ["AMI ID", "Name", "Creation Date"]
                 table_data = [
-                    [image['ImageId'], image['Name'], image['CreationDate']]
+                    [
+                        image['ImageId'],
+                        image['Name'],
+                        # Parse and format the CreationDate string
+                        datetime.strptime(image['CreationDate'], "%Y-%m-%dT%H:%M:%S.%fZ").strftime("%Y-%m-%d %H:%M:%S")
+                    ]
                     for image in images['Images']
                 ]
                 print(tabulate(table_data, headers=headers, tablefmt="grid"))
