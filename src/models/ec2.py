@@ -1,5 +1,5 @@
-from tabulate import tabulate
 from src.utils.reading_from_user import read_nonempty_string
+from tabulate import tabulate
 from datetime import datetime
 
 class EC2Controller:
@@ -8,7 +8,6 @@ class EC2Controller:
         self.ec2_resource = resource
         self.ec2_client = client
 
-    # COMPLETED
     def list_instances(self):
             """List all EC2 instances, grouped by running and stopped."""
             running_instances = []
@@ -43,7 +42,6 @@ class EC2Controller:
             else:
                 print("No stopped instances detected.")
 
-    # COMPLETED
     def start_instance(self):
         """Start a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter the Instance ID to start: ")
@@ -53,7 +51,6 @@ class EC2Controller:
         except Exception as e:
             print(e)
 
-    # COMPLETED
     def stop_instance(self):
         """Stop a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter the Instance ID to stop: ")
@@ -72,7 +69,6 @@ class EC2Controller:
         except Exception as e:
             print(e)
 
-    # COMPLETED
     def list_amis(self):
         """List all AMIs from an EC2 instance."""
         instance_id = read_nonempty_string("\nEnter the Instance ID to list associated AMIs: ")
@@ -106,7 +102,6 @@ class EC2Controller:
         except Exception as e:
             print(e)
 
-    # COMPLETED
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter the Instance ID to create AMI from: ")
@@ -124,7 +119,6 @@ class EC2Controller:
         except Exception as e:
             print(e)
 
-    # COMPLETED
     def delete_ami(self):
         """Delete a specified AMI."""
         ami_id = read_nonempty_string("\nEnter the AMI ID to delete: ")
