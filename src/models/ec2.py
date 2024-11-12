@@ -13,10 +13,9 @@ class ec2:
         response = self.ec2.describe_instances()
         running_instances = []
         stopped_instances = []
-        count = 0
-        
+
         # Parse instances
-        for reservation in response['Reservations']:
+        for reservation in response.get('Reservations', []):
             for instance in reservation['Instances']:
                 instance_info = {
                     "Instance ID": instance['InstanceId'],
@@ -29,18 +28,16 @@ class ec2:
                     running_instances.append(instance_info)
                 else:
                     stopped_instances.append(instance_info)
-            count += 1
-            
-        if count == 0:
+
+        if not running_instances and not stopped_instances:
             print("No EC2 instances detected.")
-        
-        print("\nRunning Instances:")
-        for inst in running_instances:
-            print(inst)
-        
-        print("\nStopped Instances:")
-        for inst in stopped_instances:
-            print(inst)
+        else:
+            print("\nRunning Instances:")
+            for inst in running_instances:
+                print(inst)
+            print("\nStopped Instances:")
+            for inst in stopped_instances:
+                print(inst)
 
     def start_instance(self):
         """Start a specified EC2 instance."""
