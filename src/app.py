@@ -20,9 +20,10 @@ class App:
                     key_id=user_credentials["access_key"],
                     secret_key=user_credentials["secret_key"]
                 )
+            break
 
         # EC2 Service
-        ec2 = aws_resource.get_ec2_resource
+        ec2 = aws_resource.get_ec2_resource()
         ec2_service = EC2Controller(ec2)
         while True:
             if not self.aws_menu.handle(ec2_service):
