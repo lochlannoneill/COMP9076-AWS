@@ -5,31 +5,43 @@ class resource:
     def __init__(self):
         """Initialize with optional AWS credentials and region."""
         self.region = "eu-west-1"
-        self.key_id = "insert here"  # TODO
-        self.secret_key = "insert here"  # TODO
+        self.key_id = "placeholder"  # TODO
+        self.secret_key = "placeholder"  # TODO
 
-    def EC2Resource(self):
-        # Create and return a Resource for interacting with EC2 instances
-        ec2 = boto3.resource("ec2",aws_access_key_id=self.key_id,
-                     aws_secret_access_key=self.secret_key,
-                     region_name=self.region)
-        return ec2 
+    def _create_resource(self, service_name):
+        """Create and return a resource for the specified AWS service."""
+        try:
+            return boto3.resource(
+                service_name,
+                aws_access_key_id=self.key_id,
+                aws_secret_access_key=self.secret_key,
+                region_name=self.region
+            )
+        except Exception as e:
+            print(f"Error creating resource for {service_name}: {e}")
+            return None
 
+    def _create_client(self, service_name):
+        """Create and return a client for the specified AWS service."""
+        try:
+            return boto3.client(
+                service_name,
+                aws_access_key_id=self.key_id,
+                aws_secret_access_key=self.secret_key,
+                region_name=self.region
+            )
+        except Exception as e:
+            print(f"Error creating client for {service_name}: {e}")
+            return None
 
-    def S3Resource(self):
-        # Create and return a Resource for interacting with S3 instances
-        s3 = boto3.resource("s3",aws_access_key_id=self.key_id,
-                     aws_secret_access_key=self.secret_key,
-                     region_name=self.region)
-        return s3
+    def get_ec2_resource(self):
+        """Get the EC2 resource."""
+        return self._create_resource("ec2")
 
-    def CWClient(self):
-        # Create and return a Client for interacting with CloudWatch
-        cw = cloudwatch = boto3.client('cloudwatch',aws_access_key_id=self.key_id,
-                     aws_secret_access_key=self.secret_key,
-                     region_name=self.region)
-        return cw
+    def get_s3_resource(self):
+        """Get the S3 resource."""
+        return self._create_resource("s3")
 
-
-
-
+    def get_cloudwatch_client(self):
+        """Get the CloudWatch client."""
+        return self._create_client("cloudwatch")
