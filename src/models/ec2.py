@@ -6,6 +6,7 @@ class EC2Controller:
         """Initialize with a boto3 session and region."""
         self.ec2 = resource
 
+    # COMPLETED
     def list_instances(self):
         """List all EC2 instances, grouped by running and stopped."""
         running_instances = []
@@ -43,6 +44,7 @@ class EC2Controller:
             else:
                 print("No stopped instances detected.")
 
+    # TODO
     def start_instance(self):
         """Start a specified EC2 instance."""
         instance_id = read_nonempty_string("Enter the Instance ID to start: ")
@@ -52,6 +54,7 @@ class EC2Controller:
         except Exception as e:
             print(f"Error starting instance {instance_id}: {e}")
 
+    # TODO
     def stop_instance(self):
         """Stop a specified EC2 instance."""
         instance_id = read_nonempty_string("Enter the Instance ID to stop: ")
@@ -61,6 +64,7 @@ class EC2Controller:
         except Exception as e:
             print(f"Error stopping instance {instance_id}: {e}")
 
+    # TODO
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
         instance_id = read_nonempty_string("Enter the Instance ID to create AMI from: ")
@@ -68,6 +72,7 @@ class EC2Controller:
         response = self.ec2.create_image(InstanceId=instance_id, Name=ami_name)
         print(f"AMI created: {response['ImageId']}")
 
+    # TODO
     def delete_ami(self):
         """Delete a specified AMI."""
         ami_id = read_nonempty_string("Enter the AMI ID to delete: ")

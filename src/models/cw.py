@@ -7,6 +7,7 @@ class cw:
         """Initialize with a boto3 session."""
         self.cloudwatch = session.client('cloudwatch')
 
+    # TODO
     def list_metrics(self):
         """List all CloudWatch metrics."""
         response = self.cloudwatch.list_metrics()
@@ -16,6 +17,7 @@ class cw:
             print(f"Dimensions: {metric['Dimensions']}")
             print()
 
+    # TODO
     def get_metric_data(self):
         """Get metric data for a specified metric."""
         namespace = read_nonempty_string("Enter the Namespace: ")
@@ -46,6 +48,7 @@ class cw:
         )
         print(response)
 
+    # TODO
     def put_metric_data(self):
         """Put metric data for a specified metric."""
         namespace = read_nonempty_string("Enter the Namespace: ")
