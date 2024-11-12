@@ -11,22 +11,19 @@ class App:
         self.aws_menu = awsMenu()
 
     def _start(self):
+        # Main Menu
         while True:
-            # Display and handle the main menu
             user_credentials = self.main_menu.handle(self.user_manager)
             if user_credentials:
-                # Pass credentials to the resource class to create AWS resources
                 aws_resource = resource(
                     region="eu-west-1",
                     key_id=user_credentials["access_key"],
                     secret_key=user_credentials["secret_key"]
                 )
-                self._run(aws_resource)
 
-    def _run(self, aws_resource):
+        # EC2 Service
         ec2 = aws_resource.get_ec2_resource
         ec2_service = EC2Controller(ec2)
-
         while True:
             if not self.aws_menu.handle(ec2_service):
                 break
