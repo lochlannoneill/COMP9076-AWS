@@ -1,4 +1,5 @@
 from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string
+from tabulate import tabulate
 
 class Volumes:
     def __init__(self, ec2_client, ec2_resource):
@@ -12,33 +13,44 @@ class Volumes:
         available_volumes = []
 
         # Parse volumes
-        for volume in self.volume_resource.volumes.all():  # This should use volume_resource
+        for volume in self.volume_resource.volumes.all():
+            # Gather basic volume info
             volume_info = {
                 "Volume ID": volume.volume_id,
                 "Size": f"{volume.size} GiB",
                 "State": volume.state,
                 "Availability Zone": volume.availability_zone
             }
-            if volume.state == 'in-use':
-                in_use_volumes.append(volume_info)
-            else:
-                available_volumes.append(volume_info)
 
-        # Display results in a structured format
+            # Check if volume is attached to an instance and get mount point (device)
+            mount_point = "Not Attached"
+            if volume.state == "in-use":
+                # Retrieve attachments and mount points (mount point)
+                for attachment in volume.attachments:
+                    instance_id = attachment.get("InstanceId")
+                    device = attachment.get("Device")
+                    mount_point = f"{device} (Instance: {instance_id})"
+
+            # Update the volume info with mount point if it's in-use
+            if volume.state == 'in-use':
+                volume_info["Mount Point"] = mount_point
+                in_use_volumes.append(volume_info)  # Append only once
+            else:
+                available_volumes.append(volume_info)  # Append only once
+
+        # Display results in tabular format
         print("\nIn-Use Volumes:")
         if in_use_volumes:
-            for vol in in_use_volumes:
-                print(vol)
+            print(tabulate(in_use_volumes, headers="keys", tablefmt="pretty"))
         else:
             print("No in-use volumes detected.")
 
-        print("\nUnused Volumes:")
+        print("\nAvailable Volumes:")
         if available_volumes:
-            for vol in available_volumes:
-                print(vol)
+            print(tabulate(available_volumes, headers="keys", tablefmt="pretty"))
         else:
-            print("No unused volumes detected.")
-
+            print("No available volumes detected.")
+            
     def create_volume(self):
         """Create a new EBS volume."""
         size = read_nonnegative_integer("\nEnter the size of the volume (GiB): ")
@@ -54,19 +66,37 @@ class Volumes:
         az_index = read_nonnegative_integer("Select the Availability Zone by number: ") - 1
         if 0 <= az_index < len(available_zones):
             az = available_zones[az_index]
+            
+            # Create the volume
             response = self.ec2_client.create_volume(Size=size, AvailabilityZone=az)
-            print(f"Volume created: {response['VolumeId']}")
+            volume_id = response['VolumeId']
+            print(f"Volume created: '{volume_id}'")
         else:
             print("Invalid zone selected.")
-
 
     def attach_volume(self):
         """Attach a volume to an EC2 instance."""
         volume_id = read_nonempty_string("Enter the Volume ID to attach: ")
-        instance_id = read_nonempty_string("Enter the Instance ID to attach to: ")
-        device = read_nonempty_string("Enter the device name (e.g., /dev/sdf): ")
-        response = self.ec2_client.attach_volume(VolumeId=volume_id, InstanceId=instance_id, Device=device)
-        print(f"Volume attached: {response['State']}")
+        instance_id = read_nonempty_string("Enter the Instance ID to attach to: ")  # Ensure this is an EC2 instance ID
+        
+        # List of mount points  # TODO - get dynamically
+        available_devices = ['/dev/sdf', '/dev/sdg', '/dev/sdh', '/dev/sdi', '/dev/sdj', '/dev/sdk']
+        
+        print("Available mount points:")
+        for idx, device in enumerate(available_devices, start=1):
+            print(f"\t{idx}. {device}")
+        
+        device_index = read_nonnegative_integer("Select the mount point by number: ") - 1
+        if 0 <= device_index < len(available_devices):
+            device = available_devices[device_index]
+            
+            try:
+                response = self.ec2_client.attach_volume(VolumeId=volume_id, InstanceId=instance_id, Device=device)
+                print(f"'{volume_id}' {response['State']} to '{instance_id}' at '{device}'")
+            except botocore.exceptions.ClientError as e:
+                print(f"Error attaching volume: {e}")
+        else:
+            print("Invalid device selection.")
 
     def detach_volume(self):
         """Detach a volume from an EC2 instance."""
