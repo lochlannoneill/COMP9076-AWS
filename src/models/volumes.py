@@ -45,7 +45,7 @@ class Volumes:
         else:
             print("No in-use volumes detected.")
 
-        print("\nAvailable Volumes:")
+        print("Available Volumes:")
         if available_volumes:
             print(tabulate(available_volumes, headers="keys", tablefmt="pretty"))
         else:
@@ -76,7 +76,7 @@ class Volumes:
 
     def attach_volume(self):
         """Attach a volume to an EC2 instance."""
-        volume_id = read_nonempty_string("Enter the Volume ID to attach: ")
+        volume_id = read_nonempty_string("\nEnter the Volume ID to attach: ")
         instance_id = read_nonempty_string("Enter the Instance ID to attach to: ")  # Ensure this is an EC2 instance ID
         
         # List of mount points  # TODO - get dynamically
@@ -100,12 +100,12 @@ class Volumes:
 
     def detach_volume(self):
         """Detach a volume from an EC2 instance."""
-        volume_id = read_nonempty_string("Enter the Volume ID to detach: ")
+        volume_id = read_nonempty_string("\nEnter the Volume ID to detach: ")
         response = self.ec2_client.detach_volume(VolumeId=volume_id)
-        print(f"Volume detached: {response['State']}")
+        print(f"'{volume_id}' {response['State']} from '{response['InstanceId']}' at '{response['Device']}'")  # TODO - validation when trying to detach available volume
 
     def delete_volume(self):
         """Delete a volume."""
-        volume_id = read_nonempty_string("Enter the Volume ID to delete: ")
+        volume_id = read_nonempty_string("\nEnter the Volume ID to delete: ")
         self.ec2_client.delete_volume(VolumeId=volume_id)
-        print(f"Deleted volume: {volume_id}")
+        print(f"'{volume_id}' deleted.")

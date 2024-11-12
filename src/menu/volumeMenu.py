@@ -6,10 +6,12 @@ class volumeMenu:
             "List All Volumes": 1,
             "Create New Volume": 2,
             "Attach Volume To Instance": 3,
-            "Modify Volume": 4,
-            "Snapshot Volume": 5,
-            "Create Volume From Snapshot": 6,
-            "Back": 7
+            "Detach Volume To Instance": 4,
+            "Modify Volume": 5,
+            "Snapshot Volume": 6,
+            "Create Volume From Snapshot": 7,
+            "Delete Available Volume": 8,
+            "Back": 9
         }
     
     def _display(self):
@@ -32,11 +34,15 @@ class volumeMenu:
                 ec2_service.create_volume()
             elif choice == self.options["Attach Volume To Instance"]:
                 ec2_service.attach_volume()
+            elif choice == self.options["Detach Volume To Instance"]:
+                ec2_service.detach_volume()
             elif choice == self.options["Modify Volume"]:
                 ec2_service.modify_volume()
             elif choice == self.options["Snapshot Volume"]:
                 ec2_service.snapshot_volume()
             elif choice == self.options["Create Volume From Snapshot"]:
                 ec2_service.create_volume_from_snapshot()
+            elif choice == self.options["Delete Available Volume"]:
+                ec2_service.delete_volume()
             elif choice == self.options["Back"]:
                 return False
