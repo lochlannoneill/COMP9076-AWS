@@ -19,20 +19,20 @@ class awsMenu:
     def _display(self):
         print("\nAWS Main Menu")
         for option, number in self.options.items():
-            print(f"{number}. {option}")
+            print(f"\t{number}. {option}")
 
     def handle(self, session):
         # EC2
         ec2_controller = EC2Controller(
             session.get_ec2_resource(),
             session._create_client("ec2")
-        )
+        )  # TODO - performance -> maybe just get resource here, and client after choice
         
         # Volumes
         vol = Volumes(
             session._create_client("ec2"),
             session.get_ec2_resource()
-        )
+        )  # TODO - performance ->maybe just get resource here, and client after choice
         
         while True:
             self._display()

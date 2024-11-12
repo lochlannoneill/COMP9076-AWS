@@ -22,7 +22,7 @@ class App:
             break
 
         while True:
-            if not self.aws_menu.handle(session):  # TODO - why is input not working on the first time? is this because of how the session is created ???
+            if not self.aws_menu.handle(session):
                 break
 
 def main():

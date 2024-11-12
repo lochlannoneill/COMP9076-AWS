@@ -15,7 +15,7 @@ class ec2Menu:
     def _display(self):
         print("\nAWS Main Menu")
         for option, number in self.options.items():
-            print(f"{number}. {option}")
+            print(f"\t{number}. {option}")
 
     def handle(self, ec2_service):
         while True:

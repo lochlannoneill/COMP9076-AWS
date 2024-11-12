@@ -48,7 +48,7 @@ class EC2Controller:
     # COMPLETED
     def start_instance(self):
         """Start a specified EC2 instance."""
-        instance_id = read_nonempty_string("Enter the Instance ID to start: ")
+        instance_id = read_nonempty_string("\nEnter the Instance ID to start: ")
         try:
             self.ec2_client.start_instances(InstanceIds=[instance_id])
             print(f"Instance started: '{instance_id}'")
@@ -58,7 +58,7 @@ class EC2Controller:
     # COMPLETED
     def stop_instance(self):
         """Stop a specified EC2 instance."""
-        instance_id = read_nonempty_string("Enter the Instance ID to stop: ")
+        instance_id = read_nonempty_string("\nEnter the Instance ID to stop: ")
         try:
             self.ec2_client.stop_instances(InstanceIds=[instance_id])
             print(f"Instance stopped: '{instance_id}'")
@@ -68,7 +68,8 @@ class EC2Controller:
     # COMPLETED
     def list_amis(self):
         """List all AMIs from an EC2 instance."""
-        instance_id = read_nonempty_string("Enter the Instance ID to list AMIs for: ")
+        instance_id = read_nonempty_string("\nEnter the Instance ID to list associated AMIs: ")
+        print(f"Searching associated AMIs of '{instance_id}'...")
         try:
             # Retrieve AMIs that have a tag or description mentioning the instance ID
             images = self.ec2_client.describe_images(
@@ -80,9 +81,8 @@ class EC2Controller:
                 ]
             )
             
-            if not images['Images']:
-                print(f"No AMIs found for instance {instance_id}.")
-            else:
+            if images['Images']:
+                print(f"\nAMIs associated with instance '{instance_id}':")
                 for image in images['Images']:
                     ami_info = {
                         "AMI ID": image['ImageId'],
@@ -90,6 +90,9 @@ class EC2Controller:
                         "Creation Date": image['CreationDate']
                     }
                     print(ami_info)
+            else:
+                print(f"No associated AMIs found for instance '{instance_id}'.")
+   
 
         except Exception as e:
             print(e)
@@ -97,7 +100,7 @@ class EC2Controller:
     # COMPLETED
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
-        instance_id = read_nonempty_string("Enter the Instance ID to create AMI from: ")
+        instance_id = read_nonempty_string("\nEnter the Instance ID to create AMI from: ")
         ami_name = read_nonempty_string("Enter a name for the AMI: ")
         try:
             response = self.ec2_client.create_image(InstanceId=instance_id, Name=ami_name)
@@ -115,7 +118,7 @@ class EC2Controller:
     # COMPLETED
     def delete_ami(self):
         """Delete a specified AMI."""
-        ami_id = read_nonempty_string("Enter the AMI ID to delete: ")
+        ami_id = read_nonempty_string("\nEnter the AMI ID to delete: ")
         try:
             self.ec2_client.deregister_image(ImageId=ami_id)
             print(f"Deleted AMI: '{ami_id}'")

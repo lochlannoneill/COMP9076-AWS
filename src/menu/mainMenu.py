@@ -12,7 +12,7 @@ class mainMenu:
         """Display the main menu options."""
         print("\nMain Menu")
         for option, number in self.options.items():
-            print(f"{number}. {option}")
+            print(f"\t{number}. {option}")
 
     def handle(self, user_manager):
         """Handle the main menu interaction."""
