@@ -29,7 +29,7 @@ class App:
 def main():
     user_manager = userManager()  # Initialize the user manager
     app = App(user_manager)       # Initialize the App with the user manager
-    app._start()                     # Start the application
+    app._start()                  # Start the application
 
 if __name__ == "__main__":
     main()  # Run the main function when the script is executed
