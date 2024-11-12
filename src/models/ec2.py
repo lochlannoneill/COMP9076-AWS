@@ -43,15 +43,21 @@ class ec2:
         """Start a specified EC2 instance."""
         self.list_instances()
         instance_id = read_nonempty_string("Enter the Instance ID to start: ")
-        self.ec2.start_instances(InstanceIds=[instance_id])
-        print(f"Starting instance {instance_id}...")
+        try:
+            self.ec2.start_instances(InstanceIds=[instance_id])
+            print(f"Starting instance {instance_id}...")
+        except Exception as e:
+            print(f"Error starting instance {instance_id}: {e}")
 
     def stop_instance(self):
         """Stop a specified EC2 instance."""
         self.list_instances()
         instance_id = read_nonempty_string("Enter the Instance ID to stop: ")
-        self.ec2.stop_instances(InstanceIds=[instance_id])
-        print(f"Stopping instance {instance_id}...")
+        try:
+            self.ec2.stop_instances(InstanceIds=[instance_id])
+            print(f"Stopping instance {instance_id}...")
+        except Exception as e:
+            print(f"Error stopping instance {instance_id}: {e}")
 
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
