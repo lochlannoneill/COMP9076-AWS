@@ -1,9 +1,8 @@
 import boto3
 from src.models.user import userManager
-from src.models.ec2 import EC2Controller
 from src.menu.mainMenu import mainMenu
 from src.menu.awsMenu import awsMenu
-from src.models.resource import resource  # Import the resource class
+from src.models.resource import resource
 
 class App:
     def __init__(self, user_manager):
@@ -23,12 +22,8 @@ class App:
                 )
             break
 
-        # EC2 Service
-        ec2_resource = aws_resource.get_ec2_resource()
-        ec2_client = aws_resource._create_client("ec2")
-        ec2_controller = EC2Controller(ec2_resource, ec2_client)
         while True:
-            if not self.aws_menu.handle(ec2_controller):
+            if not self.aws_menu.handle(aws_resource):
                 break
 
 def main():

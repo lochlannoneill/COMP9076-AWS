@@ -6,9 +6,9 @@ class volumes:
         """Initialize with a boto3 session."""
         self.ec2 = session.client('ec2')
 
-    # TODO
     def list_volumes(self):
         """List all EBS volumes."""
+        print("Listing all EBS volumes:")
         response = self.ec2.describe_volumes()
         for volume in response['Volumes']:
             print(f"Volume ID: {volume['VolumeId']}")
@@ -17,7 +17,6 @@ class volumes:
             print(f"Availability Zone: {volume['AvailabilityZone']}")
             print()
 
-    # TODO
     def create_volume(self):
         """Create a new EBS volume."""
         size = read_nonnegative_integer("Enter the size of the volume (GiB): ")
@@ -25,7 +24,6 @@ class volumes:
         response = self.ec2.create_volume(Size=size, AvailabilityZone=az)
         print(f"Volume created: {response['VolumeId']}")
 
-    # TODO
     def attach_volume(self):
         """Attach a volume to an EC2 instance."""
         volume_id = read_nonempty_string("Enter the Volume ID to attach: ")
@@ -34,14 +32,12 @@ class volumes:
         response = self.ec2.attach_volume(VolumeId=volume_id, InstanceId=instance_id, Device=device)
         print(f"Volume attached: {response['State']}")
 
-    # TODO
     def detach_volume(self):
         """Detach a volume from an EC2 instance."""
         volume_id = read_nonempty_string("Enter the Volume ID to detach: ")
         response = self.ec2.detach_volume(VolumeId=volume_id)
         print(f"Volume detached: {response['State']}")
 
-    # TODO
     def delete_volume(self):
         """Delete a volume."""
         volume_id = read_nonempty_string("Enter the Volume ID to delete: ")
