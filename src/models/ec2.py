@@ -17,6 +17,7 @@ class EC2Controller:
         for instance in self.ec2_resource.instances.all():
             instance_info = {
                 "Instance ID": instance.instance_id,
+                "Name": next((tag['Value'] for tag in instance.tags if tag['Key'] == 'Name'), ''),
                 "State": instance.state['Name'],
                 "Type": instance.instance_type,
                 "Region": instance.placement['AvailabilityZone'],
@@ -111,7 +112,6 @@ class EC2Controller:
             print(f"AMI created: '{ami_id}'")
         except Exception as e:
             print(e)
-
 
     # COMPLETED
     def delete_ami(self):
