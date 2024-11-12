@@ -2,11 +2,11 @@ import boto3
 from src.utils.reading_from_user import read_nonempty_string
 
 class resource:
-    def __init__(self):
-        """Initialize with optional AWS credentials and region."""
-        self.region = "eu-west-1"
-        self.key_id = "placeholder"  # TODO
-        self.secret_key = "placeholder"  # TODO
+    def __init__(self, region="eu-west-1", key_id=None, secret_key=None):  # TODO - pass parameters
+        """Initialize with AWS credentials and region."""
+        self.region = region
+        self.key_id = key_id
+        self.secret_key = secret_key
 
     def _create_resource(self, service_name):
         """Create and return a resource for the specified AWS service."""
