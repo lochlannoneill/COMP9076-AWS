@@ -44,8 +44,6 @@ class volumeMenu:
                 ec2_service.modify_volume()
             elif choice == self.options["Delete Volume"]:
                 ec2_service.delete_volume()
-            elif choice == self.options["Snapshot Volume"]:
-                ec2_service.snapshot_volume()
             elif choice == self.options["List Snapshots"]:
                 ec2_service.list_snapshots()
             elif choice == self.options["Create Snapshot"]:
