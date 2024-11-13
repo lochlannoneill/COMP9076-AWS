@@ -78,13 +78,38 @@ class Volumes:
         else:
             print("Invalid zone selected.")
 
-    # TODO - Implement this method
     def create_volume_from_snapshot(self):
         """Create a volume from a snapshot."""
         snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to create volume from: ")
-        response = self.ec2_client.create_volume(SnapshotId=snapshot_id)
-        volume_id = response['VolumeId']
-        print(f"Created '{volume_id}'")
+
+        # Optionally, retrieve the Availability Zone by describing the snapshot's volume
+        try:
+            snapshot_info = self.ec2_client.describe_snapshots(SnapshotIds=[snapshot_id])
+            volume_id = snapshot_info['Snapshots'][0]['VolumeId']
+            print(f"Found '{volume_id}' from '{snapshot_id}'")
+
+            # Describe the volume to get the availability zone
+            volume_info = self.ec2_client.describe_volumes(VolumeIds=[volume_id])
+            if not volume_info['Volumes']:
+                raise ValueError(f"Volume ID not found: '{volume_id}'")
+
+            availability_zone = volume_info['Volumes'][0]['AvailabilityZone']
+            print(f"Volume located in '{availability_zone}'")
+
+            # Create the volume from the snapshot
+            response = self.ec2_client.create_volume(
+                SnapshotId=snapshot_id,
+                AvailabilityZone=availability_zone
+            )
+            created_volume_id = response['VolumeId']
+            print(f"Created '{created_volume_id}' from '{snapshot_id}' in '{availability_zone}'.")
+
+        except self.ec2_client.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
+        except ValueError as e:
+            print(f"ValueError: {e}")
+        except Exception as e:
+            print(f"Unexpected error: {e}")
 
     def attach_volume(self):
         """Attach a volume to an EC2 instance."""
