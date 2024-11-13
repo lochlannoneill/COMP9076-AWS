@@ -117,7 +117,7 @@ class Volumes:
         new_size = read_nonnegative_integer("Enter the new size of the volume (GiB): ")
         try:
             self.ec2_client.modify_volume(VolumeId=volume_id, Size=new_size)
-            print(f"Modified '{volume_id}' to {new_size} GiB.")
+            print(f"Modified '{volume_id}' to {new_size} GiB")
         except self.ec2_client.exceptions.ClientError as e:
             print(f"An error occurred: {e}")
 
@@ -126,7 +126,7 @@ class Volumes:
         volume_id = read_nonempty_string("\nEnter the Volume ID to delete: ")
         try:
             self.ec2_client.delete_volume(VolumeId=volume_id)
-            print(f"Deleted '{volume_id}'.")
+            print(f"Deleted '{volume_id}'")
         except self.ec2_client.exceptions.ClientError as e:
             print(f"An error occurred: {e}")
 
@@ -167,7 +167,7 @@ class Volumes:
         snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to delete: ")
         try:
             self.ec2_client.delete_snapshot(SnapshotId=snapshot_id)
-            print(f"Deleted '{snapshot_id}'.")
+            print(f"Deleted '{snapshot_id}'")
         except self.ec2_client.exceptions.ClientError as e:
             print(f"An error occurred: {e}")
             
@@ -195,7 +195,7 @@ class Volumes:
                 AvailabilityZone=availability_zone
             )
             created_volume_id = response['VolumeId']
-            print(f"Created '{created_volume_id}' from '{snapshot_id}' in '{availability_zone}'.")
+            print(f"Created '{created_volume_id}' from '{snapshot_id}' in '{availability_zone}'")
 
         except self.ec2_client.exceptions.ClientError as e:
             print(f"An error occurred: {e}")
