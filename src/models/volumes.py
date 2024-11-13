@@ -125,7 +125,13 @@ class Volumes:
             return
 
         self.ec2_client.modify_volume(VolumeId=volume_id, Size=new_size)
-        print(f"'{volume_id}' modified to {new_size} GiB.")
+        print(f"Modified '{volume_id}' to {new_size} GiB.")
+    
+    def delete_volume(self):
+        """Delete a volume."""
+        volume_id = read_nonempty_string("\nEnter the Volume ID to delete: ")
+        self.ec2_client.delete_volume(VolumeId=volume_id)
+        print(f"Deleted '{volume_id}'.")
     
     def list_snapshots(self):
         """List all snapshots."""
@@ -162,11 +168,8 @@ class Volumes:
     def delete_snapshot(self):
         """Delete a snapshot."""
         snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to delete: ")
-        self.ec2_client.delete_snapshot(SnapshotId=snapshot_id)
-        print(f"'{snapshot_id}' deleted.")
-
-    def delete_volume(self):
-        """Delete a volume."""
-        volume_id = read_nonempty_string("\nEnter the Volume ID to delete: ")
-        self.ec2_client.delete_volume(VolumeId=volume_id)
-        print(f"'{volume_id}' deleted.")
+        try:
+            self.ec2_client.delete_snapshot(SnapshotId=snapshot_id)
+            print(f"Deleted '{snapshot_id}'.")
+        except self.ec2_client.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
