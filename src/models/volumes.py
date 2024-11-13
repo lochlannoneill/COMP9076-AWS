@@ -130,6 +130,8 @@ class Volumes:
     def list_snapshots(self):
         """List all snapshots."""
         snapshots = self.ec2_client.describe_snapshots(OwnerIds=['self'])['Snapshots']
+        
+        print("\nSnapshots:")
         if snapshots:
             headers = ["Snapshot ID", "Volume ID", "Size (GiB)", "Description", "Creation Date"]
             table_data = [
@@ -148,11 +150,14 @@ class Volumes:
              
     def create_snapshot(self):
         """Create a snapshot of a volume."""
-        volume_id = read_nonempty_string("\nEnter the Volume ID to snapshot: ")
+        volume_id = read_nonempty_string("\nEnter available Volume ID to snapshot: ")
         description = read_nonempty_string("Enter a description for the snapshot: ")
-        response = self.ec2_client.create_snapshot(VolumeId=volume_id, Description=description)
-        snapshot_id = response['SnapshotId']
-        print(f"Snapshot created: '{snapshot_id}'")
+        try:
+            response = self.ec2_client.create_snapshot(VolumeId=volume_id, Description=description)
+            snapshot_id = response['SnapshotId']
+            print(f"Snapshot created: '{snapshot_id}'")
+        except self.ec2_client.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
         
     def delete_snapshot(self):
         """Delete a snapshot."""
