@@ -70,7 +70,7 @@ class Volumes:
             # Create the volume
             response = self.ec2_client.create_volume(Size=size, AvailabilityZone=az)
             volume_id = response['VolumeId']
-            print(f"Volume created: '{volume_id}'")
+            print(f"Created '{volume_id}'")
         else:
             print("Invalid zone selected.")
 
@@ -79,7 +79,7 @@ class Volumes:
         snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to create volume from: ")
         response = self.ec2_client.create_volume(SnapshotId=snapshot_id)
         volume_id = response['VolumeId']
-        print(f"Volume created: '{volume_id}'")
+        print(f"Created '{volume_id}'")
 
     def attach_volume(self):
         """Attach a volume to an EC2 instance."""
@@ -161,10 +161,10 @@ class Volumes:
         try:
             response = self.ec2_client.create_snapshot(VolumeId=volume_id, Description=description)
             snapshot_id = response['SnapshotId']
-            print(f"Snapshot created: '{snapshot_id}'")
+            print(f"Created '{snapshot_id}'")
         except self.ec2_client.exceptions.ClientError as e:
             print(f"An error occurred: {e}")
-        
+
     def delete_snapshot(self):
         """Delete a snapshot."""
         snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to delete: ")
