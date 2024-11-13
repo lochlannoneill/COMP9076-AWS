@@ -5,14 +5,14 @@ class volumeMenu:
         self.options = {
             "List Volumes": 1,
             "Create Volume": 2,
-            "Create Volume From Snapshot": 3,
-            "Attach Volume": 4,
-            "Detach Volume": 5,
-            "Modify Volume": 6,
-            "Delete Volume": 7,
-            "List Snapshots": 8,
-            "Create Snapshot": 9,
-            "Delete Snapshot": 10,
+            "Attach Volume": 3,
+            "Detach Volume": 4,
+            "Modify Volume": 5,
+            "Delete Volume": 6,
+            "List Snapshots": 7,
+            "Create Snapshot": 8,
+            "Delete Snapshot": 9,
+            "Create Volume From Snapshot": 10,
             "Back": 11
         }
     
@@ -34,8 +34,6 @@ class volumeMenu:
                 ec2_service.list_volumes()
             elif choice == self.options["Create Volume"]:
                 ec2_service.create_volume()
-            elif choice == self.options["Create Volume From Snapshot"]:
-                ec2_service.create_volume_from_snapshot()
             elif choice == self.options["Attach Volume"]:
                 ec2_service.attach_volume()
             elif choice == self.options["Detach Volume"]:
@@ -44,13 +42,13 @@ class volumeMenu:
                 ec2_service.modify_volume()
             elif choice == self.options["Delete Volume"]:
                 ec2_service.delete_volume()
-            elif choice == self.options["Snapshot Volume"]:
-                ec2_service.snapshot_volume()
             elif choice == self.options["List Snapshots"]:
                 ec2_service.list_snapshots()
             elif choice == self.options["Create Snapshot"]:
                 ec2_service.create_snapshot()
             elif choice == self.options["Delete Snapshot"]:
                 ec2_service.delete_snapshot()
+            elif choice == self.options["Create Volume From Snapshot"]:
+                ec2_service.create_volume_from_snapshot()
             elif choice == self.options["Back"]:
                 return False

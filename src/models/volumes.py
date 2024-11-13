@@ -1,3 +1,4 @@
+import botocore
 from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string
 from tabulate import tabulate
 
@@ -68,18 +69,15 @@ class Volumes:
             az = available_zones[az_index]
             
             # Create the volume
-            response = self.ec2_client.create_volume(Size=size, AvailabilityZone=az)
-            volume_id = response['VolumeId']
-            print(f"Volume created: '{volume_id}'")
+            try:
+                response = self.ec2_client.create_volume(Size=size, AvailabilityZone=az)
+                volume_id = response['VolumeId']
+                print(f"Created '{volume_id}'")
+            except self.ec2_client.exceptions.ClientError as e:
+                print(f"An error occurred: {e}")
+
         else:
             print("Invalid zone selected.")
-
-    def create_volume_from_snapshot(self):
-        """Create a volume from a snapshot."""
-        snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to create volume from: ")
-        response = self.ec2_client.create_volume(SnapshotId=snapshot_id)
-        volume_id = response['VolumeId']
-        print(f"Volume created: '{volume_id}'")
 
     def attach_volume(self):
         """Attach a volume to an EC2 instance."""
@@ -87,7 +85,7 @@ class Volumes:
         instance_id = read_nonempty_string("Enter the Instance ID to attach to: ")  # Ensure this is an EC2 instance ID
         
         # List of mount points  # TODO - get dynamically
-        available_devices = ['/dev/sdf', '/dev/sdg', '/dev/sdh', '/dev/sdi', '/dev/sdj', '/dev/sdk']
+        available_devices = ['/dev/xvda', '/dev/sdf', '/dev/sdg', '/dev/sdh', '/dev/sdi', '/dev/sdj', '/dev/sdk']
         
         print("Available mount points:")
         for idx, device in enumerate(available_devices, start=1):
@@ -108,19 +106,36 @@ class Volumes:
     def detach_volume(self):
         """Detach a volume from an EC2 instance."""
         volume_id = read_nonempty_string("\nEnter the Volume ID to detach: ")
-        response = self.ec2_client.detach_volume(VolumeId=volume_id)
-        print(f"'{volume_id}' {response['State']} from '{response['InstanceId']}' at '{response['Device']}'")  # TODO - validation when trying to detach available volume
+        try:
+            response = self.ec2_client.detach_volume(VolumeId=volume_id)
+            print(f"'{volume_id}' {response['State']} from '{response['InstanceId']}' at '{response['Device']}'")
+        except self.ec2_client.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
 
     def modify_volume(self):
         """Modify a volume's size."""
         volume_id = read_nonempty_string("\nEnter the Volume ID to modify: ")
         new_size = read_nonnegative_integer("Enter the new size of the volume (GiB): ")
-        self.ec2_client.modify_volume(VolumeId=volume_id, Size=new_size)
-        print(f"'{volume_id}' modified to {new_size} GiB.")
-    
+        try:
+            self.ec2_client.modify_volume(VolumeId=volume_id, Size=new_size)
+            print(f"Modified '{volume_id}' to {new_size} GiB")
+        except self.ec2_client.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
+
+    def delete_volume(self):
+        """Delete a volume."""
+        volume_id = read_nonempty_string("\nEnter the Volume ID to delete: ")
+        try:
+            self.ec2_client.delete_volume(VolumeId=volume_id)
+            print(f"Deleted '{volume_id}'")
+        except self.ec2_client.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
+
     def list_snapshots(self):
         """List all snapshots."""
         snapshots = self.ec2_client.describe_snapshots(OwnerIds=['self'])['Snapshots']
+        
+        print("\nSnapshots:")
         if snapshots:
             headers = ["Snapshot ID", "Volume ID", "Size (GiB)", "Description", "Creation Date"]
             table_data = [
@@ -136,23 +151,56 @@ class Volumes:
             print(tabulate(table_data, headers=headers, tablefmt="grid"))
         else:
             print("No snapshots found.")
-             
+   
     def create_snapshot(self):
         """Create a snapshot of a volume."""
-        volume_id = read_nonempty_string("\nEnter the Volume ID to snapshot: ")
+        volume_id = read_nonempty_string("\nEnter available Volume ID to snapshot: ")
         description = read_nonempty_string("Enter a description for the snapshot: ")
-        response = self.ec2_client.create_snapshot(VolumeId=volume_id, Description=description)
-        snapshot_id = response['SnapshotId']
-        print(f"Snapshot created: '{snapshot_id}'")
-        
+        try:
+            response = self.ec2_client.create_snapshot(VolumeId=volume_id, Description=description)
+            snapshot_id = response['SnapshotId']
+            print(f"Created '{snapshot_id}'")
+        except self.ec2_client.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
+
     def delete_snapshot(self):
         """Delete a snapshot."""
         snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to delete: ")
-        self.ec2_client.delete_snapshot(SnapshotId=snapshot_id)
-        print(f"'{snapshot_id}' deleted.")
+        try:
+            self.ec2_client.delete_snapshot(SnapshotId=snapshot_id)
+            print(f"Deleted '{snapshot_id}'")
+        except self.ec2_client.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
+            
+    def create_volume_from_snapshot(self):
+        """Create a volume from a snapshot."""
+        snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to create volume from: ")
 
-    def delete_volume(self):
-        """Delete a volume."""
-        volume_id = read_nonempty_string("\nEnter the Volume ID to delete: ")
-        self.ec2_client.delete_volume(VolumeId=volume_id)
-        print(f"'{volume_id}' deleted.")
+        # Optionally, retrieve the Availability Zone by describing the snapshot's volume
+        try:
+            snapshot_info = self.ec2_client.describe_snapshots(SnapshotIds=[snapshot_id])
+            volume_id = snapshot_info['Snapshots'][0]['VolumeId']
+            print(f"Found '{volume_id}' from '{snapshot_id}'")
+
+            # Describe the volume to get the availability zone
+            volume_info = self.ec2_client.describe_volumes(VolumeIds=[volume_id])
+            if not volume_info['Volumes']:
+                raise ValueError(f"Volume ID not found: '{volume_id}'")
+
+            availability_zone = volume_info['Volumes'][0]['AvailabilityZone']
+            print(f"Volume located in '{availability_zone}'")
+
+            # Create the volume from the snapshot
+            response = self.ec2_client.create_volume(
+                SnapshotId=snapshot_id,
+                AvailabilityZone=availability_zone
+            )
+            created_volume_id = response['VolumeId']
+            print(f"Created '{created_volume_id}' from '{snapshot_id}' in '{availability_zone}'")
+
+        except self.ec2_client.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
+        except ValueError as e:
+            print(f"ValueError: {e}")
+        except Exception as e:
+            print(f"Unexpected error: {e}")
