@@ -1,17 +1,17 @@
 from src.utils.reading_from_user import read_range_integer
 from src.menu.ec2Menu import ec2Menu
-from src.menu.volumeMenu import volumeMenu
-from src.models.volumes import Volumes
+from src.menu.ebsMenu import ebsMenu
+from src.models.ebs import EBSController
 from src.models.ec2 import EC2Controller
 
 class awsMenu:
     def __init__(self):
         self.ec2_menu = ec2Menu()
-        self.volume_menu = volumeMenu()
+        self.ebs_menu = ebsMenu()
         self.options = {
             "EC2 Instances": 1,
-            "EBS Volumes": 2,
-            "S3 Buckets": 3,
+            "EBS Storage": 2,
+            "S3 Storage": 3,
             "Monitoring": 4,
             "Back": 5
         }
@@ -28,8 +28,8 @@ class awsMenu:
             session._create_client("ec2")
         )  # TODO - performance -> maybe just get resource here, and client after choice
         
-        # Volumes
-        vol = Volumes(
+        # EBS
+        ebs = EBSController(
             session._create_client("ec2"),
             session.get_ec2_resource()
         )  # TODO - performance ->maybe just get resource here, and client after choice
@@ -46,12 +46,12 @@ class awsMenu:
             if choice == self.options["EC2 Instances"]:
                 self.ec2_menu.handle(ec2_controller)
                 
-            # EBS Volumes
-            if choice == self.options["EBS Volumes"]:
-                self.volume_menu.handle(vol)
+            # EBS Storage
+            if choice == self.options["EBS Storage"]:
+                self.ebs_menu.handle(ebs)
                 
-            # S3 Buckets
-            if choice == self.options["S3 Buckets"]:
+            # S3 Storage
+            if choice == self.options["S3 Storage"]:
                 pass  # TODO
             
             # Monitoring
