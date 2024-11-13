@@ -68,12 +68,17 @@ class Volumes:
             az = available_zones[az_index]
             
             # Create the volume
-            response = self.ec2_client.create_volume(Size=size, AvailabilityZone=az)
-            volume_id = response['VolumeId']
-            print(f"Created '{volume_id}'")
+            try:
+                response = self.ec2_client.create_volume(Size=size, AvailabilityZone=az)
+                volume_id = response['VolumeId']
+                print(f"Created '{volume_id}'")
+            except self.ec2_client.exceptions.ClientError as e:
+                print(f"An error occurred: {e}")
+
         else:
             print("Invalid zone selected.")
 
+    # TODO - Implement this method
     def create_volume_from_snapshot(self):
         """Create a volume from a snapshot."""
         snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to create volume from: ")
@@ -108,31 +113,31 @@ class Volumes:
     def detach_volume(self):
         """Detach a volume from an EC2 instance."""
         volume_id = read_nonempty_string("\nEnter the Volume ID to detach: ")
-        response = self.ec2_client.detach_volume(VolumeId=volume_id)
-        print(f"'{volume_id}' {response['State']} from '{response['InstanceId']}' at '{response['Device']}'")  # TODO - validation when trying to detach available volume
+        try:
+            response = self.ec2_client.detach_volume(VolumeId=volume_id)
+            print(f"'{volume_id}' {response['State']} from '{response['InstanceId']}' at '{response['Device']}'")
+        except self.ec2_client.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
 
     def modify_volume(self):
         """Modify a volume's size."""
         volume_id = read_nonempty_string("\nEnter the Volume ID to modify: ")
         new_size = read_nonnegative_integer("Enter the new size of the volume (GiB): ")
-        
-        current_volume = self.ec2_client.describe_volumes(VolumeIds=[volume_id])
-        current_size = current_volume['Volumes'][0]['Size']  # voumes is a list, hence the 0
-        
-        # Check if the new size is smaller than the current size
-        if new_size < current_size:
-            print(f"Error: New size {new_size} GiB cannot be smaller than the current size of {current_size} GiB.")
-            return
+        try:
+            self.ec2_client.modify_volume(VolumeId=volume_id, Size=new_size)
+            print(f"Modified '{volume_id}' to {new_size} GiB.")
+        except self.ec2_client.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
 
-        self.ec2_client.modify_volume(VolumeId=volume_id, Size=new_size)
-        print(f"Modified '{volume_id}' to {new_size} GiB.")
-    
     def delete_volume(self):
         """Delete a volume."""
         volume_id = read_nonempty_string("\nEnter the Volume ID to delete: ")
-        self.ec2_client.delete_volume(VolumeId=volume_id)
-        print(f"Deleted '{volume_id}'.")
-    
+        try:
+            self.ec2_client.delete_volume(VolumeId=volume_id)
+            print(f"Deleted '{volume_id}'.")
+        except self.ec2_client.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
+
     def list_snapshots(self):
         """List all snapshots."""
         snapshots = self.ec2_client.describe_snapshots(OwnerIds=['self'])['Snapshots']
@@ -153,7 +158,7 @@ class Volumes:
             print(tabulate(table_data, headers=headers, tablefmt="grid"))
         else:
             print("No snapshots found.")
-             
+   
     def create_snapshot(self):
         """Create a snapshot of a volume."""
         volume_id = read_nonempty_string("\nEnter available Volume ID to snapshot: ")
