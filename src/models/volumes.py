@@ -1,3 +1,4 @@
+import botocore
 from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string
 from tabulate import tabulate
 
@@ -84,7 +85,7 @@ class Volumes:
         instance_id = read_nonempty_string("Enter the Instance ID to attach to: ")  # Ensure this is an EC2 instance ID
         
         # List of mount points  # TODO - get dynamically
-        available_devices = ['/dev/sdf', '/dev/sdg', '/dev/sdh', '/dev/sdi', '/dev/sdj', '/dev/sdk']
+        available_devices = ['/dev/xvda', '/dev/sdf', '/dev/sdg', '/dev/sdh', '/dev/sdi', '/dev/sdj', '/dev/sdk']
         
         print("Available mount points:")
         for idx, device in enumerate(available_devices, start=1):
