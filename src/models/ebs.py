@@ -1,7 +1,7 @@
 from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string
 from tabulate import tabulate
 
-class Volumes:
+class EBSController:
     def __init__(self, ec2_client, ec2_resource):
         """Initialize with a boto3 client and resource for EC2."""
         self.ec2_client = ec2_client
