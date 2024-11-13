@@ -24,3 +24,62 @@
 4. Execute the application
    ```bash
    python -m src.app
+
+-----
+
+### AWS Menu - EC2 Instances:  
+
+List Instances:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ec2/instance_list.png)
+
+Start Instance:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ec2/instance_start.png)
+
+Stop Instance:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ec2/instance_stop.png)
+
+Delete Instance:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ec2/instance_delete.png)
+
+List AMIs of Instance:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ec2/ami_list.png)
+
+Create AMI:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ec2/ami_create.png)
+
+Delete AMI:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ec2/ami_delete.png)
+
+### AWS Menu - EBS Storage:  
+
+List Volumes:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_list.png)
+
+Create Volume:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_create.png)
+
+Attach Volume:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_attach.png)
+
+Detach Volume:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_detach.png)
+
+Modify Volume:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_modify.png)
+
+Delete Volume:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_delete.png)
+
+List Snapshots:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_list.png)
+
+Create Snapshot:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_create.png)
+
+Delete Snapshot:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_delete.png)
+
+Create Volume From Snapshot:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_create_volume.png)
+
+
