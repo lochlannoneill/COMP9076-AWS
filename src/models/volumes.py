@@ -115,6 +115,15 @@ class Volumes:
         """Modify a volume's size."""
         volume_id = read_nonempty_string("\nEnter the Volume ID to modify: ")
         new_size = read_nonnegative_integer("Enter the new size of the volume (GiB): ")
+        
+        current_volume = self.ec2_client.describe_volumes(VolumeIds=[volume_id])
+        current_size = current_volume['Volumes'][0]['Size']  # voumes is a list, hence the 0
+        
+        # Check if the new size is smaller than the current size
+        if new_size < current_size:
+            print(f"Error: New size {new_size} GiB cannot be smaller than the current size of {current_size} GiB.")
+            return
+
         self.ec2_client.modify_volume(VolumeId=volume_id, Size=new_size)
         print(f"'{volume_id}' modified to {new_size} GiB.")
     
