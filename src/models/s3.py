@@ -6,7 +6,7 @@ class S3Controller:
         """Initialize with a boto3 session."""
         self.s3_client = client
 
-    # TODO
+    # COMPLETED
     def list_buckets(self):
         """List all S3 buckets."""
         response = self.s3_client.list_buckets()
@@ -16,6 +16,22 @@ class S3Controller:
         else:
             for bucket in response['Buckets']:
                 tabulate(response['Buckets'], headers='keys', tablefmt='pretty')
+    
+    # TODO
+    def create_bucket(self):
+        """Create a new bucket."""
+        bucket_name = read_nonempty_string("Enter the bucket name: ")
+        self.s3_client.create_bucket(Bucket=bucket_name)
+        print(f"Created bucket: {bucket_name}")
+        
+    # TODO
+    def delete_bucket(self):
+        """Delete a bucket."""
+        bucket_name = read_nonempty_string("Enter the bucket name: ")
+        self.s3_client.delete_bucket(Bucket=bucket_name)
+        print(f"Deleted bucket: {bucket_name}")
+
+
     # TODO
     def list_objects(self):
         """List all objects in a specified bucket."""
@@ -49,19 +65,3 @@ class S3Controller:
         object_key = read_nonempty_string("Enter the object key to delete: ")
         self.s3_client.delete_object(Bucket=bucket_name, Key=object_key)
         print(f"Deleted {bucket_name}/{object_key}")
-
-    # TODO
-    def create_bucket(self):
-        """Create a new bucket."""
-        bucket_name = read_nonempty_string("Enter the bucket name: ")
-        self.s3_client.create_bucket(Bucket=bucket_name)
-        print(f"Created bucket: {bucket_name}")
-
-    # TODO
-    def delete_bucket(self):
-        """Delete a bucket."""
-        bucket_name = read_nonempty_string("Enter the bucket name: ")
-        self.s3_client.delete_bucket(Bucket=bucket_name)
-        print(f"Deleted bucket: {bucket_name}")
-
-        
