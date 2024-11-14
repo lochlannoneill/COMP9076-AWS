@@ -27,13 +27,6 @@ class S3Controller:
         else:
             print(tabulate(buckets, headers='keys', tablefmt='pretty'))
 
-    # TODO
-    # def create_bucket(self):
-    #     """Create a new bucket."""
-    #     bucket_name = read_nonempty_string("Enter the bucket name: ")
-    #     self.s3_client.create_bucket(Bucket=bucket_name)
-    #     print(f"Created bucket: {bucket_name}")
-
     # Completed
     def delete_bucket(self):
         """Delete a bucket after validation."""
