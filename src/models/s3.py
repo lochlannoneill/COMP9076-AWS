@@ -27,7 +27,6 @@ class S3Controller:
         else:
             print(tabulate(buckets, headers='keys', tablefmt='pretty'))
 
-    # Completed
     def delete_bucket(self):
         """Delete a bucket after validation."""
         bucket_name = read_nonempty_string("\nEnter the bucket name: ")
@@ -43,7 +42,6 @@ class S3Controller:
                     print(f"\t'{obj['Key']}'")
 
                 # Delete all objects in the bucket
-                confirm = input(f"Delete all objects in '{bucket_name}' (yes/no): ")
                 # YES
                 if confirm.lower() != 'yes':
                     print("'{bucket_name}' was not deleted")
