@@ -78,11 +78,10 @@ class S3Controller:
     # TODO
     def upload_object(self):
         """Upload a file to a specified bucket."""
-        bucket_name = read_nonempty_string("Enter the bucket name: ")
-        file_path = read_nonempty_string("Enter the file path to upload: ")
-        file_name = read_nonempty_string("Enter the file name in S3: ")
-        self.s3_client.upload_file(file_path, bucket_name, file_name)
-        print(f"Uploaded {file_path} to {bucket_name}/{file_name}")
+        bucket_name = read_nonempty_string("\nEnter the bucket name: ")
+        file_name = read_nonempty_string("Enter the file to upload: ")
+        self.s3_client.upload_file(file_name, bucket_name, file_name)
+        print(f"Uploaded '{file_name}' to '{bucket_name}'")
 
     # TODO
     def download_object(self):
