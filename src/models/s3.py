@@ -60,13 +60,20 @@ class S3Controller:
         except Exception as e:
             print(f"Unexpected error: {e}")
 
-    # TODO
+    # Completed
     def list_objects(self):
         """List all objects in a specified bucket."""
         bucket_name = read_nonempty_string("Enter the bucket name: ")
-        response = self.s3_client.list_objects_v2(Bucket=bucket_name)
-        for obj in response['Contents']:
-            print(f"Key: {obj['Key']}")
+        try:
+            response = self.s3_client.list_objects_v2(Bucket=bucket_name)
+            if 'Contents' in response:
+                print(f"\nObjects in bucket '{bucket_name}':")
+                for obj in response['Contents']:
+                    print(f"\t{obj['Key']}")
+            else:
+                print(f"No objects found in bucket '{bucket_name}'.")
+        except Exception as e:
+            print(e)
 
     # TODO
     def upload_object(self):
