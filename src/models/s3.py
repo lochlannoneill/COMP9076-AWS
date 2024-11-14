@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from tabulate import tabulate
 from src.utils.reading_from_user import read_nonempty_string
@@ -81,8 +82,18 @@ class S3Controller:
         """Upload a file to a specified bucket."""
         bucket_name = read_nonempty_string("\nEnter the bucket name: ")
         file_name = read_nonempty_string("Enter the file to upload: ")
-        self.s3_client.upload_file(file_name, bucket_name, file_name)
-        print(f"Uploaded '{file_name}' to '{bucket_name}'")
+        
+        # Check if the file exists
+        if not os.path.isfile(file_name):
+            print(f"Error: The file '{file_name}' does not exist.")
+            return
+
+        try:
+            # Attempt to upload the file to the S3 bucket
+            self.s3_client.upload_file(file_name, bucket_name, file_name)  # the duplicate file_name arguement will become the s3 name
+            print(f"Uploaded '{file_name}' to '{bucket_name}'")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
     # COMPLETED
     def download_object(self):
@@ -90,8 +101,8 @@ class S3Controller:
         bucket_name = read_nonempty_string("Enter the bucket name: ")
         file_name = read_nonempty_string("Enter the file name in S3: ")
         
+        # Check if the file exists
         try:
-            # Check if the file exists
             self.s3_client.head_object(Bucket=bucket_name, Key=file_name)
         except Exception as e:
             print(f"Error: {e}")
@@ -100,7 +111,6 @@ class S3Controller:
         # Get the path to the Downloads folder
         user_home = Path.home()
         downloads_folder = user_home / 'Downloads'
-        
         file_path = downloads_folder / file_name
 
         # Download the file
