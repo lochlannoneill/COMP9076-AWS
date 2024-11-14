@@ -31,14 +31,14 @@ class EC2Controller:
             # Check if there are running instances
             print("\nRunning Instances:")
             if running_instances:
-                print(tabulate(running_instances, headers="keys", tablefmt="grid"))
+                print(tabulate(running_instances, headers="keys", tablefmt="pretty"))
             else:
                 print("No running instances detected.")
 
             # Check if there are stopped instances
             print("\nStopped Instances:")
             if stopped_instances:
-                print(tabulate(stopped_instances, headers="keys", tablefmt="grid"))
+                print(tabulate(stopped_instances, headers="keys", tablefmt="pretty"))
             else:
                 print("No stopped instances detected.")
 
@@ -96,7 +96,7 @@ class EC2Controller:
                     ]
                     for image in images['Images']
                 ]
-                print(tabulate(table_data, headers=headers, tablefmt="grid"))
+                print(tabulate(table_data, headers=headers, tablefmt="pretty"))
             else:
                 print(f"No associated AMIs found for instance '{instance_id}'.")
         except Exception as e:

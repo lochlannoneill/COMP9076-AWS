@@ -148,7 +148,7 @@ class EBSController:
                 ]
                 for snapshot in snapshots
             ]
-            print(tabulate(table_data, headers=headers, tablefmt="grid"))
+            print(tabulate(table_data, headers=headers, tablefmt="pretty"))
         else:
             print("No snapshots found.")
    
