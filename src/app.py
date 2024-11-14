@@ -1,4 +1,4 @@
-from src.models.user import userManager
+from src.models.user import UserManager
 from src.menu.mainMenu import mainMenu
 from src.menu.awsMenu import awsMenu
 from src.models.resource import Resource
@@ -30,7 +30,7 @@ class App:
 
 
 def main():
-    user_manager = userManager()
+    user_manager = UserManager()
     app = App(user_manager)
     app._start()
 

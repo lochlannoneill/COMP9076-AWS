@@ -2,7 +2,7 @@ from os.path import join, exists
 import json
 from src.utils.reading_from_user import read_nonempty_string
 
-class userManager:
+class UserManager:
     def __init__(self):
         self.file_path = join("src", "config", "passwords.json")
         self.users = self.load_users()
