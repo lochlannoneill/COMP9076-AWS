@@ -92,10 +92,3 @@ class S3Controller:
         self.s3_client.download_file(bucket_name, file_name, file_path)
         print(f"Downloaded {bucket_name}/{file_name} to {file_path}")
 
-    # TODO
-    def delete_object(self):
-        """Delete an object from a specified bucket."""
-        bucket_name = read_nonempty_string("Enter the bucket name: ")
-        object_key = read_nonempty_string("Enter the object key to delete: ")
-        self.s3_client.delete_object(Bucket=bucket_name, Key=object_key)
-        print(f"Deleted {bucket_name}/{object_key}")
