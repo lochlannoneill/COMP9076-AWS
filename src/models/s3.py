@@ -1,6 +1,6 @@
 from src.utils.reading_from_user import read_nonempty_string
 
-class s3:
+class S3Controller:
     def __init__(self, session):
         """Initialize with a boto3 session."""
         self.s3 = session.client('s3')
@@ -21,7 +21,7 @@ class s3:
             print(f"Key: {obj['Key']}")
 
     # TODO
-    def upload_file(self):
+    def upload_object(self):
         """Upload a file to a specified bucket."""
         bucket_name = read_nonempty_string("Enter the bucket name: ")
         file_path = read_nonempty_string("Enter the file path to upload: ")
@@ -30,7 +30,7 @@ class s3:
         print(f"Uploaded {file_path} to {bucket_name}/{file_name}")
 
     # TODO
-    def download_file(self):
+    def download_object(self):
         """Download a file from a specified bucket."""
         bucket_name = read_nonempty_string("Enter the bucket name: ")
         file_name = read_nonempty_string("Enter the file name in S3: ")
@@ -60,11 +60,4 @@ class s3:
         self.s3.delete_bucket(Bucket=bucket_name)
         print(f"Deleted bucket: {bucket_name}")
 
-    # TODO
-    def list_bucket_policy(self):
-        """List the bucket policy of a specified bucket."""
-        bucket_name = read_nonempty_string("Enter the bucket name: ")
-        response = self.s3.get_bucket_policy(Bucket=bucket_name)
-        print(f"Bucket policy: {response['Policy']}")
-        
         

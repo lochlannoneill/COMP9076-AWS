@@ -1,0 +1,45 @@
+from src.utils.reading_from_user import read_range_integer
+
+class s3Menu:
+    def __init__(self):
+        self.options = {
+            "List Buckets": 1,
+            "List Bucket Objects": 2,
+            "Create Bucket": 3,
+            "Delete Bucket": 4,
+            "Upload Object": 5,
+            "Download Object": 6,
+            "Delete Object": 7,
+            "Back": 8
+        }
+    
+    def _display(self):
+        print("\nS3 Storage Menu")
+        for option, number in self.options.items():
+            print(f"\t{number}. {option}")
+
+    def handle(self, s3_service):
+        while True:
+            self._display()
+            choice = read_range_integer(
+                "Select from menu: ",
+                min(self.options.values()),
+                max(self.options.values())
+            )
+
+            if choice == self.options["List Buckets"]:
+                s3_service.list_buckets()
+            elif choice == self.options["List Bucket Objects"]:
+                s3_service.list_objects()
+            elif choice == self.options["Create Bucket"]:
+                s3_service.create_bucket()
+            elif choice == self.options["Delete Bucket"]:
+                s3_service.delete_bucket()
+            elif choice == self.options["Upload Object"]:
+                s3_service.upload_object()
+            elif choice == self.options["Download Object"]:
+                s3_service.download_object()
+            elif choice == self.options["Delete Object"]:
+                s3_service.delete_object()
+            elif choice == self.options["Back"]:
+                return False
