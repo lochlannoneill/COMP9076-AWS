@@ -1,9 +1,9 @@
 from src.utils.reading_from_user import read_nonempty_string
 
 class S3Controller:
-    def __init__(self, session):
+    def __init__(self, client):
         """Initialize with a boto3 session."""
-        self.s3 = session.client('s3')
+        self.s3_client = client
 
     # TODO
     def list_buckets(self):
