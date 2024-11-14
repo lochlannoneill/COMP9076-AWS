@@ -7,10 +7,25 @@ from src.models.ec2 import EC2Controller
 from src.models.s3 import S3Controller
 
 class awsMenu:
-    def __init__(self):
+    def __init__(self, session):
+        self.ec2 = EC2Controller(
+            session.get_ec2_resource(),
+            session._create_client("ec2")
+        )  # TODO - performance -> maybe just get resource here, and client after choice (lazy loading)
+        
+        self.ebs = EBSController(
+            session._create_client("ec2"),
+            session.get_ec2_resource()
+        )  # TODO - performance ->maybe just get resource here, and client after choice (lazy loading)
+        
+        self.s3 = S3Controller(
+            session._create_client("s3")
+        )
+        
         self.ec2_menu = ec2Menu()
         self.ebs_menu = ebsMenu()
         self.s3_menu = s3Menu()
+        
         self.options = {
             "EC2 Instances": 1,
             "EBS Storage": 2,
@@ -24,24 +39,7 @@ class awsMenu:
         for option, number in self.options.items():
             print(f"\t{number}. {option}")
 
-    def handle(self, session):
-        # EC2
-        ec2 = EC2Controller(
-            session.get_ec2_resource(),
-            session._create_client("ec2")
-        )  # TODO - performance -> maybe just get resource here, and client after choice (lazy loading)
-        
-        # EBS
-        ebs = EBSController(
-            session._create_client("ec2"),
-            session.get_ec2_resource()
-        )  # TODO - performance ->maybe just get resource here, and client after choice (lazy loading)
-        
-        # S3
-        s3 = S3Controller(
-            session._create_client("s3")
-        )
-        
+    def handle(self):
         while True:
             self._display()
             choice = read_range_integer(
@@ -52,15 +50,15 @@ class awsMenu:
             
             # EC2 Instances
             if choice == self.options["EC2 Instances"]:
-                self.ec2_menu.handle(ec2)
+                self.ec2_menu.handle(self.ec2)
                 
             # EBS Storage
             if choice == self.options["EBS Storage"]:
-                self.ebs_menu.handle(ebs)
+                self.ebs_menu.handle(self.ebs)
                 
             # S3 Storage
             if choice == self.options["S3 Storage"]:
-                self.s3_menu.handle(s3)
+                self.s3_menu.handle(self.s3)
             
             # Monitoring
             if choice == self.options["Monitoring"]:
