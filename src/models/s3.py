@@ -1,4 +1,4 @@
-import tabulate
+from tabulate import tabulate
 from src.utils.reading_from_user import read_nonempty_string
 
 class S3Controller:
@@ -10,19 +10,29 @@ class S3Controller:
     def list_buckets(self):
         """List all S3 buckets."""
         response = self.s3_client.list_buckets()
+        
+        buckets = []
+        for bucket in response['Buckets']:
+            region = self.s3_client.get_bucket_location(Bucket=bucket['Name'])
+            bucket_info = {
+                'Name': bucket['Name'],
+                'Region': region['LocationConstraint'],
+                'Creation Date': bucket['CreationDate'].strftime('%Y-%m-%d %H:%M:%S')
+            }
+            buckets.append(bucket_info)
 
-        if not response['Buckets']:
+        print("\nBuckets:")
+        if not bucket_info:
             print("\nNo buckets found.")
         else:
-            for bucket in response['Buckets']:
-                tabulate(response['Buckets'], headers='keys', tablefmt='pretty')
+            print(tabulate(buckets, headers='keys', tablefmt='pretty'))
     
     # TODO
-    def create_bucket(self):
-        """Create a new bucket."""
-        bucket_name = read_nonempty_string("Enter the bucket name: ")
-        self.s3_client.create_bucket(Bucket=bucket_name)
-        print(f"Created bucket: {bucket_name}")
+    # def create_bucket(self):
+    #     """Create a new bucket."""
+    #     bucket_name = read_nonempty_string("Enter the bucket name: ")
+    #     self.s3_client.create_bucket(Bucket=bucket_name)
+    #     print(f"Created bucket: {bucket_name}")
         
     # TODO
     def delete_bucket(self):
@@ -30,7 +40,6 @@ class S3Controller:
         bucket_name = read_nonempty_string("Enter the bucket name: ")
         self.s3_client.delete_bucket(Bucket=bucket_name)
         print(f"Deleted bucket: {bucket_name}")
-
 
     # TODO
     def list_objects(self):

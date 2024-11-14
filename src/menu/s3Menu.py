@@ -4,13 +4,13 @@ class s3Menu:
     def __init__(self):
         self.options = {
             "List Buckets": 1,
-            "Create Bucket": 2,
-            "Delete Bucket": 3,
-            "List Objects in Bucket": 4,
-            "Upload Object": 5,
-            "Download Object": 6,
-            "Delete Object": 7,
-            "Back": 8
+            # "Create Bucket": 2,
+            "Delete Bucket": 2,
+            "List Objects in Bucket": 3,
+            "Upload Object": 4,
+            "Download Object": 5,
+            "Delete Object": 6,
+            "Back": 7
         }
     
     def _display(self):
@@ -29,8 +29,9 @@ class s3Menu:
 
             if choice == self.options["List Buckets"]:
                 s3_service.list_buckets()
-            elif choice == self.options["Create Bucket"]:
-                s3_service.create_bucket()
+            # TODO: Implement create_bucket
+            # elif choice == self.options["Create Bucket"]:
+            #     s3_service.create_bucket()
             elif choice == self.options["Delete Bucket"]:
                 s3_service.delete_bucket()
             elif choice == self.options["List Objects in Bucket"]:

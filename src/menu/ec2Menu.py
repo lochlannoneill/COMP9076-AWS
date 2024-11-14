@@ -4,6 +4,7 @@ class ec2Menu:
     def __init__(self):
         self.options = {
             "List All Instances": 1,
+            # "Create Instance": 2,
             "Start Instance": 2,
             "Stop Instance": 3,
             "Delete Instance": 4,
