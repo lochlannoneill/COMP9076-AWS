@@ -110,7 +110,7 @@ Delete Bucket:
 List Objects in Bucket:  
 ![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_list.png)
 
-Upload Object:
+Upload Object:  
 ![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_upload.png)
 
 Download Object:  
