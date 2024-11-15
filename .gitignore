@@ -3,3 +3,6 @@ __pycache__/
 
 # Ignore passwords.txt in the config directory
 config/
+
+# Ignore the todo file
+todo.txt
