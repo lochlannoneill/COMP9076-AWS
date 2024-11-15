@@ -7,19 +7,17 @@ class App:
     def __init__(self, user_manager):
         self.user_manager = user_manager
         self.main_menu = mainMenu()
-        self.aws_menu = None
     
     def _start(self):
         """Main application loop handling authentication and AWS menu."""
+        # Main menu loop
         while True:
             user_credentials = self.main_menu.handle(self.user_manager)
 
+            # AWS menu loop
             if user_credentials:
-                self.aws_menu = awsMenu(user_credentials)
                 while True:
-                    if not self.aws_menu.handle():
-                        break
-
+                    awsMenu(user_credentials).handle()
 
 def main():
     user_manager = UserManager()
