@@ -18,11 +18,7 @@ class mainMenu:
         """Handle the main menu interaction."""
         while True:
             self._display()
-            choice = read_range_integer(
-                "Select from menu: ",
-                min(self.options.values()),
-                max(self.options.values())
-            )
+            choice = read_range_integer("Select from menu: ", 1, len(self.options))
 
             if choice == self.options["Login"]:
                 return user_manager.login_user()

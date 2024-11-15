@@ -24,11 +24,7 @@ class ebsMenu:
     def handle(self, ec2_service):
         while True:
             self._display()
-            choice = read_range_integer(
-                "Select from menu: ",
-                min(self.options.values()),
-                max(self.options.values())
-            )
+            choice = read_range_integer("Select from menu: ", 1, len(self.options))
 
             if choice == self.options["List Volumes"]:
                 ec2_service.list_volumes()

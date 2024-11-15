@@ -42,11 +42,7 @@ class awsMenu:
     def handle(self):
         while True:
             self._display()
-            choice = read_range_integer(
-                "Select from menu: ",
-                min(self.options.values()),
-                max(self.options.values())
-            )
+            choice = read_range_integer("Select from menu: ", 1, len(self.options))
             
             # EC2 Instances
             if choice == self.options["EC2 Instances"]:
