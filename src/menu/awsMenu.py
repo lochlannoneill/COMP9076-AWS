@@ -1,31 +1,18 @@
 from src.utils.reading_from_user import read_range_integer
-from src.menu.ec2Menu import ec2Menu
-from src.menu.ebsMenu import ebsMenu
-from src.menu.s3Menu import s3Menu
+from src.models.resource import Resource
 from src.models.ebs import EBSController
 from src.models.ec2 import EC2Controller
 from src.models.s3 import S3Controller
+from src.menu.ec2Menu import ec2Menu
+from src.menu.ebsMenu import ebsMenu
+from src.menu.s3Menu import s3Menu
 
 class awsMenu:
-    def __init__(self, session):
-        self.ec2 = EC2Controller(
-            session.get_ec2_resource(),
-            session._create_client("ec2")
-        )  # TODO - performance -> maybe just get resource here, and client after choice (lazy loading)
-        
-        self.ebs = EBSController(
-            session._create_client("ec2"),
-            session.get_ec2_resource()
-        )  # TODO - performance ->maybe just get resource here, and client after choice (lazy loading)
-        
-        self.s3 = S3Controller(
-            session._create_client("s3")
-        )
-        
-        self.ec2_menu = ec2Menu()
-        self.ebs_menu = ebsMenu()
-        self.s3_menu = s3Menu()
-        
+    def __init__(self, user_credentials):
+        self.res = Resource(user_credentials)
+        self.ec2 = self.res.EC2Resource()
+        self.s3 = self.res.S3Resource()
+
         self.options = {
             "EC2 Instances": 1,
             "EBS Storage": 2,
@@ -46,19 +33,22 @@ class awsMenu:
             
             # EC2 Instances
             if choice == self.options["EC2 Instances"]:
-                self.ec2_menu.handle(self.ec2)
+                ec2_controller = EC2Controller(self.ec2)
+                ec2Menu().handle(ec2_controller)
                 
             # EBS Storage
             if choice == self.options["EBS Storage"]:
-                self.ebs_menu.handle(self.ebs)
+                ec2_controller = EBSController(self.ec2)
+                ebsMenu().handle(ec2_controller)
                 
             # S3 Storage
             if choice == self.options["S3 Storage"]:
-                self.s3_menu.handle(self.s3)
+                s3_controller = S3Controller(self.s3)
+                s3Menu().handle(s3_controller)
             
             # Monitoring
             if choice == self.options["Monitoring"]:
-                pass  # TODO
+                pass
             
             # Back
             if choice == self.options["Back"]:

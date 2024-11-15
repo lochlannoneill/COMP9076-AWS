@@ -1,41 +1,43 @@
 import boto3
 class Resource:
-    def __init__(self, region, key_id, secret_key):
+    def __init__(self, user_credentials):
         """Initialize the session with AWS credentials and region."""
-        self.session = boto3.Session(
-            aws_access_key_id=key_id,
-            aws_secret_access_key=secret_key,
-            region_name=region
-        )
+        self.region = "eu-west-1"  # TODO - should i make this dynamic or keep hard-coded?
+        self.key_id = user_credentials["access_key"]
+        self.secret_key = user_credentials["secret_key"]
 
-    def _create_resource(self, service_name):
-        """Create and return a resource for the specified AWS service."""
+    def EC2Resource(self):
+        # Create and return a Resource for interacting with EC2 instances
         try:
-            return self.session.resource(service_name)
+            ec2 = boto3.resource("ec2",
+                                aws_access_key_id=self.key_id,
+                                aws_secret_access_key=self.secret_key,
+                                region_name=self.region)
+            return ec2
         except Exception as e:
-            print(f"Error creating resource for {service_name}: {e}")
+            print(e)
             return None
 
-    def _create_client(self, service_name):
-        """Create and return a client for the specified AWS service."""
+    def S3Resource(self):
+        # Create and return a Resource for interacting with S3 instances
         try:
-            return self.session.client(service_name)
+            s3 = boto3.resource("s3",
+                                aws_access_key_id=self.key_id,
+                                aws_secret_access_key=self.secret_key,
+                                region_name=self.region)
+            return s3
         except Exception as e:
-            print(f"Error creating client for {service_name}: {e}")
+            print(e)
             return None
 
-    def get_ec2_resource(self):
-        """Get the EC2 resource."""
-        return self._create_resource("ec2")
-    
-    def get_volume_resource(self):
-        """Get the volume resource."""
-        return self._create_resource("ec2")
-
-    def get_s3_resource(self):
-        """Get the S3 resource."""
-        return self._create_resource("s3")
-
-    def get_cloudwatch_client(self):
-        """Get the CloudWatch client."""
-        return self._create_client("cloudwatch")
+    def CWClient(self):
+        # Create and return a Client for interacting with CloudWatch
+        try:
+            cw = boto3.client('cloudwatch',
+                            aws_access_key_id=self.key_id,
+                            aws_secret_access_key=self.secret_key,
+                            region_name=self.region)
+            return cw
+        except Exception as e:
+            print(e)
+            return None

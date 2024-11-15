@@ -3,50 +3,51 @@ from tabulate import tabulate
 from datetime import datetime
 
 class EC2Controller:
-    def __init__(self, resource, client):
-        """Initialize with a boto3 session, region, and EC2 client."""
+    def __init__(self, resource):
+        """Initialize with a boto3 session, region, and EC2 resource."""
         self.ec2_resource = resource
-        self.ec2_client = client
 
     def list_instances(self):
-            """List all EC2 instances, grouped by running and stopped."""
-            running_instances = []
-            stopped_instances = []
+        """List all EC2 instances, grouped by running and stopped."""
+        running_instances = []
+        stopped_instances = []
 
-            # Parse instances
-            for instance in self.ec2_resource.instances.all():
-                instance_info = {
-                    "Instance ID": instance.instance_id,
-                    "Name": next((tag['Value'] for tag in instance.tags if tag['Key'] == 'Name'), ''),
-                    "State": instance.state['Name'],
-                    "Type": instance.instance_type,
-                    "Region": instance.placement['AvailabilityZone'],
-                    "Launch Time": instance.launch_time.strftime("%Y-%m-%d %H:%M:%S")
-                }
-                if instance.state['Name'] == 'running':
-                    running_instances.append(instance_info)
-                else:
-                    stopped_instances.append(instance_info)
-
-            # Check if there are running instances
-            print("\nRunning Instances:")
-            if running_instances:
-                print(tabulate(running_instances, headers="keys", tablefmt="pretty"))
+        # Parse instances using resource
+        for instance in self.ec2_resource.instances.all():
+            instance_info = {
+                "Instance ID": instance.instance_id,
+                "Name": next((tag['Value'] for tag in instance.tags if tag['Key'] == 'Name'), ''),
+                "State": instance.state['Name'],
+                "Type": instance.instance_type,
+                "Region": instance.placement['AvailabilityZone'],
+                "Launch Time": instance.launch_time.strftime("%Y-%m-%d %H:%M:%S")
+            }
+            if instance.state['Name'] == 'running':
+                running_instances.append(instance_info)
             else:
-                print("No running instances detected.")
+                stopped_instances.append(instance_info)
 
-            # Check if there are stopped instances
-            print("\nStopped Instances:")
-            if stopped_instances:
-                print(tabulate(stopped_instances, headers="keys", tablefmt="pretty"))
-            else:
-                print("No stopped instances detected.")
+        # Check if there are running instances
+        print("\nRunning Instances:")
+        if running_instances:
+            print(tabulate(running_instances, headers="keys", tablefmt="pretty"))
+        else:
+            print("No running instances detected.")
+
+        # Check if there are stopped instances
+        print("\nStopped Instances:")
+        if stopped_instances:
+            print(tabulate(stopped_instances, headers="keys", tablefmt="pretty"))
+        else:
+            print("No stopped instances detected.")
 
     def start_instance(self):
         """Start a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter the Instance ID to start: ")
         try:
-            self.ec2_client.start_instances(InstanceIds=[instance_id])
+            # Start instance using resource method
+            instance = self.ec2_resource.Instance(instance_id)
+            instance.start()
             print(f"Started '{instance_id}'")
         except Exception as e:
             print(e)
@@ -55,7 +56,9 @@ class EC2Controller:
         """Stop a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter the Instance ID to stop: ")
         try:
-            self.ec2_client.stop_instances(InstanceIds=[instance_id])
+            # Stop instance using resource method
+            instance = self.ec2_resource.Instance(instance_id)
+            instance.stop()
             print(f"Stopped '{instance_id}'")
         except Exception as e:
             print(e)
@@ -64,7 +67,9 @@ class EC2Controller:
         """Delete a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter the Instance ID to delete: ")
         try:
-            self.ec2_client.terminate_instances(InstanceIds=[instance_id])
+            # Terminate instance using resource method
+            instance = self.ec2_resource.Instance(instance_id)
+            instance.terminate()
             print(f"Deleted '{instance_id}'")
         except Exception as e:
             print(e)
@@ -74,27 +79,22 @@ class EC2Controller:
         instance_id = read_nonempty_string("\nEnter the Instance ID to list associated AMIs: ")
         print(f"Searching associated AMIs of '{instance_id}'...")
         try:
-            # Retrieve AMIs that have a tag or description mentioning the instance ID
-            images = self.ec2_client.describe_images(
-                Filters=[
-                    {
-                        'Name': 'tag:InstanceId',
-                        'Values': [instance_id]
-                    }
-                ]
-            )
+            # Using the EC2 resource to filter images by InstanceId tag
+            images = self.ec2_resource.images.filter(Filters=[
+                {'Name': 'tag:InstanceId', 'Values': [instance_id]}
+            ])
             
             # If there are images associated with the instance, print them in tabular format
-            if images['Images']:
+            if images:
                 headers = ["AMI ID", "Name", "Creation Date"]
                 table_data = [
                     [
-                        image['ImageId'],
-                        image['Name'],
+                        image.id,
+                        image.name,
                         # Parse and format the CreationDate string
-                        datetime.strptime(image['CreationDate'], "%Y-%m-%dT%H:%M:%S.%fZ").strftime("%Y-%m-%d %H:%M:%S")
+                        image.creation_date.strftime("%Y-%m-%d %H:%M:%S")
                     ]
-                    for image in images['Images']
+                    for image in images
                 ]
                 print(tabulate(table_data, headers=headers, tablefmt="pretty"))
             else:
@@ -107,15 +107,17 @@ class EC2Controller:
         instance_id = read_nonempty_string("\nEnter the Instance ID to create AMI from: ")
         ami_name = read_nonempty_string("Enter a name for the AMI: ")
         try:
-            response = self.ec2_client.create_image(InstanceId=instance_id, Name=ami_name)
-            ami_id = response['ImageId']
+            # Create image (AMI) using resource method
+            instance = self.ec2_resource.Instance(instance_id)
+            response = instance.create_image(Name=ami_name)
+            ami_id = response.id
             
             # Add a tag with the Instance ID to the new AMI
-            self.ec2_client.create_tags(
+            self.ec2_resource.create_tags(
                 Resources=[ami_id],
                 Tags=[{'Key': 'InstanceId', 'Value': instance_id}]
             )
-            print(f"Created '{ami_id}'")
+            print(f"Created AMI '{ami_id}'")
         except Exception as e:
             print(e)
 
@@ -123,7 +125,9 @@ class EC2Controller:
         """Delete a specified AMI."""
         ami_id = read_nonempty_string("\nEnter the AMI ID to delete: ")
         try:
-            self.ec2_client.deregister_image(ImageId=ami_id)
-            print(f"Deleted '{ami_id}'")
+            # Deregister image (delete AMI) using resource method
+            image = self.ec2_resource.Image(ami_id)
+            image.deregister()
+            print(f"Deleted AMI '{ami_id}'")
         except Exception as e:
             print(e)

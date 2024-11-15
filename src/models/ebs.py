@@ -3,21 +3,26 @@ from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_
 from tabulate import tabulate
 
 class EBSController:
-    def __init__(self, ec2_client, ec2_resource):
-        """Initialize with a boto3 client and resource for EC2."""
-        self.ec2_client = ec2_client
-        self.volume_resource = ec2_resource
+    def __init__(self, resource):
+        """Initialize with a boto3 resource for EC2."""
+        self.resource = resource
 
     def list_volumes(self):
         """List all EBS volumes."""
+        try:
+            volumes = self.resource.volumes.all()  # Using resource to list volumes
+        except botocore.exceptions.ClientError as e:
+            print(f"Error describing volumes: {e}")
+            return
+
         in_use_volumes = []
         available_volumes = []
 
         # Parse volumes
-        for volume in self.volume_resource.volumes.all():
+        for volume in volumes:
             # Gather basic volume info
             volume_info = {
-                "Volume ID": volume.volume_id,
+                "Volume ID": volume.id,
                 "Size": f"{volume.size} GiB",
                 "State": volume.state,
                 "Availability Zone": volume.availability_zone
@@ -26,7 +31,7 @@ class EBSController:
             # Check if volume is attached to an instance and get mount point (device)
             mount_point = "Not Attached"
             if volume.state == "in-use":
-                # Retrieve attachments and mount points (mount point)
+                # Retrieve attachments and mount points
                 for attachment in volume.attachments:
                     instance_id = attachment.get("InstanceId")
                     device = attachment.get("Device")
@@ -35,9 +40,9 @@ class EBSController:
             # Update the volume info with mount point if it's in-use
             if volume.state == 'in-use':
                 volume_info["Mount Point"] = mount_point
-                in_use_volumes.append(volume_info)  # Append only once
+                in_use_volumes.append(volume_info)
             else:
-                available_volumes.append(volume_info)  # Append only once
+                available_volumes.append(volume_info)
 
         # Display results in tabular format
         print("\nIn-Use Volumes:")
@@ -57,7 +62,11 @@ class EBSController:
         size = read_nonnegative_integer("\nEnter the size of the volume (GiB): ")
         
         # List available zones for the region dynamically
-        available_zones = [az['ZoneName'] for az in self.ec2_client.describe_availability_zones()['AvailabilityZones']]
+        try:
+            available_zones = [az.name for az in self.resource.availability_zones.all()]  # Using resource for availability zones
+        except botocore.exceptions.ClientError as e:
+            print(f"Error retrieving availability zones: {e}")
+            return
         
         print("Available zones:")
         for idx, az in enumerate(available_zones, start=1):
@@ -70,12 +79,10 @@ class EBSController:
             
             # Create the volume
             try:
-                response = self.ec2_client.create_volume(Size=size, AvailabilityZone=az)
-                volume_id = response['VolumeId']
-                print(f"Created '{volume_id}'")
-            except self.ec2_client.exceptions.ClientError as e:
+                volume = self.resource.create_volume(Size=size, AvailabilityZone=az)  # Using resource to create volume
+                print(f"Created '{volume.id}'")
+            except botocore.exceptions.ClientError as e:
                 print(f"An error occurred: {e}")
-
         else:
             print("Invalid zone selected.")
 
@@ -96,8 +103,9 @@ class EBSController:
             device = available_devices[device_index]
             
             try:
-                response = self.ec2_client.attach_volume(VolumeId=volume_id, InstanceId=instance_id, Device=device)
-                print(f"'{volume_id}' {response['State']} to '{instance_id}' at '{device}'")
+                volume = self.resource.Volume(volume_id)  # Get the volume using resource
+                volume.attach_to_instance(InstanceId=instance_id, Device=device)
+                print(f"'{volume.id}' attached to '{instance_id}' at '{device}'")
             except botocore.exceptions.ClientError as e:
                 print(f"Error attaching volume: {e}")
         else:
@@ -107,9 +115,10 @@ class EBSController:
         """Detach a volume from an EC2 instance."""
         volume_id = read_nonempty_string("\nEnter the Volume ID to detach: ")
         try:
-            response = self.ec2_client.detach_volume(VolumeId=volume_id)
-            print(f"'{volume_id}' {response['State']} from '{response['InstanceId']}' at '{response['Device']}'")
-        except self.ec2_client.exceptions.ClientError as e:
+            volume = self.resource.Volume(volume_id)  # Get the volume using resource
+            volume.detach_from_instance()
+            print(f"'{volume.id}' detached from instance")
+        except self.resource.meta.client.exceptions.ClientError as e:
             print(f"An error occurred: {e}")
 
     def modify_volume(self):
@@ -117,34 +126,36 @@ class EBSController:
         volume_id = read_nonempty_string("\nEnter the Volume ID to modify: ")
         new_size = read_nonnegative_integer("Enter the new size of the volume (GiB): ")
         try:
-            self.ec2_client.modify_volume(VolumeId=volume_id, Size=new_size)
-            print(f"Modified '{volume_id}' to {new_size} GiB")
-        except self.ec2_client.exceptions.ClientError as e:
+            volume = self.resource.Volume(volume_id)  # Get the volume using resource
+            volume.modify_attribute(Size=new_size)
+            print(f"Modified '{volume.id}' to {new_size} GiB")
+        except self.resource.meta.client.exceptions.ClientError as e:
             print(f"An error occurred: {e}")
 
     def delete_volume(self):
         """Delete a volume."""
         volume_id = read_nonempty_string("\nEnter the Volume ID to delete: ")
         try:
-            self.ec2_client.delete_volume(VolumeId=volume_id)
-            print(f"Deleted '{volume_id}'")
-        except self.ec2_client.exceptions.ClientError as e:
+            volume = self.resource.Volume(volume_id)  # Get the volume using resource
+            volume.delete()
+            print(f"Deleted '{volume.id}'")
+        except self.resource.meta.client.exceptions.ClientError as e:
             print(f"An error occurred: {e}")
 
     def list_snapshots(self):
         """List all snapshots."""
-        snapshots = self.ec2_client.describe_snapshots(OwnerIds=['self'])['Snapshots']
+        snapshots = self.resource.snapshots.filter(OwnerIds=['self'])  # Using resource to filter snapshots
         
         print("\nSnapshots:")
         if snapshots:
             headers = ["Snapshot ID", "Volume ID", "Size (GiB)", "Description", "Creation Date"]
             table_data = [
                 [
-                    snapshot['SnapshotId'],
-                    snapshot['VolumeId'],
-                    snapshot['VolumeSize'],
-                    snapshot['Description'],
-                    snapshot['StartTime'].strftime("%Y-%m-%d %H:%M:%S")
+                    snapshot.id,
+                    snapshot.volume_id,
+                    snapshot.volume_size,
+                    snapshot.description,
+                    snapshot.start_time.strftime("%Y-%m-%d %H:%M:%S")
                 ]
                 for snapshot in snapshots
             ]
@@ -157,48 +168,45 @@ class EBSController:
         volume_id = read_nonempty_string("\nEnter available Volume ID to snapshot: ")
         description = read_nonempty_string("Enter a description for the snapshot: ")
         try:
-            response = self.ec2_client.create_snapshot(VolumeId=volume_id, Description=description)
-            snapshot_id = response['SnapshotId']
-            print(f"Created '{snapshot_id}'")
-        except self.ec2_client.exceptions.ClientError as e:
+            volume = self.resource.Volume(volume_id)  # Get the volume using resource
+            snapshot = volume.create_snapshot(Description=description)
+            print(f"Created '{snapshot.id}'")
+        except self.resource.meta.client.exceptions.ClientError as e:
             print(f"An error occurred: {e}")
 
     def delete_snapshot(self):
         """Delete a snapshot."""
         snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to delete: ")
         try:
-            self.ec2_client.delete_snapshot(SnapshotId=snapshot_id)
-            print(f"Deleted '{snapshot_id}'")
-        except self.ec2_client.exceptions.ClientError as e:
+            snapshot = self.resource.Snapshot(snapshot_id)  # Get the snapshot using resource
+            snapshot.delete()
+            print(f"Deleted '{snapshot.id}'")
+        except self.resource.meta.client.exceptions.ClientError as e:
             print(f"An error occurred: {e}")
-            
+
     def create_volume_from_snapshot(self):
         """Create a volume from a snapshot."""
         snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to create volume from: ")
 
         # Optionally, retrieve the Availability Zone by describing the snapshot's volume
         try:
-            snapshot_info = self.ec2_client.describe_snapshots(SnapshotIds=[snapshot_id])
-            volume_id = snapshot_info['Snapshots'][0]['VolumeId']
+            snapshot = self.resource.Snapshot(snapshot_id)  # Get snapshot using resource
+            volume_id = snapshot.volume_id
             print(f"Found '{volume_id}' from '{snapshot_id}'")
 
             # Describe the volume to get the availability zone
-            volume_info = self.ec2_client.describe_volumes(VolumeIds=[volume_id])
-            if not volume_info['Volumes']:
-                raise ValueError(f"Volume ID not found: '{volume_id}'")
-
-            availability_zone = volume_info['Volumes'][0]['AvailabilityZone']
+            volume = self.resource.Volume(volume_id)  # Get the volume using resource
+            availability_zone = volume.availability_zone
             print(f"Volume located in '{availability_zone}'")
 
             # Create the volume from the snapshot
-            response = self.ec2_client.create_volume(
+            new_volume = self.resource.create_volume(
                 SnapshotId=snapshot_id,
                 AvailabilityZone=availability_zone
             )
-            created_volume_id = response['VolumeId']
-            print(f"Created '{created_volume_id}' from '{snapshot_id}' in '{availability_zone}'")
+            print(f"Created '{new_volume.id}' from '{snapshot_id}' in '{availability_zone}'")
 
-        except self.ec2_client.exceptions.ClientError as e:
+        except self.resource.meta.client.exceptions.ClientError as e:
             print(f"An error occurred: {e}")
         except ValueError as e:
             print(f"ValueError: {e}")
