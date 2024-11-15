@@ -70,34 +70,34 @@ Delete AMI:
 ### AWS Menu - EBS Storage:  
 
 List Volumes:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_list.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/volume_list.png)
 
 Create Volume:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_create.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/volume_create.png)
 
 Attach Volume:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_attach.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/volume_attach.png)
 
 Detach Volume:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_detach.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/volume_detach.png)
 
 Modify Volume:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_modify.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/volume_modify.png)
 
 Delete Volume:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_delete.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/volume_delete.png)
 
 List Snapshots:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_list.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/snapshot_list.png)
 
 Create Snapshot:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_create.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/snapshot_create.png)
 
 Delete Snapshot:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_delete.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/snapshot_delete.png)
 
 Create Volume From Snapshot:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_create_volume.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/snapshot_create_volume.png)
 
 ### AWS Menu - S3 Storage:  
 
