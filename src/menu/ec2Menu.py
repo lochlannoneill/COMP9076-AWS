@@ -4,6 +4,7 @@ class ec2Menu:
     def __init__(self):
         self.options = {
             "List All Instances": 1,
+            # "Create Instance": 2,
             "Start Instance": 2,
             "Stop Instance": 3,
             "Delete Instance": 4,
@@ -21,11 +22,7 @@ class ec2Menu:
     def handle(self, ec2_service):
         while True:
             self._display()
-            choice = read_range_integer(
-                "Select from menu: ",
-                min(self.options.values()),
-                max(self.options.values())
-            )
+            choice = read_range_integer("Select from menu: ", 1, len(self.options))
 
             if choice == self.options["List All Instances"]:
                 ec2_service.list_instances()

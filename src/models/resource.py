@@ -1,5 +1,5 @@
 import boto3
-class resource:
+class Resource:
     def __init__(self, region, key_id, secret_key):
         """Initialize the session with AWS credentials and region."""
         self.session = boto3.Session(

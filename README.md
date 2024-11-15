@@ -15,11 +15,28 @@
    ```bash
    pip install tabulate
 
-3. **(Optional)** Include user information in **'src/config/passwords.txt'**
+3. **(Optional)** Include pre-supplied user information in **'src/config/passwords.json'** or create new users during runtime.
    ```bash
-   David   12345pass   AKIKAOD798  PPB7952+AmaYUd+824nmW
-   John    aaaaaaaaa   AKOP67NKAF  CpA9752SDF+709+fa09faAfG
-   Joan    bcbcbcddddddd   AIL67NK8NM  KMALF75+95mml+7+89052
+   [
+      {
+         "name": "David",
+         "password": "12345pass",
+         "access key": "PPB7952+AmaYUd+824nmW",
+         "secret key": "AmaYUd"
+      },
+      {
+         "name": "John",
+         "password": "aaaaaaaaa",
+         "access key": "AKOP67NKAF",
+         "secret key": "CpA9752SDF+709+fa09faAfG"
+      },
+      {
+         "name": "Joan",
+         "password": "bcbcbcddddddd",
+         "access key": "AIL67NK8NM",
+         "secret key": "KMALF75+95mml+7+89052"
+      }
+   ]
 
 4. Execute the application
    ```bash
@@ -53,33 +70,48 @@ Delete AMI:
 ### AWS Menu - EBS Storage:  
 
 List Volumes:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_list.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/volume_list.png)
 
 Create Volume:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_create.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/volume_create.png)
 
 Attach Volume:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_attach.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/volume_attach.png)
 
 Detach Volume:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_detach.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/volume_detach.png)
 
 Modify Volume:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_modify.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/volume_modify.png)
 
 Delete Volume:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/volume_delete.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/volume_delete.png)
 
 List Snapshots:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_list.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/snapshot_list.png)
 
 Create Snapshot:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_create.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/snapshot_create.png)
 
 Delete Snapshot:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_delete.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/snapshot_delete.png)
 
 Create Volume From Snapshot:  
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_create_volume.png)
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/ebs/snapshot_create_volume.png)
 
+### AWS Menu - S3 Storage:  
 
+List Buckets:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/bucket_list.png)
+
+Delete Bucket:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/bucket_delete.png)
+
+List Objects in Bucket:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_list.png)
+
+Download Object:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_download.png)
+
+Delete Object:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_delete.png)

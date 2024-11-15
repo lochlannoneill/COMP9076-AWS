@@ -31,14 +31,14 @@ class EC2Controller:
             # Check if there are running instances
             print("\nRunning Instances:")
             if running_instances:
-                print(tabulate(running_instances, headers="keys", tablefmt="grid"))
+                print(tabulate(running_instances, headers="keys", tablefmt="pretty"))
             else:
                 print("No running instances detected.")
 
             # Check if there are stopped instances
             print("\nStopped Instances:")
             if stopped_instances:
-                print(tabulate(stopped_instances, headers="keys", tablefmt="grid"))
+                print(tabulate(stopped_instances, headers="keys", tablefmt="pretty"))
             else:
                 print("No stopped instances detected.")
 
@@ -47,7 +47,7 @@ class EC2Controller:
         instance_id = read_nonempty_string("\nEnter the Instance ID to start: ")
         try:
             self.ec2_client.start_instances(InstanceIds=[instance_id])
-            print(f"Instance started: '{instance_id}'")
+            print(f"Started '{instance_id}'")
         except Exception as e:
             print(e)
 
@@ -56,7 +56,7 @@ class EC2Controller:
         instance_id = read_nonempty_string("\nEnter the Instance ID to stop: ")
         try:
             self.ec2_client.stop_instances(InstanceIds=[instance_id])
-            print(f"Instance stopped: '{instance_id}'")
+            print(f"Stopped '{instance_id}'")
         except Exception as e:
             print(e)
 
@@ -65,7 +65,7 @@ class EC2Controller:
         instance_id = read_nonempty_string("\nEnter the Instance ID to delete: ")
         try:
             self.ec2_client.terminate_instances(InstanceIds=[instance_id])
-            print(f"'{instance_id}' deleted.")
+            print(f"Deleted '{instance_id}'")
         except Exception as e:
             print(e)
 
@@ -96,7 +96,7 @@ class EC2Controller:
                     ]
                     for image in images['Images']
                 ]
-                print(tabulate(table_data, headers=headers, tablefmt="grid"))
+                print(tabulate(table_data, headers=headers, tablefmt="pretty"))
             else:
                 print(f"No associated AMIs found for instance '{instance_id}'.")
         except Exception as e:
@@ -115,7 +115,7 @@ class EC2Controller:
                 Resources=[ami_id],
                 Tags=[{'Key': 'InstanceId', 'Value': instance_id}]
             )
-            print(f"AMI created: '{ami_id}'")
+            print(f"Created '{ami_id}'")
         except Exception as e:
             print(e)
 
@@ -124,6 +124,6 @@ class EC2Controller:
         ami_id = read_nonempty_string("\nEnter the AMI ID to delete: ")
         try:
             self.ec2_client.deregister_image(ImageId=ami_id)
-            print(f"Deleted AMI: '{ami_id}'")
+            print(f"Deleted '{ami_id}'")
         except Exception as e:
             print(e)
