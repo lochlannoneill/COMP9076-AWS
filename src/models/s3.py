@@ -8,7 +8,6 @@ class S3Controller:
         """Initialize with a boto3 session."""
         self.s3_client = client
 
-    # COMPLETED
     def list_buckets(self):
         """List all S3 buckets."""
         response = self.s3_client.list_buckets()
@@ -29,7 +28,6 @@ class S3Controller:
         else:
             print(tabulate(buckets, headers='keys', tablefmt='pretty'))
 
-    # COMPLETED
     def delete_bucket(self):
         """Delete a bucket after validation."""
         bucket_name = read_nonempty_string("\nEnter the bucket name: ")
@@ -62,7 +60,6 @@ class S3Controller:
         except Exception as e:
             print(f"Unexpected error: {e}")
 
-    # COMPLETED
     def list_objects(self):
         """List all objects in a specified bucket."""
         bucket_name = read_nonempty_string("\nEnter the bucket name: ")
@@ -77,7 +74,6 @@ class S3Controller:
         except Exception as e:
             print(e)
 
-    # COMPLETED
     def upload_object(self):
         """Upload a file to a specified bucket."""
         bucket_name = read_nonempty_string("\nEnter the bucket name: ")
@@ -95,7 +91,6 @@ class S3Controller:
         except Exception as e:
             print(f"An error occurred: {e}")
 
-    # COMPLETED
     def download_object(self):
         """Download a file from a specified bucket to the 'Downloads' folder."""
         bucket_name = read_nonempty_string("\nEnter the bucket name: ")
