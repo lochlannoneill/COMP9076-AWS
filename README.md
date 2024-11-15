@@ -99,4 +99,19 @@ Delete Snapshot:
 Create Volume From Snapshot:  
 ![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/volumes/snapshot_create_volume.png)
 
+### AWS Menu - S3 Storage:  
 
+List Buckets:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/bucket_list.png)
+
+Delete Bucket:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/bucket_delete.png)
+
+List Objects in Bucket:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_list.png)
+
+Download Object:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_download.png)
+
+Delete Object:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_delete.png)
