@@ -1,31 +1,26 @@
 from os.path import join, exists
-import json
 from src.utils.reading_from_user import read_nonempty_string
 
 class UserManager:
     def __init__(self):
-        self.file_path = join("src", "config", "passwords.json")
+        self.file_path = join("src", "config", "passwords.txt")
+        self.line_tabcount = 4  # Number of fields in each line in passwords.txt
         self.users = self.load_users()
 
     def load_users(self):
-        """Load existing users from the password JSON file."""
+        """Load existing users from the passwords.txt file."""
         users = {}
         if exists(self.file_path):
             with open(self.file_path, "r") as file:
-                try:
-                    users_list = json.load(file)
-                    for user in users_list:
-                        username = user["name"]
-                        password = user["password"]
-                        access_key = user["access key"]
-                        secret_key = user["secret key"]
+                for line in file:
+                    parts = line.split()
+                    if len(parts) == self.line_tabcount:
+                        username, password, access_key, secret_key = parts
                         users[username] = {
                             "password": password,
                             "access_key": access_key,
                             "secret_key": secret_key
                         }
-                except json.JSONDecodeError:
-                    print("Error: Could not decode the JSON file.")
         return users
 
     def login_user(self):
@@ -41,27 +36,19 @@ class UserManager:
             print("Invalid username or password. Please try again.")
 
     def register_user(self):
-        """Register a new user and add them to the password JSON file."""
+        """Register a new user and add them to the passwords.txt file."""
         username = read_nonempty_string("Enter a new username: ")
         password = read_nonempty_string("Enter a password: ")
         access_key = read_nonempty_string("Enter your AWS Access Key ID: ")
         secret_key = read_nonempty_string("Enter your AWS Secret Access Key: ")
 
-        # Load existing users from JSON and append new user
+        # Load existing users from the file
         with open(self.file_path, "r") as file:
-            users_list = json.load(file)
-        
-        # Add the new user to the list
-        users_list.append({
-            "name": username,
-            "password": password,
-            "access key": access_key,
-            "secret key": secret_key
-        })
+            users_list = file.readlines()
 
-        # Write updated list back to the JSON file
-        with open(self.file_path, "w") as file:
-            json.dump(users_list, file, indent=4)
+        # Append the new user to the list
+        with open(self.file_path, "a") as file:
+            file.write(f"{username}\t{password}\t{access_key}\t{secret_key}\n")
         
         print(f"User '{username}' registered successfully.")
         # Update in-memory users dictionary
