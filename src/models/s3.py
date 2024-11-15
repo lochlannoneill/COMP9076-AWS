@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from tabulate import tabulate
-from src.utils.reading_from_user import read_nonempty_string
+from src.utils.reading_from_user import read_nonempty_string, read_range_integer
 
 class S3Controller:
     def __init__(self, client):
@@ -98,21 +98,33 @@ class S3Controller:
     # COMPLETED
     def download_object(self):
         """Download a file from a specified bucket to the 'Downloads' folder."""
-        bucket_name = read_nonempty_string("Enter the bucket name: ")
-        file_name = read_nonempty_string("Enter the file name in S3: ")
-        
-        # Check if the file exists
+        bucket_name = read_nonempty_string("\nEnter the bucket name: ")
+
         try:
-            self.s3_client.head_object(Bucket=bucket_name, Key=file_name)
+            response = self.s3_client.list_objects_v2(Bucket=bucket_name)
+            
+            # Check if the bucket is empty
+            if 'Contents' not in response:
+                print(f"Error: No files found in the bucket '{bucket_name}'.")
+                return
+
+            # Display the list of objects and give the user a choice
+            print(f"Files in bucket '{bucket_name}':")
+            for index, obj in enumerate(response['Contents'], 1):
+                print(f"\t{index}. '{obj['Key']}'")
+
+            # Get file selection from the user
+            choice = read_range_integer("Enter the index of the file to download: ", 1, len(response['Contents']))
+            file_name = response['Contents'][choice - 1]['Key']
+        
+            # Get the path to the Downloads folder
+            user_home = Path.home()
+            downloads_folder = user_home / 'Downloads'
+            file_path = downloads_folder / file_name
+
+            # Download the file
+            self.s3_client.download_file(bucket_name, file_name, str(file_path))
+            print(f"Downloaded '{file_path}'")
+
         except Exception as e:
             print(f"Error: {e}")
-            return
-
-        # Get the path to the Downloads folder
-        user_home = Path.home()
-        downloads_folder = user_home / 'Downloads'
-        file_path = downloads_folder / file_name
-
-        # Download the file
-        self.s3_client.download_file(bucket_name, file_name, str(file_path))
-        print(f"Downloaded '{file_path}'")
