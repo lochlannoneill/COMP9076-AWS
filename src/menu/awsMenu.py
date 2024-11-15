@@ -33,18 +33,15 @@ class awsMenu:
             
             # EC2 Instances
             if choice == self.options["EC2 Instances"]:
-                ec2_controller = EC2Controller(self.ec2)
-                ec2Menu().handle(ec2_controller)
+                ec2Menu().handle(EC2Controller(self.ec2))
                 
             # EBS Storage
             if choice == self.options["EBS Storage"]:
-                ec2_controller = EBSController(self.ec2)
-                ebsMenu().handle(ec2_controller)
+                ebsMenu().handle(EBSController(self.ec2))
                 
             # S3 Storage
             if choice == self.options["S3 Storage"]:
-                s3_controller = S3Controller(self.s3)
-                s3Menu().handle(s3_controller)
+                s3Menu().handle(S3Controller(self.s3))
             
             # Monitoring
             if choice == self.options["Monitoring"]:
