@@ -107,11 +107,11 @@ List Buckets:
 Delete Bucket:  
 ![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/bucket_delete.png)
 
-Upload Object:
-![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/bucket_upload.png)
-
 List Objects in Bucket:  
 ![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_list.png)
+
+Upload Object:
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_upload.png)
 
 Download Object:  
 ![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_download.png)
