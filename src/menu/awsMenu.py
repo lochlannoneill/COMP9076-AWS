@@ -10,8 +10,6 @@ from src.menu.s3Menu import s3Menu
 class awsMenu:
     def __init__(self, user_credentials):
         self.res = Resource(user_credentials)
-        self.ec2 = self.res.EC2Resource()
-        self.s3 = self.res.S3Resource()
 
         self.options = {
             "EC2 Instances": 1,
@@ -33,15 +31,15 @@ class awsMenu:
             
             # EC2 Instances
             if choice == self.options["EC2 Instances"]:
-                ec2Menu().handle(EC2Controller(self.ec2))
+                ec2Menu().handle(EC2Controller(self.res.EC2Resource()))
                 
             # EBS Storage
             if choice == self.options["EBS Storage"]:
-                ebsMenu().handle(EBSController(self.ec2))
+                ebsMenu().handle(EBSController(self.res.EC2Resource()))
                 
             # S3 Storage
             if choice == self.options["S3 Storage"]:
-                s3Menu().handle(S3Controller(self.s3))
+                s3Menu().handle(S3Controller(res.S3Resource()))
             
             # Monitoring
             if choice == self.options["Monitoring"]:
