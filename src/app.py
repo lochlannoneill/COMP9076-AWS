@@ -18,6 +18,7 @@ class App:
             if user_credentials:
                 while True:
                     awsMenu(user_credentials).handle()
+                    break
 
 def main():
     user_manager = UserManager()
