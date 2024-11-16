@@ -3,9 +3,9 @@ from src.models.resource import Resource
 from src.models.ebs import EBSController
 from src.models.ec2 import EC2Controller
 from src.models.s3 import S3Controller
-from src.menu.ec2Menu import EC2Menu
-from src.menu.ebsMenu import EBSMenu
-from src.menu.s3Menu import S3Menu
+from src.menu.ec2_menu import EC2Menu
+from src.menu.ebs_menu import EBSMenu
+from src.menu.s3_menu import S3Menu
 
 class AWSMenu:
     def __init__(self, user_credentials):

@@ -1,5 +1,5 @@
-from src.menu.mainMenu import MainMenu
-from src.menu.awsMenu import AWSMenu
+from src.menu.main_menu import MainMenu
+from src.menu.aws_menu import AWSMenu
 from src.models.resource import Resource
 
 class App:
