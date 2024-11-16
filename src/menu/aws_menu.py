@@ -47,7 +47,7 @@ class AWSMenu:
             
             # Monitoring
             if choice == self.options["Monitoring"]:
-                cw = self.res.CWClient(self.res.CWClient())  # Client
+                cw = CWController(self.res.CWClient())  # Client
                 CWMenu().handle(cw)
             
             # Back
