@@ -44,30 +44,34 @@ class CWController:
         threshold = 1000
         region = self.client.meta.region_name  # Get the region from the client
         
-        self.client.put_metric_alarm(
-            AlarmName=f'{alarm_name}',
-            ComparisonOperator='GreaterThanOrEqualToThreshold',
-            EvaluationPeriods=1,
-            MetricName='NetworkPacketsOut',
-            Namespace='AWS/EC2',
-            Period=300,    #INSUFFICIENT_DATA error if lower than the metric period
-            Statistic='Average',
-            Threshold=1000,  # Trigger alarm if NetworkPacketsOut >= 1,000
-            ActionsEnabled=True,
-            AlarmDescription=f'Alarm to stop instance if NetworkPacketsOut >= {threshold}',
-            Dimensions=[
-                {
-                    'Name': 'InstanceId',
-                    'Value': instance_id
-                },
-            ],
-            Unit='Count',  # Unit type for NetworkPacketsOut
-            AlarmActions=[
-                f"arn:aws:automate:{region}:ec2:stop"  # Add an EC2 Stop action when the alarm triggers
-            ]
-        )
-        print(f"Alarm created for '{instance_id}' if NetworkPacketsOut >= {threshold}")
-
+        try:
+            self.client.put_metric_alarm(
+                AlarmName=f'{alarm_name}',
+                ComparisonOperator='GreaterThanOrEqualToThreshold',
+                EvaluationPeriods=1,
+                MetricName='NetworkPacketsOut',
+                Namespace='AWS/EC2',
+                Period=300,    #INSUFFICIENT_DATA error if lower than the metric period
+                Statistic='Average',
+                Threshold=1000,  # Trigger alarm if NetworkPacketsOut >= 1,000
+                ActionsEnabled=True,
+                AlarmDescription=f'Alarm to stop instance if NetworkPacketsOut >= {threshold}',
+                Dimensions=[
+                    {
+                        'Name': 'InstanceId',
+                        'Value': instance_id
+                    },
+                ],
+                Unit='Count',  # Unit type for NetworkPacketsOut
+                AlarmActions=[
+                    f"arn:aws:automate:{region}:ec2:stop"  # Add an EC2 Stop action when the alarm triggers
+                ]
+            )
+            print(f"Alarm created for '{instance_id}' if NetworkPacketsOut >= {threshold}")
+        
+        except Exception as e:
+            print(f"Error creating alarm: {e}")
+            
     # COMPLETED
     def delete_alarm(self):
         alarm = read_nonempty_string("Enter name of alarm to delete: ")
@@ -77,6 +81,7 @@ class CWController:
                 AlarmNames=[alarm]
             )
             print(f"Deleted '{alarm}'")
+        
         except Exception as e:
             print(f"Error deleting alarm: {e}")
 
