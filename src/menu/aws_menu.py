@@ -10,7 +10,6 @@ from src.utils.reading_from_user import read_range_integer
 class AWSMenu:
     def __init__(self, user_credentials):
         self.res = Resource(user_credentials)
-
         self.options = {
             "EC2 Instances": 1,
             "EBS Storage": 2,
@@ -33,12 +32,12 @@ class AWSMenu:
             if choice == self.options["EC2 Instances"]:
                 ec2 = EC2Controller(self.res.EC2Resource())
                 EC2Menu().handle(ec2)
-                
+            
             # EBS Storage
             if choice == self.options["EBS Storage"]:
                 ebs = EBSController(self.res.EC2Resource())  # EBS is part of EC2
                 EBSMenu().handle(ebs)
-                
+            
             # S3 Storage
             if choice == self.options["S3 Storage"]:
                 s3 = S3Controller(self.res.S3Resource())

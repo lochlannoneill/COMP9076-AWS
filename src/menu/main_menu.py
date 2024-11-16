@@ -14,17 +14,22 @@ class MainMenu:
         print("Main Menu")
         for option, number in self.options.items():
             print(f"\t{number}. {option}")
-
+    
     def handle(self):
         """Handle the main menu interaction."""
         while True:
             self._display()
             choice = read_range_integer("Select from menu: ", 1, len(self.options))
 
+            # Login
             if choice == self.options["Login"]:
                 return UserManager().login()
+            
+            # Register
             elif choice == self.options["Register"]:
                 UserManager().register()
+            
+            # Exit
             elif choice == self.options["Exit"]:
                 print("Exiting...")
                 exit()
