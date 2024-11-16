@@ -1,6 +1,6 @@
 import botocore
-from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string
 from tabulate import tabulate
+from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string
 
 class EBSController:
     def __init__(self, resource):

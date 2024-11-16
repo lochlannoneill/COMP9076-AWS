@@ -1,5 +1,5 @@
-from src.utils.reading_from_user import read_range_integer
 from src.models.user import UserManager
+from src.utils.reading_from_user import read_range_integer
 
 class MainMenu:
     def __init__(self):

@@ -1,6 +1,6 @@
-from src.utils.reading_from_user import read_nonempty_string
 from tabulate import tabulate
 from datetime import datetime
+from src.utils.reading_from_user import read_nonempty_string
 
 class EC2Controller:
     def __init__(self, resource):
