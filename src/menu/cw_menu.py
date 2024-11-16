@@ -4,16 +4,15 @@ class CWMenu:
     def __init__(self):
         self.options = {
             "List Metrics": 1,
-            "Get Metric Data": 2,
-            "Put Metric Data": 3,
-            "Set Alarm": 4,
-            "Delete Alarm": 5,
-            "Free Tier AWS Services": 6,
-            "Back": 7
+            "Get Metric Statistics": 2,
+            "Set Alarm": 3,
+            "Delete Alarm": 4,
+            "Free Tier AWS Services": 5,
+            "Back": 6
         }
     
     def _display(self):
-        print("\nCW Menu")
+        print("\nCloudWatch Menu")
         for option, number in self.options.items():
             print(f"\t{number}. {option}")
 
@@ -26,13 +25,9 @@ class CWMenu:
             if choice == self.options["List Metrics"]:
                 service.list_metrics()
             
-            # Get Metric Data
-            if choice == self.options["Get Metric Data"]:
+            # Get Metric Statistics
+            if choice == self.options["Get Metric Statistics"]:
                 service.get_metric_data()
-            
-            # Put Metric Data
-            if choice == self.options["Put Metric Data"]:
-                service.put_metric_data()
             
             # Set Alarm
             if choice == self.options["Set Alarm"]:

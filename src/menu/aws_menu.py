@@ -16,7 +16,7 @@ class AWSMenu:
             "EC2 Instances": 1,
             "EBS Storage": 2,
             "S3 Storage": 3,
-            "Monitoring": 4,
+            "CloudWatch Monitoring": 4,
             "Back": 5
         }
 
