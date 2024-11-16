@@ -5,9 +5,9 @@ class UserManager:
     def __init__(self):
         self.file_path = join("src", "config", "passwords.txt")
         self.line_tabcount = 4  # Number of fields in each line in passwords.txt
-        self.users = self.load_users()
+        self.users = self.load()
 
-    def load_users(self):
+    def load(self):
         """Load existing users from the passwords.txt file."""
         users = {}
         
