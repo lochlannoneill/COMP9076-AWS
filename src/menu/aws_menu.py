@@ -31,15 +31,18 @@ class AWSMenu:
             
             # EC2 Instances
             if choice == self.options["EC2 Instances"]:
-                EC2Menu().handle(EC2Controller(self.res.EC2Resource()))
+                ec2 = EC2Controller(self.res.EC2Resource())
+                EC2Menu().handle(ec2)
                 
             # EBS Storage
             if choice == self.options["EBS Storage"]:
-                EBSMenu().handle(EBSController(self.res.EC2Resource()))
+                ebs = EBSController(self.res.EC2Resource())  # EBS is part of EC2
+                EBSMenu().handle(ebs)
                 
             # S3 Storage
             if choice == self.options["S3 Storage"]:
-                S3Menu().handle(S3Controller(self.res.S3Resource()))
+                s3 = S3Controller(self.res.S3Resource())
+                S3Menu().handle(s3)
             
             # Monitoring
             if choice == self.options["Monitoring"]:
