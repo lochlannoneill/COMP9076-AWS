@@ -34,7 +34,7 @@ class UserManager:
     def login(self):
         """Authenticate an existing user."""
         while True:
-            username = read_nonempty_string("Username: ")
+            username = read_nonempty_string("\nUsername: ")
             password = read_nonempty_string("Password: ")
             valid_user = username in self.users and self.users[username]["password"] == password
 
@@ -45,7 +45,7 @@ class UserManager:
 
     def register(self):
         """Register a new user and add them to the passwords.txt file."""
-        username = read_nonempty_string("Enter a new username: ")
+        username = read_nonempty_string("\nEnter a new username: ")
         password = read_nonempty_string("Enter a password: ")
         access_key = read_nonempty_string("Enter your AWS Access Key ID: ")
         secret_key = read_nonempty_string("Enter your AWS Secret Access Key: ")
