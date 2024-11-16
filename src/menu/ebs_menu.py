@@ -1,6 +1,6 @@
 from src.utils.reading_from_user import read_range_integer
 
-class ebsMenu:
+class EBSMenu:
     def __init__(self):
         self.options = {
             "List Volumes": 1,
@@ -21,30 +21,51 @@ class ebsMenu:
         for option, number in self.options.items():
             print(f"\t{number}. {option}")
 
-    def handle(self, ec2_service):
+    def handle(self, service):
         while True:
             self._display()
             choice = read_range_integer("Select from menu: ", 1, len(self.options))
 
+            # List Volumes
             if choice == self.options["List Volumes"]:
-                ec2_service.list_volumes()
+                service.list_volumes()
+            
+            # Create Volume
             elif choice == self.options["Create Volume"]:
-                ec2_service.create_volume()
+                service.create_volume()
+            
+            # Attach Volume
             elif choice == self.options["Attach Volume"]:
-                ec2_service.attach_volume()
+                service.attach_volume()
+            
+            # Detach Volume
             elif choice == self.options["Detach Volume"]:
-                ec2_service.detach_volume()
+                service.detach_volume()
+            
+            # Modify Volume
             elif choice == self.options["Modify Volume"]:
-                ec2_service.modify_volume()
+                service.modify_volume()
+            
+            # Delete Volume
             elif choice == self.options["Delete Volume"]:
-                ec2_service.delete_volume()
+                service.delete_volume()
+            
+            # List Snapshots
             elif choice == self.options["List Snapshots"]:
-                ec2_service.list_snapshots()
+                service.list_snapshots()
+            
+            # Create Snapshot
             elif choice == self.options["Create Snapshot"]:
-                ec2_service.create_snapshot()
+                service.create_snapshot()
+            
+            # Delete Snapshot
             elif choice == self.options["Delete Snapshot"]:
-                ec2_service.delete_snapshot()
+                service.delete_snapshot()
+            
+            # Create Volume From Snapshot
             elif choice == self.options["Create Volume From Snapshot"]:
-                ec2_service.create_volume_from_snapshot()
+                service.create_volume_from_snapshot()
+            
+            # Back
             elif choice == self.options["Back"]:
                 return False

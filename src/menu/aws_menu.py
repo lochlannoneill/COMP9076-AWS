@@ -1,18 +1,15 @@
-from src.utils.reading_from_user import read_range_integer
 from src.models.resource import Resource
-from src.models.ebs import EBSController
+from src.menu.ec2_menu import EC2Menu
 from src.models.ec2 import EC2Controller
+from src.menu.ebs_menu import EBSMenu
+from src.models.ebs import EBSController
+from src.menu.s3_menu import S3Menu
 from src.models.s3 import S3Controller
-from src.menu.ec2Menu import ec2Menu
-from src.menu.ebsMenu import ebsMenu
-from src.menu.s3Menu import s3Menu
+from src.utils.reading_from_user import read_range_integer
 
-class awsMenu:
+class AWSMenu:
     def __init__(self, user_credentials):
         self.res = Resource(user_credentials)
-        self.ec2 = self.res.EC2Resource()
-        self.s3 = self.res.S3Resource()
-
         self.options = {
             "EC2 Instances": 1,
             "EBS Storage": 2,
@@ -33,18 +30,18 @@ class awsMenu:
             
             # EC2 Instances
             if choice == self.options["EC2 Instances"]:
-                ec2_controller = EC2Controller(self.ec2)
-                ec2Menu().handle(ec2_controller)
-                
+                ec2 = EC2Controller(self.res.EC2Resource())
+                EC2Menu().handle(ec2)
+            
             # EBS Storage
             if choice == self.options["EBS Storage"]:
-                ec2_controller = EBSController(self.ec2)
-                ebsMenu().handle(ec2_controller)
-                
+                ebs = EBSController(self.res.EC2Resource())  # EBS is part of EC2
+                EBSMenu().handle(ebs)
+            
             # S3 Storage
             if choice == self.options["S3 Storage"]:
-                s3_controller = S3Controller(self.s3)
-                s3Menu().handle(s3_controller)
+                s3 = S3Controller(self.res.S3Resource())
+                S3Menu().handle(s3)
             
             # Monitoring
             if choice == self.options["Monitoring"]:

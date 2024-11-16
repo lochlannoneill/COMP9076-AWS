@@ -15,28 +15,11 @@
    ```bash
    pip install tabulate
 
-3. **(Optional)** Include pre-supplied user information in **'src/config/passwords.json'** or create new users during runtime.
+3. **(Optional)** Include pre-supplied user information in **'src/config/passwords.txt'** or create new users during runtime.
    ```bash
-   [
-      {
-         "name": "David",
-         "password": "12345pass",
-         "access key": "PPB7952+AmaYUd+824nmW",
-         "secret key": "AmaYUd"
-      },
-      {
-         "name": "John",
-         "password": "aaaaaaaaa",
-         "access key": "AKOP67NKAF",
-         "secret key": "CpA9752SDF+709+fa09faAfG"
-      },
-      {
-         "name": "Joan",
-         "password": "bcbcbcddddddd",
-         "access key": "AIL67NK8NM",
-         "secret key": "KMALF75+95mml+7+89052"
-      }
-   ]
+   David   12345pass   AKIKAOD798  PPB7952+AmaYUd+824nmW
+   John    aaaaaaaaa   AKOP67NKAF  CpA9752SDF+709+fa09faAfG
+   Joan    bcbcbcddddddd   AIL67NK8NM  KMALF75+95mml+7+89052
 
 4. Execute the application
    ```bash

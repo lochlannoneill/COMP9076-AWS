@@ -1,6 +1,7 @@
+from src.models.user import UserManager
 from src.utils.reading_from_user import read_range_integer
 
-class mainMenu:
+class MainMenu:
     def __init__(self):
         self.options = {
             "Login": 1,
@@ -13,17 +14,22 @@ class mainMenu:
         print("Main Menu")
         for option, number in self.options.items():
             print(f"\t{number}. {option}")
-
-    def handle(self, user_manager):
+    
+    def handle(self):
         """Handle the main menu interaction."""
         while True:
             self._display()
             choice = read_range_integer("Select from menu: ", 1, len(self.options))
 
+            # Login
             if choice == self.options["Login"]:
-                return user_manager.login_user()
+                return UserManager().login()
+            
+            # Register
             elif choice == self.options["Register"]:
-                user_manager.register_user()
+                UserManager().register()
+            
+            # Exit
             elif choice == self.options["Exit"]:
                 print("Exiting...")
                 exit()

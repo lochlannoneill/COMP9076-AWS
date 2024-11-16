@@ -1,6 +1,6 @@
-from src.utils.reading_from_user import read_nonempty_string
 from tabulate import tabulate
 from datetime import datetime
+from src.utils.reading_from_user import read_nonempty_string
 
 class EC2Controller:
     def __init__(self, resource):
@@ -12,7 +12,7 @@ class EC2Controller:
         running_instances = []
         stopped_instances = []
 
-        # Parse instances using resource
+        # Parse instances
         for instance in self.ec2_resource.instances.all():
             instance_info = {
                 "Instance ID": instance.instance_id,
@@ -27,14 +27,14 @@ class EC2Controller:
             else:
                 stopped_instances.append(instance_info)
 
-        # Check if there are running instances
+        # Display running instances
         print("\nRunning Instances:")
         if running_instances:
             print(tabulate(running_instances, headers="keys", tablefmt="pretty"))
         else:
             print("No running instances detected.")
 
-        # Check if there are stopped instances
+        # Display stopped instances
         print("\nStopped Instances:")
         if stopped_instances:
             print(tabulate(stopped_instances, headers="keys", tablefmt="pretty"))
@@ -44,8 +44,9 @@ class EC2Controller:
     def start_instance(self):
         """Start a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter the Instance ID to start: ")
+        
+        # Start instance using resource method
         try:
-            # Start instance using resource method
             instance = self.ec2_resource.Instance(instance_id)
             instance.start()
             print(f"Started '{instance_id}'")
@@ -55,8 +56,9 @@ class EC2Controller:
     def stop_instance(self):
         """Stop a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter the Instance ID to stop: ")
+        
+        # Stop instance using resource method
         try:
-            # Stop instance using resource method
             instance = self.ec2_resource.Instance(instance_id)
             instance.stop()
             print(f"Stopped '{instance_id}'")
@@ -66,8 +68,9 @@ class EC2Controller:
     def delete_instance(self):
         """Delete a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter the Instance ID to delete: ")
+        
+        # Terminate instance using resource method
         try:
-            # Terminate instance using resource method
             instance = self.ec2_resource.Instance(instance_id)
             instance.terminate()
             print(f"Deleted '{instance_id}'")
@@ -78,20 +81,20 @@ class EC2Controller:
         """List all AMIs from an EC2 instance."""
         instance_id = read_nonempty_string("\nEnter the Instance ID to list associated AMIs: ")
         print(f"Searching associated AMIs of '{instance_id}'...")
+        
+        # Search for images associated with the instance
         try:
-            # Using the EC2 resource to filter images by InstanceId tag
             images = self.ec2_resource.images.filter(Filters=[
                 {'Name': 'tag:InstanceId', 'Values': [instance_id]}
             ])
             
-            # If there are images associated with the instance, print them in tabular format
+            # Display images
             if images:
                 headers = ["AMI ID", "Name", "Creation Date"]
                 table_data = [
                     [
                         image.id,
                         image.name,
-                        # Parse and format the CreationDate string
                         image.creation_date.strftime("%Y-%m-%d %H:%M:%S")
                     ]
                     for image in images
@@ -106,13 +109,14 @@ class EC2Controller:
         """Create an AMI from a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter the Instance ID to create AMI from: ")
         ami_name = read_nonempty_string("Enter a name for the AMI: ")
+        
+        # Create AMI using resource method
         try:
-            # Create image (AMI) using resource method
             instance = self.ec2_resource.Instance(instance_id)
             response = instance.create_image(Name=ami_name)
             ami_id = response.id
             
-            # Add a tag with the Instance ID to the new AMI
+            # Tag the AMI with the instance ID
             self.ec2_resource.create_tags(
                 Resources=[ami_id],
                 Tags=[{'Key': 'InstanceId', 'Value': instance_id}]
@@ -124,8 +128,9 @@ class EC2Controller:
     def delete_ami(self):
         """Delete a specified AMI."""
         ami_id = read_nonempty_string("\nEnter the AMI ID to delete: ")
+        
+        # Deregister AMI using resource method
         try:
-            # Deregister image (delete AMI) using resource method
             image = self.ec2_resource.Image(ami_id)
             image.deregister()
             print(f"Deleted AMI '{ami_id}'")
