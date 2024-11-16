@@ -39,7 +39,7 @@ class AWSMenu:
                 
             # S3 Storage
             if choice == self.options["S3 Storage"]:
-                S3Menu().handle(S3Controller(res.S3Resource()))
+                S3Menu().handle(S3Controller(self.res.S3Resource()))
             
             # Monitoring
             if choice == self.options["Monitoring"]:
