@@ -10,16 +10,18 @@ class UserManager:
     def load_users(self):
         """Load existing users from the passwords.txt file."""
         users = {}
+        
+        # Check if the file exists
         if not exists(self.file_path):
             print(f"File not found '{self.file_path}'")
             return users
 
+        # Read the file line by line
         try:
             with open(self.file_path, "r") as file:
                 for line_number, line in enumerate(file, start=1):
-                    # Clean up the line and split by tab
                     parts = line.strip().split("\t")
-                    if len(parts) == self.line_tabcount:
+                    if len(parts) == self.line_tabcount:  # Check if the line has the correct number of fields
                         username, password, access_key, secret_key = parts
                         users[username] = {
                             "password": password,
