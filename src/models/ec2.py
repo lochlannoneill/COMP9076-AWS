@@ -111,6 +111,7 @@ class EC2Controller:
                 print(tabulate(table_data, headers=headers, tablefmt="pretty"))
             else:
                 print(f"No associated AMIs found for instance '{instance_id}'.")
+        
         except Exception as e:
             print(e)
 
@@ -131,6 +132,7 @@ class EC2Controller:
                 Tags=[{'Key': 'InstanceId', 'Value': instance_id}]
             )
             print(f"Created AMI '{ami_id}'")
+            
         except Exception as e:
             print(e)
 
