@@ -27,7 +27,7 @@ class CWMenu:
             
             # Get Metric Statistics
             if choice == self.options["Get Metric Statistics"]:
-                service.get_metric_data()
+                service.get_metric_statistics()
             
             # Set Alarm
             if choice == self.options["Set Alarm"]:
