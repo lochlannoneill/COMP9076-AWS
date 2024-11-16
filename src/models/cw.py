@@ -68,10 +68,18 @@ class CWController:
         )
         print(f"Alarm created for '{instance_id}' if NetworkPacketsOut >= {threshold}")
 
-    # TODO
+    # COMPLETED
     def delete_alarm(self):
-        print("Not implemented yet.")
-    
+        alarm = read_nonempty_string("Enter name of alarm to delete: ")
+        
+        try:
+            self.client.delete_alarms(
+                AlarmNames=[alarm]
+            )
+            print(f"Deleted '{alarm}'")
+        except Exception as e:
+            print(f"Error deleting alarm: {e}")
+
     # TODO 
     def free_tier_aws_services(self):
         print("Not implemented yet.")
