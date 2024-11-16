@@ -3,12 +3,11 @@ from src.utils.reading_from_user import read_range_integer
 class CWMenu:
     def __init__(self):
         self.options = {
-            "List Metrics": 1,
-            "Get Metric Statistics": 2,
-            "Set Alarm": 3,
-            "Delete Alarm": 4,
-            "Free Tier AWS Services": 5,
-            "Back": 6
+            "Get Metric Statistics": 1,
+            "Set Alarm": 2,
+            "Delete Alarm": 3,
+            "Free Tier AWS Services": 4,
+            "Back": 5
         }
     
     def _display(self):
@@ -20,10 +19,6 @@ class CWMenu:
         while True:
             self._display()
             choice = read_range_integer("Select from menu: ", 1, len(self.options))
-            
-            # List Metrics
-            if choice == self.options["List Metrics"]:
-                service.list_metrics()
             
             # Get Metric Statistics
             if choice == self.options["Get Metric Statistics"]:

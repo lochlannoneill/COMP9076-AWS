@@ -1,4 +1,5 @@
 import datetime
+import tabulate
 from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string, read_nonnegative_float
 
 class CWController:
@@ -6,34 +7,39 @@ class CWController:
         """Initialize with a boto3 session."""
         self.client = client
 
-    # TODO
-    def list_metrics(self):
-        """List all CloudWatch metrics."""
-        response = self.client.list_metrics()
-        for metric in response['Metrics']:
-            print(f"Namespace: {metric['Namespace']}")
-            print(f"Metric Name: {metric['MetricName']}")
-            print(f"Dimensions: {metric['Dimensions']}")
-            print()
-
+    # COMPLETED
     def get_metric_statistics(self):
-        # Output the average result of the given 'metric' over the last 600 seconds
-        # for EC2 instance 'instance_id'
+            """Display the EBSReadBytes and EBSByteBalance% performance metrics for a particular EC2 instance, averaged over the last 20 minutes."""
+            instance_id = read_nonempty_string("\nEnter Instance ID to get metrics: ")
+            metrics = ['EBSReadBytes', 'EBSByteBalance%']
+            minutes = 20
 
-        a = self.cw.get_metric_statistics(
-            Period=300,
-            StartTime=datetime.datetime.utcnow() - datetime.timedelta(seconds=600),
-            EndTime=datetime.datetime.utcnow(),
-            MetricName=metric,
-            Namespace="AWS/EC2",
-            Statistics=['Average'],
-            Dimensions=[{'Name':'InstanceId', 'Value':instance_id}]
-            )
-        print(a)
+            end_time = datetime.datetime.utcnow()
+            start_time = end_time - datetime.timedelta(minutes=minutes)
+
+            print(f"Average metrics over the last {minutes} minutes")
+            for metric in metrics:
+                response = self.client.get_metric_statistics(
+                    Period=300,
+                    StartTime=start_time,
+                    EndTime=end_time,
+                    MetricName=metric,
+                    Namespace="AWS/EC2",
+                    Statistics=['Average'],
+                    Dimensions=[{'Name': 'InstanceId', 'Value': instance_id}]
+                )
+
+                datapoints = response.get('Datapoints', [])
+                if datapoints:
+                    # Calculate the average from the data points over the 20 minutes
+                    average = sum([dp['Average'] for dp in datapoints]) / len(datapoints)
+                    print(f"\t{metric:<24s}{average:.2f}")
+                else:
+                    print(f"\t{metric:<24s}: No data available")
 
     # COMPLETED
     def set_alarm(self):
-        instance_id = read_nonempty_string("Enter Instance ID to set alarm: ")
+        instance_id = read_nonempty_string("\nEnter Instance ID to set alarm: ")
         alarm_name = read_nonempty_string("Enter alarm name: ")
         threshold = 1000
         region = self.client.meta.region_name  # Get the region from the client
@@ -60,7 +66,7 @@ class CWController:
                 f"arn:aws:automate:{region}:ec2:stop"  # Add an EC2 Stop action when the alarm triggers
             ]
         )
-        print(f"Alarm created for {instance_id} if NetworkPacketsOut >= {threshold}")
+        print(f"Alarm created for '{instance_id}' if NetworkPacketsOut >= {threshold}")
 
     # TODO
     def delete_alarm(self):
