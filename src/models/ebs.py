@@ -10,9 +10,9 @@ class EBSController:
     def list_volumes(self):
         """List all EBS volumes."""
         try:
-            volumes = self.resource.volumes.all()  # Using resource to list volumes
+            volumes = self.resource.volumes.all()
         except botocore.exceptions.ClientError as e:
-            print(f"Error describing volumes: {e}")
+            print(e)
             return
 
         in_use_volumes = []
@@ -20,7 +20,6 @@ class EBSController:
 
         # Parse volumes
         for volume in volumes:
-            # Gather basic volume info
             volume_info = {
                 "Volume ID": volume.id,
                 "Size": f"{volume.size} GiB",
@@ -44,13 +43,14 @@ class EBSController:
             else:
                 available_volumes.append(volume_info)
 
-        # Display results in tabular format
+        # Display In-Use Volumes
         print("\nIn-Use Volumes:")
         if in_use_volumes:
             print(tabulate(in_use_volumes, headers="keys", tablefmt="pretty"))
         else:
             print("No in-use volumes detected.")
 
+        # Display Available Volumes
         print("Available Volumes:")
         if available_volumes:
             print(tabulate(available_volumes, headers="keys", tablefmt="pretty"))
@@ -59,27 +59,26 @@ class EBSController:
             
     def create_volume(self):
         """Create a new EBS volume."""
-        size = read_nonnegative_integer("\nEnter the size of the volume (GiB): ")
+        size = read_nonnegative_integer("\nEnter the size of the volume (GiB) to create: ")
         
-        # List available zones for the region dynamically
+        # Get available zones for the region dynamically
         try:
-            available_zones = [az.name for az in self.resource.availability_zones.all()]  # Using resource for availability zones
+            available_zones = [az.name for az in self.resource.availability_zones.all()]
         except botocore.exceptions.ClientError as e:
-            print(f"Error retrieving availability zones: {e}")
+            print(e)
             return
-        
         print("Available zones:")
-        for idx, az in enumerate(available_zones, start=1):
-            print(f"\t{idx}. {az}")
+        for index, zone in enumerate(available_zones, start=1):
+            print(f"\t{index}. {zone}")
         
         # Get valid availability zone from user input
-        az_index = read_nonnegative_integer("Select the Availability Zone by number: ") - 1
-        if 0 <= az_index < len(available_zones):
-            az = available_zones[az_index]
+        choice = read_nonnegative_integer("Select the Availability Zone by number: ") - 1
+        if 0 <= choice < len(available_zones):
+            zone = available_zones[choice]
             
             # Create the volume
             try:
-                volume = self.resource.create_volume(Size=size, AvailabilityZone=az)  # Using resource to create volume
+                volume = self.resource.create_volume(Size=size, AvailabilityZone=zone)  # Using resource to create volume
                 print(f"Created '{volume.id}'")
             except botocore.exceptions.ClientError as e:
                 print(f"An error occurred: {e}")
