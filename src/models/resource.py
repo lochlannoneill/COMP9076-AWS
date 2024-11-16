@@ -6,7 +6,7 @@ class Resource:
         self.key_id = user_credentials["access_key"]
         self.secret_key = user_credentials["secret_key"]
 
-    def EC2Resource(self):
+    def get_ec2_resource(self):
         # Create and return a Resource for interacting with EC2 instances
         try:
             ec2 = boto3.resource("ec2",
@@ -18,7 +18,7 @@ class Resource:
             print(e)
             return None
 
-    def S3Resource(self):
+    def get_s3_resource(self):
         # Create and return a Resource for interacting with S3
         try:
             s3 = boto3.resource("s3",
@@ -30,7 +30,7 @@ class Resource:
             print(e)
             return None
 
-    def CWClient(self):
+    def get_cw_client(self):
         # Create and return a Client for interacting with CloudWatch
         try:
             cw = boto3.client('cloudwatch',
