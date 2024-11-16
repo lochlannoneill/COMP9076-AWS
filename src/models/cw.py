@@ -13,29 +13,32 @@ class CWController:
             instance_id = read_nonempty_string("\nEnter Instance ID to get metrics= statistics: ")
             metrics = ['EBSReadBytes', 'EBSByteBalance%']
             minutes = 20
-
             end_time = datetime.datetime.utcnow()
             start_time = end_time - datetime.timedelta(minutes=minutes)
 
-            print(f"Average metrics over the last {minutes} minutes")
-            for metric in metrics:
-                response = self.client.get_metric_statistics(
-                    Period=300,
-                    StartTime=start_time,
-                    EndTime=end_time,
-                    MetricName=metric,
-                    Namespace="AWS/EC2",
-                    Statistics=['Average'],
-                    Dimensions=[{'Name': 'InstanceId', 'Value': instance_id}]
-                )
+            print(f"Average metrics over {minutes} minutes for '{instance_id}':")
+            try:
+                for metric in metrics:
+                    response = self.client.get_metric_statistics(
+                        Period=300,
+                        StartTime=start_time,
+                        EndTime=end_time,
+                        MetricName=metric,
+                        Namespace="AWS/EC2",
+                        Statistics=['Average'],
+                        Dimensions=[{'Name': 'InstanceId', 'Value': instance_id}]
+                    )
 
-                datapoints = response.get('Datapoints', [])
-                if datapoints:
-                    # Calculate the average from the data points over the 20 minutes
-                    average = sum([dp['Average'] for dp in datapoints]) / len(datapoints)
-                    print(f"\t{metric:<24s}{average:.2f}")
-                else:
-                    print(f"\t{metric:<24s}: No data available")
+                    datapoints = response.get('Datapoints', [])
+                    if datapoints:
+                        # Calculate the average from the data points over the 20 minutes
+                        average = sum([dp['Average'] for dp in datapoints]) / len(datapoints)
+                        print(f"\t{metric:<24s}{average:.2f}")
+                    else:
+                        print(f"\t{metric:<24s}No data available")
+                        
+            except Exception as e:
+                print(f"Error getting metric statistics: {e}")
 
     # COMPLETED
     def set_alarm(self):
