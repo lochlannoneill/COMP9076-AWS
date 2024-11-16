@@ -17,34 +17,34 @@ class S3Menu:
         for option, number in self.options.items():
             print(f"\t{number}. {option}")
 
-    def handle(self, s3_service):
+    def handle(self, service):
         while True:
             self._display()
             choice = read_range_integer("Select from menu: ", 1, len(self.options))
 
             # List Buckets
             if choice == self.options["List Buckets"]:
-                s3_service.list_buckets()
+                service.list_buckets()
             
             # Delete Bucket
             elif choice == self.options["Delete Bucket"]:
-                s3_service.delete_bucket()
+                service.delete_bucket()
             
             # List Objects in Bucket
             elif choice == self.options["List Objects in Bucket"]:
-                s3_service.list_objects()
+                service.list_objects()
             
             # Upload Object
             elif choice == self.options["Upload Object"]:
-                s3_service.upload_object()
+                service.upload_object()
             
             # Download Object
             elif choice == self.options["Download Object"]:
-                s3_service.download_object()
+                service.download_object()
             
             # Delete Object
             elif choice == self.options["Delete Object"]:
-                s3_service.delete_object()
+                service.delete_object()
             
             # Back
             elif choice == self.options["Back"]:

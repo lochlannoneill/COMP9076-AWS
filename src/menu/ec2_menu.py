@@ -18,38 +18,38 @@ class EC2Menu:
         for option, number in self.options.items():
             print(f"\t{number}. {option}")
 
-    def handle(self, ec2_service):
+    def handle(self, service):
         while True:
             self._display()
             choice = read_range_integer("Select from menu: ", 1, len(self.options))
-            
+
             # List All Instances
             if choice == self.options["List All Instances"]:
-                ec2_service.list_instances()
+                service.list_instances()
             
             # Start Instance
             elif choice == self.options["Start Instance"]:
-                ec2_service.start_instance()
+                service.start_instance()
             
             # Stop Instance
             elif choice == self.options["Stop Instance"]:
-                ec2_service.stop_instance()
+                service.stop_instance()
             
             # Delete Instance
             elif choice == self.options["Delete Instance"]:
-                ec2_service.delete_instance()
+                service.delete_instance()
             
             # List AMIs of Instance
             elif choice == self.options["List AMIs of Instance"]:
-                ec2_service.list_amis()
+                service.list_amis()
             
             # Create AMI
             elif choice == self.options["Create AMI"]:
-                ec2_service.create_ami()
+                service.create_ami()
             
             # Delete AMI
             elif choice == self.options["Delete AMI"]:
-                ec2_service.delete_ami()
+                service.delete_ami()
             
             # Back
             elif choice == self.options["Back"]:
