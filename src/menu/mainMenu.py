@@ -22,9 +22,9 @@ class mainMenu:
             choice = read_range_integer("Select from menu: ", 1, len(self.options))
 
             if choice == self.options["Login"]:
-                return UserManager().login_user()
+                return UserManager().login()
             elif choice == self.options["Register"]:
-                UserManager().register_user()
+                UserManager().register()
             elif choice == self.options["Exit"]:
                 print("Exiting...")
                 exit()

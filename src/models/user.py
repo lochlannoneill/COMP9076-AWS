@@ -23,7 +23,7 @@ class UserManager:
                         }
         return users
 
-    def login_user(self):
+    def login(self):
         """Authenticate an existing user."""
         while True:
             username = read_nonempty_string("Username: ")
@@ -35,7 +35,7 @@ class UserManager:
                 return self.users[username]
             print("Invalid username or password. Please try again.")
 
-    def register_user(self):
+    def register(self):
         """Register a new user and add them to the passwords.txt file."""
         username = read_nonempty_string("Enter a new username: ")
         password = read_nonempty_string("Enter a password: ")
