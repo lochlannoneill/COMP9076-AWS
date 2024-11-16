@@ -36,7 +36,7 @@ class EBSController:
                     device = attachment.get("Device")
                     mount_point = f"{device} (Instance: {instance_id})"
 
-            # Update the volume info with mount point if it's in-use
+            # Append to the appropriate list
             if volume.state == 'in-use':
                 volume_info["Mount Point"] = mount_point
                 in_use_volumes.append(volume_info)
@@ -61,7 +61,7 @@ class EBSController:
         """Create a new EBS volume."""
         size = read_nonnegative_integer("\nEnter the size of the volume (GiB) to create: ")
         
-        # Get available zones for the region dynamically
+        # Get available zones
         try:
             available_zones = [az.name for az in self.resource.availability_zones.all()]
         except botocore.exceptions.ClientError as e:
@@ -71,7 +71,7 @@ class EBSController:
         for index, zone in enumerate(available_zones, start=1):
             print(f"\t{index}. {zone}")
         
-        # Get valid availability zone from user input
+        # Get the zone from user input
         choice = read_range_integer("Select the Availability Zone by number: ", 1, len(available_zones))
         zone = available_zones[choice]
         
@@ -93,11 +93,11 @@ class EBSController:
         for idx, device in enumerate(available_devices, start=1):
             print(f"\t{idx}. {device}")
         
-        # Get the device index from user input
+        # Get the mount point from user input
         device_index = read_range_integer("Select the mount point by number: ", 1, len(available_devices))
         device = available_devices[device_index]
 
-        # Attach the volume
+        # Attach the volume to the instance
         try:
             volume = self.resource.Volume(volume_id)
             volume.attach_to_instance(InstanceId=instance_id, Device=device)
@@ -108,6 +108,8 @@ class EBSController:
     def detach_volume(self):
         """Detach a volume from an EC2 instance."""
         volume_id = read_nonempty_string("\nEnter the Volume ID to detach: ")
+        
+        # Detach the volume
         try:
             volume = self.resource.Volume(volume_id)
             volume.detach_from_instance()
@@ -119,8 +121,10 @@ class EBSController:
         """Modify a volume's size."""
         volume_id = read_nonempty_string("\nEnter the Volume ID to modify: ")
         new_size = read_nonnegative_integer("Enter the new size of the volume (GiB): ")
+        
+        # Modify the volume
         try:
-            volume = self.resource.Volume(volume_id)  # Get the volume using resource
+            volume = self.resource.Volume(volume_id)
             volume.modify_attribute(Size=new_size)
             print(f"Modified '{volume.id}' to {new_size} GiB")
         except self.resource.meta.client.exceptions.ClientError as e:
@@ -129,6 +133,8 @@ class EBSController:
     def delete_volume(self):
         """Delete a volume."""
         volume_id = read_nonempty_string("\nEnter the Volume ID to delete: ")
+        
+        # Delete the volume
         try:
             volume = self.resource.Volume(volume_id)
             volume.delete()
@@ -139,8 +145,9 @@ class EBSController:
     def list_snapshots(self):
         """List all snapshots."""
         snapshots = self.resource.snapshots.filter(OwnerIds=['self'])
-        
         print("\nSnapshots:")
+        
+        # Display snapshots
         if snapshots:
             headers = ["Snapshot ID", "Volume ID", "Size (GiB)", "Description", "Creation Date"]
             table_data = [
@@ -161,6 +168,8 @@ class EBSController:
         """Create a snapshot of a volume."""
         volume_id = read_nonempty_string("\nEnter available Volume ID to snapshot: ")
         description = read_nonempty_string("Enter a description for the snapshot: ")
+        
+        # Create the snapshot
         try:
             volume = self.resource.Volume(volume_id)
             snapshot = volume.create_snapshot(Description=description)
@@ -171,6 +180,8 @@ class EBSController:
     def delete_snapshot(self):
         """Delete a snapshot."""
         snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to delete: ")
+        
+        # Delete the snapshot
         try:
             snapshot = self.resource.Snapshot(snapshot_id)
             snapshot.delete()
