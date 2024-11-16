@@ -45,8 +45,8 @@ class AWSMenu:
                 s3 = S3Controller(self.res.get_s3_resource())
                 S3Menu().handle(s3)
             
-            # Monitoring
-            if choice == self.options["Monitoring"]:
+            # CloudWatch Monitoring
+            if choice == self.options["CloudWatch Monitoring"]:
                 cw = CWController(self.res.get_cw_client())  # Client
                 CWMenu().handle(cw)
             
