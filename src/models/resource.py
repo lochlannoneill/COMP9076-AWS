@@ -19,7 +19,7 @@ class Resource:
             return None
 
     def S3Resource(self):
-        # Create and return a Resource for interacting with S3 instances
+        # Create and return a Resource for interacting with S3
         try:
             s3 = boto3.resource("s3",
                                 aws_access_key_id=self.key_id,
