@@ -31,5 +31,5 @@ class MainMenu:
             
             # Exit
             elif choice == self.options["Exit"]:
-                print("Exiting...")
+                print("Exiting ...")
                 exit()

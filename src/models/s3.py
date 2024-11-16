@@ -31,7 +31,7 @@ class S3Controller:
 
     def delete_bucket(self):
         """Delete a bucket after validation."""
-        bucket_name = read_nonempty_string("\nEnter the bucket name: ")
+        bucket_name = read_nonempty_string("\nEnter bucket name to delete: ")
 
         # Check if the bucket exists
         try:
@@ -66,7 +66,7 @@ class S3Controller:
 
     def list_objects(self):
         """List all objects in a specified bucket."""
-        bucket_name = read_nonempty_string("\nEnter the bucket name: ")
+        bucket_name = read_nonempty_string("\nEnter bucket name to list objects: ")
         
         # Check if the bucket exists
         try:
@@ -86,8 +86,8 @@ class S3Controller:
 
     def upload_object(self):
         """Upload a file to a specified bucket."""
-        bucket_name = read_nonempty_string("\nEnter the bucket name: ")
-        file_name = read_nonempty_string("Enter the file to upload: ")
+        bucket_name = read_nonempty_string("\nEnter bucket name: ")
+        file_name = read_nonempty_string("Enter file to upload: ")
 
         # Check if the file exists
         if not os.path.isfile(file_name):
@@ -105,7 +105,7 @@ class S3Controller:
 
     def download_object(self):
         """Download a file from a specified bucket to the 'Downloads' folder."""
-        bucket_name = read_nonempty_string("\nEnter the bucket name: ")
+        bucket_name = read_nonempty_string("\nEnter bucket name to download object: ")
 
         # Check if the bucket exists
         try:
@@ -123,7 +123,7 @@ class S3Controller:
                 print(f"\t{index}. '{obj.key}'")
 
             # Get the file to download
-            choice = read_range_integer("Enter the index of the file to download: ", 1, len(objects))
+            choice = read_range_integer("Enter object index to download: ", 1, len(objects))
             file_name = objects[choice - 1].key
 
             # Set the download path

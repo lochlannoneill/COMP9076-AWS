@@ -59,7 +59,7 @@ class EBSController:
             
     def create_volume(self):
         """Create a new EBS volume."""
-        size = read_nonnegative_integer("\nEnter the size of the volume (GiB) to create: ")
+        size = read_nonnegative_integer("\nEnter size (GiB) of volume to create: ")
         
         # Get available zones
         try:
@@ -72,7 +72,7 @@ class EBSController:
             print(f"\t{index}. {zone}")
         
         # Get the zone from user input
-        choice = read_range_integer("Select the Availability Zone by number: ", 1, len(available_zones))
+        choice = read_range_integer("Select zone index: ", 1, len(available_zones))
         zone = available_zones[choice]
         
         # Create the volume
@@ -80,21 +80,21 @@ class EBSController:
             volume = self.resource.create_volume(Size=size, AvailabilityZone=zone)  # Using resource to create volume
             print(f"Created '{volume.id}'")
         except botocore.exceptions.ClientError as e:
-            print(f"An error occurred: {e}")
+            print(e)
 
     def attach_volume(self):
         """Attach a volume to an EC2 instance."""
-        volume_id = read_nonempty_string("\nEnter the Volume ID to attach: ")
-        instance_id = read_nonempty_string("Enter the Instance ID to attach to: ")
+        volume_id = read_nonempty_string("\nEnter Volume ID to attach: ")
+        instance_id = read_nonempty_string("Enter Instance ID to attach to: ")
         
         # List of mount points  # TODO - get dynamically
         available_devices = ['/dev/xvda', '/dev/sdf', '/dev/sdg', '/dev/sdh', '/dev/sdi', '/dev/sdj', '/dev/sdk']
-        print("Available mount points:")
+        print("Available mount-points:")
         for idx, device in enumerate(available_devices, start=1):
             print(f"\t{idx}. {device}")
         
         # Get the mount point from user input
-        device_index = read_range_integer("Select the mount point by number: ", 1, len(available_devices))
+        device_index = read_range_integer("Select mount-point index: ", 1, len(available_devices))
         device = available_devices[device_index]
 
         # Attach the volume to the instance
@@ -107,7 +107,7 @@ class EBSController:
 
     def detach_volume(self):
         """Detach a volume from an EC2 instance."""
-        volume_id = read_nonempty_string("\nEnter the Volume ID to detach: ")
+        volume_id = read_nonempty_string("\nEnter Volume ID to detach: ")
         
         # Detach the volume
         try:
@@ -119,8 +119,8 @@ class EBSController:
 
     def modify_volume(self):
         """Modify a volume's size."""
-        volume_id = read_nonempty_string("\nEnter the Volume ID to modify: ")
-        new_size = read_nonnegative_integer("Enter the new size of the volume (GiB): ")
+        volume_id = read_nonempty_string("\nEnter Volume ID to modify: ")
+        new_size = read_nonnegative_integer("Enter new size (GiB) of volume: ")
         
         # Modify the volume
         try:
@@ -132,7 +132,7 @@ class EBSController:
 
     def delete_volume(self):
         """Delete a volume."""
-        volume_id = read_nonempty_string("\nEnter the Volume ID to delete: ")
+        volume_id = read_nonempty_string("\nEnter Volume ID to delete: ")
         
         # Delete the volume
         try:
@@ -167,7 +167,7 @@ class EBSController:
     def create_snapshot(self):
         """Create a snapshot of a volume."""
         volume_id = read_nonempty_string("\nEnter available Volume ID to snapshot: ")
-        description = read_nonempty_string("Enter a description for the snapshot: ")
+        description = read_nonempty_string("Enter description for snapshot: ")
         
         # Create the snapshot
         try:
@@ -179,7 +179,7 @@ class EBSController:
 
     def delete_snapshot(self):
         """Delete a snapshot."""
-        snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to delete: ")
+        snapshot_id = read_nonempty_string("\nEnter Snapshot ID to delete: ")
         
         # Delete the snapshot
         try:
@@ -191,7 +191,7 @@ class EBSController:
 
     def create_volume_from_snapshot(self):
         """Create a volume from a snapshot."""
-        snapshot_id = read_nonempty_string("\nEnter the Snapshot ID to create volume from: ")
+        snapshot_id = read_nonempty_string("\nEnter Snapshot ID to create volume: ")
 
         try:
             # Get the volume ID from the snapshot

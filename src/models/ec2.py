@@ -44,7 +44,7 @@ class EC2Controller:
 
     def start_instance(self):
         """Start a specified EC2 instance."""
-        instance_id = read_nonempty_string("\nEnter the Instance ID to start: ")
+        instance_id = read_nonempty_string("\nEnter Instance ID to start: ")
         
         # Start instance using resource method
         try:
@@ -63,7 +63,7 @@ class EC2Controller:
 
     def stop_instance(self):
         """Stop a specified EC2 instance."""
-        instance_id = read_nonempty_string("\nEnter the Instance ID to stop: ")
+        instance_id = read_nonempty_string("\nEnter Instance ID to stop: ")
         
         # Stop instance using resource method
         try:
@@ -76,7 +76,7 @@ class EC2Controller:
 
     def delete_instance(self):
         """Delete a specified EC2 instance."""
-        instance_id = read_nonempty_string("\nEnter the Instance ID to delete: ")
+        instance_id = read_nonempty_string("\nEnter Instance ID to delete: ")
         
         # Terminate instance using resource method
         try:
@@ -88,8 +88,8 @@ class EC2Controller:
 
     def list_amis(self):
         """List all AMIs from an EC2 instance."""
-        instance_id = read_nonempty_string("\nEnter the Instance ID to list associated AMIs: ")
-        print(f"Searching associated AMIs of '{instance_id}'...")
+        instance_id = read_nonempty_string("\nEnter Instance ID to list associated AMIs: ")
+        print(f"Searching associated AMIs of '{instance_id}' ...")
         
         # Search for images associated with the instance
         try:
@@ -117,8 +117,8 @@ class EC2Controller:
 
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
-        instance_id = read_nonempty_string("\nEnter the Instance ID to create AMI from: ")
-        ami_name = read_nonempty_string("Enter a name for the AMI: ")
+        instance_id = read_nonempty_string("\nEnter Instance ID to create AMI: ")
+        ami_name = read_nonempty_string("Enter name for AMI: ")
         
         # Create AMI using resource method
         try:
@@ -138,7 +138,7 @@ class EC2Controller:
 
     def delete_ami(self):
         """Delete a specified AMI."""
-        ami_id = read_nonempty_string("\nEnter the AMI ID to delete: ")
+        ami_id = read_nonempty_string("\nEnter AMI ID to delete: ")
         
         # Deregister AMI using resource method
         try:
