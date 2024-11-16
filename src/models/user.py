@@ -5,9 +5,9 @@ class UserManager:
     def __init__(self):
         self.file_path = join("src", "config", "passwords.txt")
         self.line_tabcount = 4  # Number of fields in each line in passwords.txt
-        self.users = self.load_users()
+        self.users = self.load()
 
-    def load_users(self):
+    def load(self):
         """Load existing users from the passwords.txt file."""
         users = {}
         
@@ -52,15 +52,16 @@ class UserManager:
         access_key = read_nonempty_string("Enter your AWS Access Key ID: ")
         secret_key = read_nonempty_string("Enter your AWS Secret Access Key: ")
 
-        # Load existing users from the file
-        with open(self.file_path, "r") as file:
-            users_list = file.readlines()
+        # Check if the passwords.txt file exists, and create it if not
+        if not exists(self.file_path):
+            with open(self.file_path, "w") as file:
+                print(f"Created '{self.file_path}'")
 
         # Append the new user to the list
         with open(self.file_path, "a") as file:
             file.write(f"{username}\t{password}\t{access_key}\t{secret_key}\n")
         
-        print(f"User '{username}' registered successfully.")
+        print(f"Registered '{username}'")
         # Update in-memory users dictionary
         self.users[username] = {
             "password": password,

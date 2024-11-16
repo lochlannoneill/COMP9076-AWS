@@ -10,7 +10,7 @@ def read_input(prompt, validation_func, exception_type):
         except exception_type:
             print("An error occurred while reading input. Please try again.")
         except KeyboardInterrupt:
-            print("\nInput interrupted. Exiting...")
+            print("\nInput interrupted. Exiting ...")
             exit()
 
 # string validation parent

@@ -1,15 +1,15 @@
 import datetime
 from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string, read_nonnegative_float
 
-class cw:
-    def __init__(self, session):
+class CWController:
+    def __init__(self, client):
         """Initialize with a boto3 session."""
-        self.cloudwatch = session.client('cloudwatch')
+        self.client = client
 
     # TODO
     def list_metrics(self):
         """List all CloudWatch metrics."""
-        response = self.cloudwatch.list_metrics()
+        response = self.client.list_metrics()
         for metric in response['Metrics']:
             print(f"Namespace: {metric['Namespace']}")
             print(f"Metric Name: {metric['MetricName']}")
@@ -26,7 +26,7 @@ class cw:
         start_time = read_nonempty_string("Enter the Start Time (YYYY-MM-DD HH:MM:SS): ")
         end_time = read_nonempty_string("Enter the End Time (YYYY-MM-DD HH:MM:SS): ") #TODO - data validation
         period = read_nonnegative_integer("Enter the Period (in seconds): ")
-        response = self.cloudwatch.get_metric_data(
+        response = self.client.get_metric_data(
             MetricDataQueries=[
                 {
                     'Id': 'm1',
@@ -56,7 +56,7 @@ class cw:
         dimensions = [d.split('=') for d in dimensions.split(',')]
         value = read_nonnegative_float("Enter the Value: ")
         timestamp = read_nonempty_string("Enter the Timestamp (YYYY-MM-DD HH:MM:SS): ")
-        response = self.cloudwatch.put_metric_data(
+        response = self.client.put_metric_data(
             Namespace=namespace,
             MetricData=[
                 {
@@ -68,3 +68,15 @@ class cw:
             ]
         )
         print(response)
+
+    # TODO
+    def set_alarm(self):
+        print("Not implemented yet.")
+
+    # TODO
+    def delete_alarm(self):
+        print("Not implemented yet.")
+    
+    # TODO 
+    def free_tier_aws_services(self):
+        print("Not implemented yet.")

@@ -10,10 +10,9 @@ class App:
             user_credentials = MainMenu().handle()
             
             # AWS menu loop
-            if user_credentials:
-                while True:
-                    AWSMenu(user_credentials).handle()
-                    break
+            while True:
+                AWSMenu(user_credentials).handle()
+                break
 
 if __name__ == "__main__":
     app = App()

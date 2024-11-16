@@ -6,6 +6,7 @@ class EC2Controller:
     def __init__(self, resource):
         """Initialize with a boto3 session, region, and EC2 resource."""
         self.ec2_resource = resource
+        self.ec2_client = resource.meta.client
 
     def list_instances(self):
         """List all EC2 instances, grouped by running and stopped."""
@@ -43,31 +44,39 @@ class EC2Controller:
 
     def start_instance(self):
         """Start a specified EC2 instance."""
-        instance_id = read_nonempty_string("\nEnter the Instance ID to start: ")
+        instance_id = read_nonempty_string("\nEnter Instance ID to start: ")
         
         # Start instance using resource method
         try:
             instance = self.ec2_resource.Instance(instance_id)
             instance.start()
+            
+            # Wait for the instance to enter the 'running' state
+            print(f"Starting '{instance_id}' ...")
+            waiter = self.ec2_client.get_waiter('instance_running')
+            waiter.wait(InstanceIds=[instance_id])
+            
             print(f"Started '{instance_id}'")
+            
         except Exception as e:
             print(e)
 
     def stop_instance(self):
         """Stop a specified EC2 instance."""
-        instance_id = read_nonempty_string("\nEnter the Instance ID to stop: ")
+        instance_id = read_nonempty_string("\nEnter Instance ID to stop: ")
         
         # Stop instance using resource method
         try:
             instance = self.ec2_resource.Instance(instance_id)
             instance.stop()
             print(f"Stopped '{instance_id}'")
+            
         except Exception as e:
             print(e)
 
     def delete_instance(self):
         """Delete a specified EC2 instance."""
-        instance_id = read_nonempty_string("\nEnter the Instance ID to delete: ")
+        instance_id = read_nonempty_string("\nEnter Instance ID to delete: ")
         
         # Terminate instance using resource method
         try:
@@ -79,8 +88,8 @@ class EC2Controller:
 
     def list_amis(self):
         """List all AMIs from an EC2 instance."""
-        instance_id = read_nonempty_string("\nEnter the Instance ID to list associated AMIs: ")
-        print(f"Searching associated AMIs of '{instance_id}'...")
+        instance_id = read_nonempty_string("\nEnter Instance ID to list associated AMIs: ")
+        print(f"Searching associated AMIs of '{instance_id}' ...")
         
         # Search for images associated with the instance
         try:
@@ -102,13 +111,14 @@ class EC2Controller:
                 print(tabulate(table_data, headers=headers, tablefmt="pretty"))
             else:
                 print(f"No associated AMIs found for instance '{instance_id}'.")
+        
         except Exception as e:
             print(e)
 
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
-        instance_id = read_nonempty_string("\nEnter the Instance ID to create AMI from: ")
-        ami_name = read_nonempty_string("Enter a name for the AMI: ")
+        instance_id = read_nonempty_string("\nEnter Instance ID to create AMI: ")
+        ami_name = read_nonempty_string("Enter name for AMI: ")
         
         # Create AMI using resource method
         try:
@@ -122,12 +132,13 @@ class EC2Controller:
                 Tags=[{'Key': 'InstanceId', 'Value': instance_id}]
             )
             print(f"Created AMI '{ami_id}'")
+            
         except Exception as e:
             print(e)
 
     def delete_ami(self):
         """Delete a specified AMI."""
-        ami_id = read_nonempty_string("\nEnter the AMI ID to delete: ")
+        ami_id = read_nonempty_string("\nEnter AMI ID to delete: ")
         
         # Deregister AMI using resource method
         try:
