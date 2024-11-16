@@ -16,62 +16,51 @@ class CWController:
             print(f"Dimensions: {metric['Dimensions']}")
             print()
 
-    # TODO
-    def get_metric_data(self):
-        """Get metric data for a specified metric."""
-        namespace = read_nonempty_string("Enter the Namespace: ")
-        metric_name = read_nonempty_string("Enter the Metric Name: ")
-        dimensions = read_nonempty_string("Enter the Dimensions (comma-separated key=value): ")
-        dimensions = [d.split('=') for d in dimensions.split(',')]
-        start_time = read_nonempty_string("Enter the Start Time (YYYY-MM-DD HH:MM:SS): ")
-        end_time = read_nonempty_string("Enter the End Time (YYYY-MM-DD HH:MM:SS): ") #TODO - data validation
-        period = read_nonnegative_integer("Enter the Period (in seconds): ")
-        response = self.client.get_metric_data(
-            MetricDataQueries=[
+    def get_metric_statistics(self):
+        # Output the average result of the given 'metric' over the last 600 seconds
+        # for EC2 instance 'instance_id'
+
+        a = self.cw.get_metric_statistics(
+            Period=300,
+            StartTime=datetime.datetime.utcnow() - datetime.timedelta(seconds=600),
+            EndTime=datetime.datetime.utcnow(),
+            MetricName=metric,
+            Namespace="AWS/EC2",
+            Statistics=['Average'],
+            Dimensions=[{'Name':'InstanceId', 'Value':instance_id}]
+            )
+        print(a)
+
+    # COMPLETED
+    def set_alarm(self):
+        instance_id = read_nonempty_string("Enter Instance ID to set alarm: ")
+        alarm_name = read_nonempty_string("Enter alarm name: ")
+        threshold = 1000
+        region = self.client.meta.region_name  # Get the region from the client
+        
+        self.client.put_metric_alarm(
+            AlarmName=f'{alarm_name}',
+            ComparisonOperator='GreaterThanOrEqualToThreshold',
+            EvaluationPeriods=1,
+            MetricName='NetworkPacketsOut',
+            Namespace='AWS/EC2',
+            Period=300,    #INSUFFICIENT_DATA error if lower than the metric period
+            Statistic='Average',
+            Threshold=1000,  # Trigger alarm if NetworkPacketsOut >= 1,000
+            ActionsEnabled=True,
+            AlarmDescription=f'Alarm to stop instance if NetworkPacketsOut >= {threshold}',
+            Dimensions=[
                 {
-                    'Id': 'm1',
-                    'MetricStat': {
-                        'Metric': {
-                            'Namespace': namespace,
-                            'MetricName': metric_name,
-                            'Dimensions': [{d[0]: d[1]} for d in dimensions]
-                        },
-                        'Period': period,
-                        'Stat': 'Average'
-                    },
-                    'ReturnData': True
+                    'Name': 'InstanceId',
+                    'Value': instance_id
                 },
             ],
-            StartTime=datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S"),
-            EndTime=datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S")
-        )
-        print(response)
-
-    # TODO
-    def put_metric_data(self):
-        """Put metric data for a specified metric."""
-        namespace = read_nonempty_string("Enter the Namespace: ")
-        metric_name = read_nonempty_string("Enter the Metric Name: ")
-        dimensions = read_nonempty_string("Enter the Dimensions (comma-separated key=value): ")
-        dimensions = [d.split('=') for d in dimensions.split(',')]
-        value = read_nonnegative_float("Enter the Value: ")
-        timestamp = read_nonempty_string("Enter the Timestamp (YYYY-MM-DD HH:MM:SS): ")
-        response = self.client.put_metric_data(
-            Namespace=namespace,
-            MetricData=[
-                {
-                    'MetricName': metric_name,
-                    'Dimensions': [{d[0]: d[1]} for d in dimensions],
-                    'Value': value,
-                    'Timestamp': datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
-                },
+            Unit='Count',  # Unit type for NetworkPacketsOut
+            AlarmActions=[
+                f"arn:aws:automate:{region}:ec2:stop"  # Add an EC2 Stop action when the alarm triggers
             ]
         )
-        print(response)
-
-    # TODO
-    def set_alarm(self):
-        print("Not implemented yet.")
+        print(f"Alarm created for {instance_id} if NetworkPacketsOut >= {threshold}")
 
     # TODO
     def delete_alarm(self):
