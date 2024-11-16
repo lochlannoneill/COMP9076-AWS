@@ -8,7 +8,7 @@ class App:
         # Main menu loop
         while True:
             user_credentials = MainMenu().handle()
-
+            
             # AWS menu loop
             if user_credentials:
                 while True:
