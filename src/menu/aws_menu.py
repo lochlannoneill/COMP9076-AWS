@@ -5,6 +5,8 @@ from src.menu.ebs_menu import EBSMenu
 from src.models.ebs import EBSController
 from src.menu.s3_menu import S3Menu
 from src.models.s3 import S3Controller
+from src.menu.cw_menu import CWMenu
+from src.models.cw import CWController
 from src.utils.reading_from_user import read_range_integer
 
 class AWSMenu:
@@ -45,7 +47,8 @@ class AWSMenu:
             
             # Monitoring
             if choice == self.options["Monitoring"]:
-                pass
+                cw = self.res.CWClient(self.res.CWClient())  # Client
+                CWMenu().handle(cw)
             
             # Back
             if choice == self.options["Back"]:
