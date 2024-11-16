@@ -10,7 +10,7 @@ class CWController:
     # COMPLETED
     def get_metric_statistics(self):
             """Display the EBSReadBytes and EBSByteBalance% performance metrics for a particular EC2 instance, averaged over the last 20 minutes."""
-            instance_id = read_nonempty_string("\nEnter Instance ID to get metrics: ")
+            instance_id = read_nonempty_string("\nEnter Instance ID to get metrics= statistics: ")
             metrics = ['EBSReadBytes', 'EBSByteBalance%']
             minutes = 20
 
