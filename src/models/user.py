@@ -10,10 +10,15 @@ class UserManager:
     def load_users(self):
         """Load existing users from the passwords.txt file."""
         users = {}
-        if exists(self.file_path):
+        if not exists(self.file_path):
+            print(f"File not found '{self.file_path}'")
+            return users
+
+        try:
             with open(self.file_path, "r") as file:
-                for line in file:
-                    parts = line.split()
+                for line_number, line in enumerate(file, start=1):
+                    # Clean up the line and split by tab
+                    parts = line.strip().split("\t")
                     if len(parts) == self.line_tabcount:
                         username, password, access_key, secret_key = parts
                         users[username] = {
@@ -21,6 +26,11 @@ class UserManager:
                             "access_key": access_key,
                             "secret_key": secret_key
                         }
+                    else:
+                        logging.warning(f"Line {line_number} in {self.file_path} is malformed: {line.strip()}")
+        except Exception as e:
+            print(e)
+
         return users
 
     def login(self):
