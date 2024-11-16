@@ -6,6 +6,7 @@ class EC2Controller:
     def __init__(self, resource):
         """Initialize with a boto3 session, region, and EC2 resource."""
         self.ec2_resource = resource
+        self.ec2_client = resource.meta.client
 
     def list_instances(self):
         """List all EC2 instances, grouped by running and stopped."""
@@ -49,7 +50,14 @@ class EC2Controller:
         try:
             instance = self.ec2_resource.Instance(instance_id)
             instance.start()
+            
+            # Wait for the instance to enter the 'running' state
+            print(f"Starting '{instance_id}' ...")
+            waiter = self.ec2_client.get_waiter('instance_running')
+            waiter.wait(InstanceIds=[instance_id])
+            
             print(f"Started '{instance_id}'")
+            
         except Exception as e:
             print(e)
 
@@ -62,6 +70,7 @@ class EC2Controller:
             instance = self.ec2_resource.Instance(instance_id)
             instance.stop()
             print(f"Stopped '{instance_id}'")
+            
         except Exception as e:
             print(e)
 
