@@ -72,18 +72,15 @@ class EBSController:
             print(f"\t{index}. {zone}")
         
         # Get valid availability zone from user input
-        choice = read_nonnegative_integer("Select the Availability Zone by number: ") - 1
-        if 0 <= choice < len(available_zones):
-            zone = available_zones[choice]
-            
-            # Create the volume
-            try:
-                volume = self.resource.create_volume(Size=size, AvailabilityZone=zone)  # Using resource to create volume
-                print(f"Created '{volume.id}'")
-            except botocore.exceptions.ClientError as e:
-                print(f"An error occurred: {e}")
-        else:
-            print("Invalid zone selected.")
+        choice = read_range_integer("Select the Availability Zone by number: ", 1, len(available_zones))
+        zone = available_zones[choice]
+        
+        # Create the volume
+        try:
+            volume = self.resource.create_volume(Size=size, AvailabilityZone=zone)  # Using resource to create volume
+            print(f"Created '{volume.id}'")
+        except botocore.exceptions.ClientError as e:
+            print(f"An error occurred: {e}")
 
     def attach_volume(self):
         """Attach a volume to an EC2 instance."""
