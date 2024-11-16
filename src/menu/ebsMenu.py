@@ -1,6 +1,6 @@
 from src.utils.reading_from_user import read_range_integer
 
-class ebsMenu:
+class EBSMenu:
     def __init__(self):
         self.options = {
             "List Volumes": 1,

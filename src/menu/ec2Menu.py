@@ -1,6 +1,6 @@
 from src.utils.reading_from_user import read_range_integer
 
-class ec2Menu:
+class EC2Menu:
     def __init__(self):
         self.options = {
             "List All Instances": 1,

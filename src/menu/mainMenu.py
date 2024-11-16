@@ -1,7 +1,7 @@
 from src.utils.reading_from_user import read_range_integer
 from src.models.user import UserManager
 
-class mainMenu:
+class MainMenu:
     def __init__(self):
         self.options = {
             "Login": 1,

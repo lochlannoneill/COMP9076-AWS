@@ -1,6 +1,6 @@
 from src.utils.reading_from_user import read_range_integer
 
-class s3Menu:
+class S3Menu:
     def __init__(self):
         self.options = {
             "List Buckets": 1,

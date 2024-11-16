@@ -3,11 +3,11 @@ from src.models.resource import Resource
 from src.models.ebs import EBSController
 from src.models.ec2 import EC2Controller
 from src.models.s3 import S3Controller
-from src.menu.ec2Menu import ec2Menu
-from src.menu.ebsMenu import ebsMenu
-from src.menu.s3Menu import s3Menu
+from src.menu.ec2Menu import EC2Menu
+from src.menu.ebsMenu import EBSMenu
+from src.menu.s3Menu import S3Menu
 
-class awsMenu:
+class AWSMenu:
     def __init__(self, user_credentials):
         self.res = Resource(user_credentials)
 
@@ -31,15 +31,15 @@ class awsMenu:
             
             # EC2 Instances
             if choice == self.options["EC2 Instances"]:
-                ec2Menu().handle(EC2Controller(self.res.EC2Resource()))
+                EC2Menu().handle(EC2Controller(self.res.EC2Resource()))
                 
             # EBS Storage
             if choice == self.options["EBS Storage"]:
-                ebsMenu().handle(EBSController(self.res.EC2Resource()))
+                EBSMenu().handle(EBSController(self.res.EC2Resource()))
                 
             # S3 Storage
             if choice == self.options["S3 Storage"]:
-                s3Menu().handle(S3Controller(res.S3Resource()))
+                S3Menu().handle(S3Controller(res.S3Resource()))
             
             # Monitoring
             if choice == self.options["Monitoring"]:

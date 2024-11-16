@@ -26,8 +26,6 @@ class UserManager:
                             "access_key": access_key,
                             "secret_key": secret_key
                         }
-                    else:
-                        logging.warning(f"Line {line_number} in {self.file_path} is malformed: {line.strip()}")
         except Exception as e:
             print(e)
 

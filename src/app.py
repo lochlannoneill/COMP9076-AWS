@@ -1,5 +1,5 @@
-from src.menu.mainMenu import mainMenu
-from src.menu.awsMenu import awsMenu
+from src.menu.mainMenu import MainMenu
+from src.menu.awsMenu import AWSMenu
 from src.models.resource import Resource
 
 class App:
@@ -7,12 +7,12 @@ class App:
         """Main application loop handling authentication and AWS menu."""
         # Main menu loop
         while True:
-            user_credentials = mainMenu().handle()
+            user_credentials = MainMenu().handle()
 
             # AWS menu loop
             if user_credentials:
                 while True:
-                    awsMenu(user_credentials).handle()
+                    AWSMenu(user_credentials).handle()
                     break
 
 if __name__ == "__main__":
