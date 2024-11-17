@@ -1,19 +1,17 @@
 from src.utils.reading_from_user import read_range_integer
 
-class CW2Menu:
+class CWMenu:
     def __init__(self):
         self.options = {
-            "List Metrics": 1,
-            "Get Metric Data": 2,
-            "Put Metric Data": 3,
-            "Set Alarm": 4,
-            "Delete Alarm": 5,
-            "Free Tier AWS Services": 6,
-            "Back": 7
+            "Get Metric Statistics": 1,
+            "Set Alarm": 2,
+            "Delete Alarm": 3,
+            "Free Tier AWS Services": 4,
+            "Back": 5
         }
     
     def _display(self):
-        print("\nCW Menu")
+        print("\nCloudWatch Menu")
         for option, number in self.options.items():
             print(f"\t{number}. {option}")
 
@@ -22,17 +20,9 @@ class CW2Menu:
             self._display()
             choice = read_range_integer("Select from menu: ", 1, len(self.options))
             
-            # List Metrics
-            if choice == self.options["List Metrics"]:
-                service.list_metrics()
-            
-            # Get Metric Data
-            if choice == self.options["Get Metric Data"]:
-                service.get_metric_data()
-            
-            # Put Metric Data
-            if choice == self.options["Put Metric Data"]:
-                service.put_metric_data()
+            # Get Metric Statistics
+            if choice == self.options["Get Metric Statistics"]:
+                service.get_metric_statistics()
             
             # Set Alarm
             if choice == self.options["Set Alarm"]:

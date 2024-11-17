@@ -1,11 +1,11 @@
 import botocore
-from tabulate import tabulate
 from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string, read_range_integer
 
 class EBSController:
     def __init__(self, resource):
         """Initialize with a boto3 resource for EC2."""
         self.resource = resource
+        self.client = resource.meta.client
 
     def list_volumes(self):
         """List all EBS volumes."""
@@ -45,40 +45,42 @@ class EBSController:
 
         # Display In-Use Volumes
         print("\nIn-Use Volumes:")
-        if in_use_volumes:
-            print(tabulate(in_use_volumes, headers="keys", tablefmt="pretty"))
-        else:
+        if not in_use_volumes:
             print("No in-use volumes detected.")
+        else:
+            for volume in in_use_volumes:
+                print(volume)
 
         # Display Available Volumes
-        print("Available Volumes:")
-        if available_volumes:
-            print(tabulate(available_volumes, headers="keys", tablefmt="pretty"))
-        else:
+        print("\nAvailable Volumes:")
+        if not available_volumes:
             print("No available volumes detected.")
+        else:
+            for volume in available_volumes:
+                print(volume)
             
     def create_volume(self):
         """Create a new EBS volume."""
         size = read_nonnegative_integer("\nEnter size (GiB) of volume to create: ")
-        
-        # Get available zones
+
         try:
-            available_zones = [az.name for az in self.resource.availability_zones.all()]
-        except botocore.exceptions.ClientError as e:
-            print(e)
-            return
-        print("Available zones:")
-        for index, zone in enumerate(available_zones, start=1):
-            print(f"\t{index}. {zone}")
-        
-        # Get the zone from user input
-        choice = read_range_integer("Select zone index: ", 1, len(available_zones))
-        zone = available_zones[choice]
-        
-        # Create the volume
-        try:
+            # Get available zones using the EC2 client
+            response = self.client.describe_availability_zones()
+            available_zones = [zone['ZoneName'] for zone in response['AvailabilityZones']]
+            
+            # Display available zones
+            print("Available zones:")
+            for index, zone in enumerate(available_zones, start=1):
+                print(f"\t{index}. {zone}")
+
+            # Get the zone from user input
+            choice = read_range_integer("Select zone index: ", 1, len(available_zones))
+            zone = available_zones[choice - 1]  # Adjust for 0-based index
+
+            # Create the volume
             volume = self.resource.create_volume(Size=size, AvailabilityZone=zone)  # Using resource to create volume
             print(f"Created '{volume.id}'")
+            
         except botocore.exceptions.ClientError as e:
             print(e)
 
@@ -95,7 +97,7 @@ class EBSController:
         
         # Get the mount point from user input
         device_index = read_range_integer("Select mount-point index: ", 1, len(available_devices))
-        device = available_devices[device_index]
+        device = available_devices[device_index - 1]  # Adjust for 0-based index
 
         # Attach the volume to the instance
         try:
@@ -121,14 +123,17 @@ class EBSController:
         """Modify a volume's size."""
         volume_id = read_nonempty_string("\nEnter Volume ID to modify: ")
         new_size = read_nonnegative_integer("Enter new size (GiB) of volume: ")
-        
-        # Modify the volume
+
         try:
-            volume = self.resource.Volume(volume_id)
-            volume.modify_attribute(Size=new_size)
-            print(f"Modified '{volume.id}' to {new_size} GiB")
-        except self.resource.meta.client.exceptions.ClientError as e:
-            print(e)
+            # Use the EC2 client to modify the volume
+            self.client.modify_volume(
+                VolumeId=volume_id,
+                Size=new_size
+            )
+            print(f"Modified '{volume_id}' to {new_size} GiB")
+            
+        except botocore.exceptions.ClientError as e:
+            print(f"Error: {e}")
 
     def delete_volume(self):
         """Delete a volume."""
@@ -145,24 +150,14 @@ class EBSController:
     def list_snapshots(self):
         """List all snapshots."""
         snapshots = self.resource.snapshots.filter(OwnerIds=['self'])
-        print("\nSnapshots:")
         
         # Display snapshots
-        if snapshots:
-            headers = ["Snapshot ID", "Volume ID", "Size (GiB)", "Description", "Creation Date"]
-            table_data = [
-                [
-                    snapshot.id,
-                    snapshot.volume_id,
-                    snapshot.volume_size,
-                    snapshot.description,
-                    snapshot.start_time.strftime("%Y-%m-%d %H:%M:%S")
-                ]
-                for snapshot in snapshots
-            ]
-            print(tabulate(table_data, headers=headers, tablefmt="pretty"))
-        else:
+        print("\nSnapshots:")
+        if not snapshots:
             print("No snapshots found.")
+        else:
+            for snapshot in snapshots:
+                print(snapshot)
    
     def create_snapshot(self):
         """Create a snapshot of a volume."""
@@ -197,12 +192,10 @@ class EBSController:
             # Get the volume ID from the snapshot
             snapshot = self.resource.Snapshot(snapshot_id)
             volume_id = snapshot.volume_id
-            print(f"Found '{volume_id}' from '{snapshot_id}'")
 
             # Get the availability zone of the volume
             volume = self.resource.Volume(volume_id)
             availability_zone = volume.availability_zone
-            print(f"Volume located in '{availability_zone}'")
 
             # Create a new volume from the snapshot
             new_volume = self.resource.create_volume(

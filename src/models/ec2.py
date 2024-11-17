@@ -1,4 +1,3 @@
-from tabulate import tabulate
 from datetime import datetime
 from src.utils.reading_from_user import read_nonempty_string
 
@@ -23,24 +22,26 @@ class EC2Controller:
                 "Region": instance.placement['AvailabilityZone'],
                 "Launch Time": instance.launch_time.strftime("%Y-%m-%d %H:%M:%S")
             }
-            if instance.state['Name'] == 'running':
-                running_instances.append(instance_info)
-            else:
+            if not instance.state['Name'] == 'running':
                 stopped_instances.append(instance_info)
+            else:
+                running_instances.append(instance_info)
 
         # Display running instances
         print("\nRunning Instances:")
-        if running_instances:
-            print(tabulate(running_instances, headers="keys", tablefmt="pretty"))
-        else:
+        if not running_instances:
             print("No running instances detected.")
+        else:
+            for instance in running_instances:
+                print(instance)
 
         # Display stopped instances
         print("\nStopped Instances:")
-        if stopped_instances:
-            print(tabulate(stopped_instances, headers="keys", tablefmt="pretty"))
-        else:
+        if not stopped_instances:
             print("No stopped instances detected.")
+        else:
+            for instance in stopped_instances:
+                print(instance)
 
     def start_instance(self):
         """Start a specified EC2 instance."""
@@ -69,6 +70,11 @@ class EC2Controller:
         try:
             instance = self.ec2_resource.Instance(instance_id)
             instance.stop()
+            
+            print(f"Stopping '{instance_id}' ...")
+            waiter = self.ec2_client.get_waiter('instance_stopped')
+            waiter.wait(InstanceIds=[instance_id])
+            
             print(f"Stopped '{instance_id}'")
             
         except Exception as e:
@@ -82,6 +88,11 @@ class EC2Controller:
         try:
             instance = self.ec2_resource.Instance(instance_id)
             instance.terminate()
+            
+            print(f"Stopping '{instance_id}' ...")
+            waiter = self.ec2_client.get_waiter('instance_terminated')
+            waiter.wait(InstanceIds=[instance_id])
+            
             print(f"Deleted '{instance_id}'")
         except Exception as e:
             print(e)
@@ -89,7 +100,6 @@ class EC2Controller:
     def list_amis(self):
         """List all AMIs from an EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to list associated AMIs: ")
-        print(f"Searching associated AMIs of '{instance_id}' ...")
         
         # Search for images associated with the instance
         try:
@@ -98,22 +108,12 @@ class EC2Controller:
             ])
             
             # Display images
-            if images:
-                headers = ["AMI ID", "Name", "Creation Date"]
-                table_data = [
-                    [
-                        image.id,
-                        image.name,
-                        image.creation_date.strftime("%Y-%m-%d %H:%M:%S")
-                    ]
-                    for image in images
-                ]
-                print(tabulate(table_data, headers=headers, tablefmt="pretty"))
-            else:
-                print(f"No associated AMIs found for instance '{instance_id}'.")
+            print(f"AMIs of '{instance_id}':")
+            for image in images:
+                print(f"\t{image}")
         
         except Exception as e:
-            print(e)
+            print(f"Error: {e}")
 
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
