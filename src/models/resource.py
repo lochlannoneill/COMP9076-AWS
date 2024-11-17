@@ -1,8 +1,8 @@
 import boto3
 class Resource:
-    def __init__(self, user_credentials):
+    def __init__(self, user_credentials, region):
         """Initialize the session with AWS credentials and region."""
-        self.region = "eu-west-1"  # TODO - should i make this dynamic or keep hard-coded?
+        self.region = region
         self.key_id = user_credentials["access_key"]
         self.secret_key = user_credentials["secret_key"]
 
@@ -38,6 +38,18 @@ class Resource:
                             aws_secret_access_key=self.secret_key,
                             region_name=self.region)
             return cw
+        except Exception as e:
+            print(e)
+            return None
+
+    def get_elb_client(self):
+        # Create and return a Client for interacting with ELB
+        try:
+            elb = boto3.client('elbv2',
+                               aws_access_key_id=self.key_id,
+                               aws_secret_access_key=self.secret_key,
+                               region_name=self.region)
+            return elb
         except Exception as e:
             print(e)
             return None

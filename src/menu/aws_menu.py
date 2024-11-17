@@ -11,7 +11,8 @@ from src.utils.reading_from_user import read_range_integer
 
 class AWSMenu:
     def __init__(self, user_credentials):
-        self.res = Resource(user_credentials)
+        self.region = "eu-west-1"  # TODO - make region configurable
+        self.res = Resource(user_credentials, self.region)
         self.options = {
             "EC2 Instances": 1,
             "EBS Storage": 2,
