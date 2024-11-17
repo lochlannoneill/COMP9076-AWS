@@ -137,3 +137,33 @@ class S3Controller:
 
         except Exception as e:
             print(f"Error: {e}")
+            
+    def delete_object(self):
+        """Delete an object from a specified bucket."""
+        bucket_name = read_nonempty_string("\nEnter bucket name to delete object: ")
+
+        # Check if the bucket exists
+        try:
+            bucket = self.s3_resource.Bucket(bucket_name)
+            objects = list(bucket.objects.all())
+
+            # Check if the bucket is empty
+            if not objects:
+                print(f"Error: No objects found in the bucket '{bucket_name}'.")
+                return
+
+            # Display objects in the bucket
+            print(f"Objects in bucket '{bucket_name}':")
+            for index, obj in enumerate(objects, 1):
+                print(f"\t{index}. '{obj.key}'")
+
+            # Get the object to delete
+            choice = read_range_integer("Enter object index to delete: ", 1, len(objects))
+            object_key = objects[choice - 1].key  # Adjust for 0-based index
+
+            # Delete the object
+            bucket.Object(object_key).delete()
+            print(f"Deleted '{object_key}'")
+
+        except Exception as e:
+            print(f"Error: {e}")
