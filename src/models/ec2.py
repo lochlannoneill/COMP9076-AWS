@@ -108,9 +108,9 @@ class EC2Controller:
             ])
             
             # Display images
-            print(f"AMIs of '{instance_id}':")
+            print(f"\nAMIs of '{instance_id}':")
             for image in images:
-                print(f"\t{image}")
+                print(image)
         
         except Exception as e:
             print(f"Error: {e}")

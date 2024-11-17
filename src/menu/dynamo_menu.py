@@ -3,12 +3,13 @@ from src.utils.reading_from_user import read_range_integer
 class DynamoDBMenu:
     def __init__(self):
         self.options = {
-            "Create Table": 1,
-            "Get All Items In Table": 2,
-            "Get Item": 3,
-            "Add Item": 4,
-            "Delete Item": 5,
-            "Back": 6
+            "List Tables": 1,
+            "Create Table": 2,
+            "List Items In Table": 3,
+            "Get Item": 4,
+            "Add Item": 5,
+            "Delete Item": 6,
+            "Back": 7
         }
     
     def _display(self):
@@ -21,13 +22,17 @@ class DynamoDBMenu:
             self._display()
             choice = read_range_integer("Select from menu: ", 1, len(self.options))
             
+            # List Tables
+            if choice == self.options["List Tables"]:
+                service.list_tables()
+            
             # Create Table
             if choice == self.options["Create Table"]:
                 service.create_table()
             
-            # Get All Items In Table
-            elif choice == self.options["Get All Items In Table"]:
-                service.get_items_in_table()
+            # List Items In Table
+            elif choice == self.options["List Items In Table"]:
+                service.list_items_in_table()
             
             # Get Item
             elif choice == self.options["Get Item"]:

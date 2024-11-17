@@ -6,6 +6,23 @@ class DynamoDBController:
         self.client = client
 
     # COMPLETED
+    def list_tables(self):
+        """List all tables in DynamoDB."""
+        try:
+            response = self.client.list_tables()
+            tables = response.get('TableNames', [])
+            
+            print("\nTables in DynamoDB:")
+            if not tables:
+                print("No tables found.")
+            else:
+                for table in tables:
+                    print(f"\t{table}")
+                    
+        except Exception as e:
+            print(e)
+            
+    # COMPLETED
     def create_table(self):
         """Create a table in DynamoDB."""
         try:
@@ -37,7 +54,7 @@ class DynamoDBController:
             print(e)
         
     # COMPLETED
-    def get_items_in_table(self):
+    def list_items_in_table(self):
         """Retrieve all items from a table in DynamoDB."""
         table_name = read_nonempty_string("\nEnter table name: ")
         try:
@@ -46,7 +63,7 @@ class DynamoDBController:
             )
             items = response.get('Items', [])
             
-            print("Retrieved items: ")
+            print(f"\nItems in '{table_name}': ")
             if not items:
                 print(f"No items found in table '{table_name}'.")
             else:
