@@ -47,11 +47,11 @@ class CWController:
         comparison_operator = 'GreaterThanOrEqualToThreshold'
         metric = 'NetworkPacketsOut'
         threshold = 1000
-        region = self.client.meta.region_name  # Get the region from the client
+        region = self.client.meta.region_name
         
         try:
             # Check if the instance exists with EC2 resource
-            instances = list(self.ec2_resource.instances.filter(InstanceIds=[instance_id]))  # Convert to a list
+            instances = list(self.ec2_resource.instances.filter(InstanceIds=[instance_id]))
             if not instances:
                 print(f"Instance '{instance_id}' does not exist.")  # TODO - not being printed, skipping to exception instead
                 return
