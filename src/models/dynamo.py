@@ -52,7 +52,22 @@ class DynamoDBController:
         
         except Exception as e:
             print(e)
+    
+    # COMPLETED
+    def delete_table(self):
+        """Delete a table in DynamoDB."""
+        table_name = read_nonempty_string("\nEnter table name to delete: ")
         
+        try:
+            # Delete the table from DynamoDB
+            response = self.client.delete_table(
+                TableName=table_name
+            )
+            print(f"Deleted '{table_name}'")
+            
+        except Exception as e:
+            print(e)
+
     # COMPLETED
     def list_items_in_table(self):
         """Retrieve all items from a table in DynamoDB."""
@@ -73,7 +88,7 @@ class DynamoDBController:
         except Exception as e:
             print(e)
             
-    # COMPLETED
+    # TODO
     def get_item(self):
         """Retrieve an item from a table in Dynamo"""
         table_name = read_nonempty_string("\nEnter table name: ")
@@ -116,12 +131,10 @@ class DynamoDBController:
                 TableName=table_name,
                 Item=item_data
             )
-            print(f"Added item '{item_id}' to '{table_name}'")
+            print(f"\nAdded item '{item_id}' to '{table_name}'")
             
         except Exception as e:
             print(e)
-
-
         
     # TODO  
     def delete_item(self):

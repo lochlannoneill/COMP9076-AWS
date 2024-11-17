@@ -5,11 +5,12 @@ class DynamoDBMenu:
         self.options = {
             "List Tables": 1,
             "Create Table": 2,
-            "List Items In Table": 3,
-            "Get Item": 4,
-            "Add Item": 5,
-            "Delete Item": 6,
-            "Back": 7
+            "Delete Table": 3,
+            "List Items In Table": 4,
+            "Get Item": 5,
+            "Add Item": 6,
+            "Delete Item": 7,
+            "Back": 8
         }
     
     def _display(self):
@@ -29,6 +30,10 @@ class DynamoDBMenu:
             # Create Table
             if choice == self.options["Create Table"]:
                 service.create_table()
+                
+            # Delete Table
+            elif choice == self.options["Delete Table"]:
+                service.delete_table()
             
             # List Items In Table
             elif choice == self.options["List Items In Table"]:
