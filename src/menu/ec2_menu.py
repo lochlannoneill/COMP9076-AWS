@@ -3,7 +3,7 @@ from src.utils.reading_from_user import read_range_integer
 class EC2Menu:
     def __init__(self):
         self.options = {
-            "List All Instances": 1,
+            "List Instances": 1,
             "Start Instance": 2,
             "Stop Instance": 3,
             "Delete Instance": 4,
@@ -23,8 +23,8 @@ class EC2Menu:
             self._display()
             choice = read_range_integer("Select from menu: ", 1, len(self.options))
 
-            # List All Instances
-            if choice == self.options["List All Instances"]:
+            # List Instances
+            if choice == self.options["List Instances"]:
                 service.list_instances()
             
             # Start Instance

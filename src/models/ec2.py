@@ -4,7 +4,7 @@ from src.utils.reading_from_user import read_nonempty_string
 class EC2Controller:
     def __init__(self, resource):
         """Initialize with a boto3 session, region, and EC2 resource."""
-        self.ec2_resource = resource
+        self.resource = resource
         self.ec2_client = resource.meta.client
 
     def list_instances(self):
@@ -13,7 +13,7 @@ class EC2Controller:
         stopped_instances = []
 
         # Parse instances
-        for instance in self.ec2_resource.instances.all():
+        for instance in self.resource.instances.all():
             instance_info = {
                 "Instance ID": instance.instance_id,
                 "Name": next((tag['Value'] for tag in instance.tags if tag['Key'] == 'Name'), ''),
@@ -49,7 +49,7 @@ class EC2Controller:
         
         # Start instance using resource method
         try:
-            instance = self.ec2_resource.Instance(instance_id)
+            instance = self.resource.Instance(instance_id)
             instance.start()
             
             # Wait for the instance to enter the 'running' state
@@ -68,7 +68,7 @@ class EC2Controller:
         
         # Stop instance using resource method
         try:
-            instance = self.ec2_resource.Instance(instance_id)
+            instance = self.resource.Instance(instance_id)
             instance.stop()
             
             print(f"Stopping '{instance_id}' ...")
@@ -86,7 +86,7 @@ class EC2Controller:
         
         # Terminate instance using resource method
         try:
-            instance = self.ec2_resource.Instance(instance_id)
+            instance = self.resource.Instance(instance_id)
             instance.terminate()
             
             print(f"Stopping '{instance_id}' ...")
@@ -98,19 +98,19 @@ class EC2Controller:
             print(e)
 
     def list_amis(self):
-        """List all AMIs from an EC2 instance."""
+        """List all AMIs of a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to list associated AMIs: ")
         
         # Search for images associated with the instance
         try:
-            images = self.ec2_resource.images.filter(Filters=[
+            images = self.resource.images.filter(Filters=[
                 {'Name': 'tag:InstanceId', 'Values': [instance_id]}
             ])
             
             # Display images
-            print(f"AMIs of '{instance_id}':")
+            print(f"\nAMIs of '{instance_id}':")
             for image in images:
-                print(f"\t{image}")
+                print(image)
         
         except Exception as e:
             print(f"Error: {e}")
@@ -122,12 +122,12 @@ class EC2Controller:
         
         # Create AMI using resource method
         try:
-            instance = self.ec2_resource.Instance(instance_id)
+            instance = self.resource.Instance(instance_id)
             response = instance.create_image(Name=ami_name)
             ami_id = response.id
             
             # Tag the AMI with the instance ID
-            self.ec2_resource.create_tags(
+            self.resource.create_tags(
                 Resources=[ami_id],
                 Tags=[{'Key': 'InstanceId', 'Value': instance_id}]
             )
@@ -142,7 +142,7 @@ class EC2Controller:
         
         # Deregister AMI using resource method
         try:
-            image = self.ec2_resource.Image(ami_id)
+            image = self.resource.Image(ami_id)
             image.deregister()
             print(f"Deleted AMI '{ami_id}'")
         except Exception as e:

@@ -1,8 +1,8 @@
 import boto3
 class Resource:
-    def __init__(self, user_credentials):
+    def __init__(self, region, user_credentials):
         """Initialize the session with AWS credentials and region."""
-        self.region = "eu-west-1"  # TODO - should i make this dynamic or keep hard-coded?
+        self.region = region
         self.key_id = user_credentials["access_key"]
         self.secret_key = user_credentials["secret_key"]
 
@@ -30,7 +30,7 @@ class Resource:
             print(e)
             return None
 
-    def get_cw_client(self):
+    def get_cw_client(self):  # TODO - change to resource
         # Create and return a Client for interacting with CloudWatch
         try:
             cw = boto3.client('cloudwatch',
@@ -38,6 +38,18 @@ class Resource:
                             aws_secret_access_key=self.secret_key,
                             region_name=self.region)
             return cw
+        except Exception as e:
+            print(e)
+            return None
+
+    def get_dynamodb_client(self):
+        """Create and return a DynamoDB client."""
+        try:
+            dynamodb = boto3.client("dynamodb",
+                                    aws_access_key_id=self.key_id,
+                                    aws_secret_access_key=self.secret_key,
+                                    region_name=self.region)
+            return dynamodb
         except Exception as e:
             print(e)
             return None

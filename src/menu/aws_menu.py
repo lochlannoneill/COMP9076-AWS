@@ -7,17 +7,21 @@ from src.menu.s3_menu import S3Menu
 from src.models.s3 import S3Controller
 from src.menu.cw_menu import CWMenu
 from src.models.cw import CWController
+from src.menu.dynamo_menu import DynamoDBMenu
+from src.models.dynamo import DynamoDBController
 from src.utils.reading_from_user import read_range_integer
 
 class AWSMenu:
     def __init__(self, user_credentials):
-        self.res = Resource(user_credentials)
+        self.region = "eu-west-1"  # TODO - make region configurable
+        self.res = Resource(self.region, user_credentials)
         self.options = {
             "EC2 Instances": 1,
             "EBS Storage": 2,
             "S3 Storage": 3,
             "CloudWatch Monitoring": 4,
-            "Back": 5
+            "DynamoDB": 5,
+            "Back": 6
         }
 
     def _display(self):
@@ -58,6 +62,13 @@ class AWSMenu:
                     self.res.get_ec2_resource()  # EC2 for instance existence validation
                 )
                 CWMenu().handle(cw)
+            
+            # DynamoDB
+            if choice == self.options["DynamoDB"]:
+                dynamo = DynamoDBController(
+                    self.res.get_dynamodb_client()  # DynamoDB client
+                )
+                DynamoDBMenu().handle(dynamo)
             
             # Back
             if choice == self.options["Back"]:
