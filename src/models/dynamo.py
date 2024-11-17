@@ -89,9 +89,9 @@ class DynamoDBController:
 
         # Loop to collect the headings and their corresponding data
         for i in range(num_headings):
-            heading = read_nonempty_string(f"\nEnter heading {i+1} (attribute name): ")
-            data = read_nonempty_string(f"Enter data for {heading}: ")
-            item_data[heading] = {'S': data}  # Assuming the data is a string ('S')
+            attribute = read_nonempty_string(f"\nEnter attribute {i+1} name: ")
+            data = read_nonempty_string(f"Enter data for {attribute}: ")
+            item_data[attribute] = {'S': data}  # Assuming the data is a string ('S')
 
         try:
             # Add the item to DynamoDB
