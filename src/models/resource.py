@@ -42,15 +42,13 @@ class Resource:
             print(e)
             return None
 
-    def get_dynamodb_resource(self):
-        # Create and return a Resource for interacting with DynamoDB
+    def get_dynamodb_client(self):
+        """Create and return a DynamoDB client."""
         try:
-            dynamodb = boto3.resource(
-                "dynamodb",
-                aws_access_key_id=self.key_id,
-                aws_secret_access_key=self.secret_key,
-                region_name=self.region
-            )
+            dynamodb = boto3.client("dynamodb",
+                                    aws_access_key_id=self.key_id,
+                                    aws_secret_access_key=self.secret_key,
+                                    region_name=self.region)
             return dynamodb
         except Exception as e:
             print(e)
