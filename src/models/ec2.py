@@ -47,8 +47,8 @@ class EC2Controller:
         """Start a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to start: ")
         
-        # Start instance using resource method
         try:
+            # Start the instance
             instance = self.resource.Instance(instance_id)
             instance.start()
             
@@ -56,7 +56,6 @@ class EC2Controller:
             print(f"Starting '{instance_id}' ...")
             waiter = self.ec2_client.get_waiter('instance_running')
             waiter.wait(InstanceIds=[instance_id])
-            
             print(f"Started '{instance_id}'")
             
         except Exception as e:
@@ -66,15 +65,15 @@ class EC2Controller:
         """Stop a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to stop: ")
         
-        # Stop instance using resource method
         try:
+            # Stop the instance
             instance = self.resource.Instance(instance_id)
             instance.stop()
             
+            # Wait for the instance to enter the 'stopped' state
             print(f"Stopping '{instance_id}' ...")
             waiter = self.ec2_client.get_waiter('instance_stopped')
             waiter.wait(InstanceIds=[instance_id])
-            
             print(f"Stopped '{instance_id}'")
             
         except Exception as e:
@@ -84,20 +83,21 @@ class EC2Controller:
         """Delete a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to delete: ")
         
-        # Terminate instance using resource method
         try:
+            # Terminate the instance
             instance = self.resource.Instance(instance_id)
             instance.terminate()
             
+            # Wait for the instance to be terminated
             print(f"Stopping '{instance_id}' ...")
             waiter = self.ec2_client.get_waiter('instance_terminated')
             waiter.wait(InstanceIds=[instance_id])
-            
             print(f"Deleted '{instance_id}'")
+            
         except Exception as e:
             print(e)
 
-    def list_amis(self):
+    def list_amis_of_instance(self):
         """List all AMIs of a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to list associated AMIs: ")
         
@@ -109,11 +109,14 @@ class EC2Controller:
             
             # Display images
             print(f"\nAMIs of '{instance_id}':")
-            for image in images:
-                print(image)
+            if not images:
+                print("No AMIs detected.")
+            else:
+                for image in images:
+                    print(f"\t{image}")
         
         except Exception as e:
-            print(f"Error: {e}")
+            print(e)
 
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
@@ -122,6 +125,7 @@ class EC2Controller:
         
         # Create AMI using resource method
         try:
+            # Create the AMI
             instance = self.resource.Instance(instance_id)
             response = instance.create_image(Name=ami_name)
             ami_id = response.id
@@ -131,7 +135,12 @@ class EC2Controller:
                 Resources=[ami_id],
                 Tags=[{'Key': 'InstanceId', 'Value': instance_id}]
             )
-            print(f"Created AMI '{ami_id}'")
+            
+            # Use a waiter to wait until the AMI is available
+            print(f"Creating '{ami_id}' ...")
+            waiter = self.ec2_client.get_waiter('image_available')
+            waiter.wait(ImageIds=[ami_id])
+            print(f"Created '{ami_id}'")
             
         except Exception as e:
             print(e)

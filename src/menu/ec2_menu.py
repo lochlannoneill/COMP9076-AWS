@@ -41,7 +41,7 @@ class EC2Menu:
             
             # List AMIs of Instance
             elif choice == self.options["List AMIs of Instance"]:
-                service.list_amis()
+                service.list_amis_of_instance()
             
             # Create AMI
             elif choice == self.options["Create AMI"]:
