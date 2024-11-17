@@ -111,17 +111,17 @@ class DynamoDBController:
             
     # COMPLETED
     def add_item(self):
-        """Add an item to a table in DynamoDB with user-defined headings."""
+        """Add an item to a table in DynamoDB with user-defined attributes."""
         table_name = read_nonempty_string("\nEnter table name to add item: ")
         item_id = read_nonempty_string("Enter item ID: ")
-        num_headings = read_nonnegative_integer("Enter the number of headings (attributes) you want to add: ")
+        num_attributes = read_nonnegative_integer("Enter the number of attributes (attributes) you want to add: ")
         
         # Dictionary to hold the attributes for the item
         item_data = {'id': {'S': item_id}}  # Assuming the ID is a string ('S')
 
-        # Loop to collect the headings and their corresponding data
-        for i in range(num_headings):
-            attribute = read_nonempty_string(f"\nEnter attribute {i+1} name: ")
+        # Loop to collect the attributes and their corresponding data
+        for i in range(num_attributes):
+            attribute = read_nonempty_string(f"\nEnter attribute {i+1} heading: ")
             data = read_nonempty_string(f"Enter data for {attribute}: ")
             item_data[attribute] = {'S': data}  # Assuming the data is a string ('S')
 
