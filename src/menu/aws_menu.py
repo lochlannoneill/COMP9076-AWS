@@ -7,6 +7,8 @@ from src.menu.s3_menu import S3Menu
 from src.models.s3 import S3Controller
 from src.menu.cw_menu import CWMenu
 from src.models.cw import CWController
+from src.menu.dynamo_menu import DynamoDBMenu
+from src.models.dynamo import DynamoDBController
 from src.utils.reading_from_user import read_range_integer
 
 class AWSMenu:
@@ -18,7 +20,8 @@ class AWSMenu:
             "EBS Storage": 2,
             "S3 Storage": 3,
             "CloudWatch Monitoring": 4,
-            "Back": 5
+            "Dynamo Relational DB": 5,
+            "Back": 6
         }
 
     def _display(self):
@@ -59,6 +62,13 @@ class AWSMenu:
                     self.res.get_ec2_resource()  # EC2 for instance existence validation
                 )
                 CWMenu().handle(cw)
+            
+            # Dynamo Relational DB
+            if choice == self.options["Dynamo Relational DB"]:
+                dynamo = DynamoDBControllerController(
+                    self.res.get_dynamodb_resource()
+                )
+                DynamoDBMenu().handle(dynamo)
             
             # Back
             if choice == self.options["Back"]:

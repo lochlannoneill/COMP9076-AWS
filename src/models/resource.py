@@ -30,7 +30,7 @@ class Resource:
             print(e)
             return None
 
-    def get_cw_client(self):
+    def get_cw_client(self):  # TODO - change to resource
         # Create and return a Client for interacting with CloudWatch
         try:
             cw = boto3.client('cloudwatch',
@@ -42,14 +42,16 @@ class Resource:
             print(e)
             return None
 
-    def get_elb_client(self):
-        # Create and return a Client for interacting with ELB
+    def get_dynamodb_resource(self):
+        # Create and return a Resource for interacting with DynamoDB
         try:
-            elb = boto3.client('elbv2',
-                               aws_access_key_id=self.key_id,
-                               aws_secret_access_key=self.secret_key,
-                               region_name=self.region)
-            return elb
+            dynamodb = boto3.resource(
+                "dynamodb",
+                aws_access_key_id=self.key_id,
+                aws_secret_access_key=self.secret_key,
+                region_name=self.region
+            )
+            return dynamodb
         except Exception as e:
             print(e)
             return None
