@@ -5,6 +5,7 @@ class EBSController:
     def __init__(self, resource):
         """Initialize with a boto3 resource for EC2."""
         self.resource = resource
+        self.client = resource.meta.client
 
     def list_volumes(self):
         """List all EBS volumes."""
@@ -61,25 +62,25 @@ class EBSController:
     def create_volume(self):
         """Create a new EBS volume."""
         size = read_nonnegative_integer("\nEnter size (GiB) of volume to create: ")
-        
-        # Get available zones
+
         try:
-            available_zones = [az.name for az in self.resource.availability_zones.all()]
-        except botocore.exceptions.ClientError as e:
-            print(e)
-            return
-        print("Available zones:")
-        for index, zone in enumerate(available_zones, start=1):
-            print(f"\t{index}. {zone}")
-        
-        # Get the zone from user input
-        choice = read_range_integer("Select zone index: ", 1, len(available_zones))
-        zone = available_zones[choice]
-        
-        # Create the volume
-        try:
+            # Get available zones using the EC2 client
+            response = self.client.describe_availability_zones()
+            available_zones = [zone['ZoneName'] for zone in response['AvailabilityZones']]
+            
+            # Display available zones
+            print("Available zones:")
+            for index, zone in enumerate(available_zones, start=1):
+                print(f"\t{index}. {zone}")
+
+            # Get the zone from user input
+            choice = read_range_integer("Select zone index: ", 1, len(available_zones))
+            zone = available_zones[choice - 1]  # Adjust for 0-based index
+
+            # Create the volume
             volume = self.resource.create_volume(Size=size, AvailabilityZone=zone)  # Using resource to create volume
             print(f"Created '{volume.id}'")
+            
         except botocore.exceptions.ClientError as e:
             print(e)
 
