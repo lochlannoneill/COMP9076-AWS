@@ -1,6 +1,6 @@
 import boto3
 class Resource:
-    def __init__(self, user_credentials, region):
+    def __init__(self, region, user_credentials):
         """Initialize the session with AWS credentials and region."""
         self.region = region
         self.key_id = user_credentials["access_key"]
