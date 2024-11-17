@@ -192,12 +192,10 @@ class EBSController:
             # Get the volume ID from the snapshot
             snapshot = self.resource.Snapshot(snapshot_id)
             volume_id = snapshot.volume_id
-            print(f"Found '{volume_id}' from '{snapshot_id}'")
 
             # Get the availability zone of the volume
             volume = self.resource.Volume(volume_id)
             availability_zone = volume.availability_zone
-            print(f"Volume located in '{availability_zone}'")
 
             # Create a new volume from the snapshot
             new_volume = self.resource.create_volume(
