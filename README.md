@@ -95,7 +95,7 @@ Upload Object:
 Download Object:  
 ![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_download.png)
 
-### AWS Menu - CloudWatch Monitoring: 
+### AWS Menu - CloudWatch Monitoring:  
 
 Get Metric Statistics:  
 ![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/cw/metrics_get.png)
@@ -105,3 +105,26 @@ Set Alarm:
 
 Delete Alarm:  
 ![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/cw/alarm_delete.png)
+
+### AWS Menu - DynamoDB:  
+
+List Tables:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/dynamo/table_list.png)
+
+Create Table:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/dynamo/table_create.png)
+
+Delete Table:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/dynamo/table_delete.png)
+
+List Items In Table:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/dynamo/item_list.png)
+
+Get Item:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/dynamo/item_get.png)
+
+Add Item:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/dynamo/item_add.png)
+
+Delete Item:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/dynamo/item_delete.png)
