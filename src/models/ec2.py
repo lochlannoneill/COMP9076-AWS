@@ -5,7 +5,7 @@ class EC2Controller:
     def __init__(self, resource):
         """Initialize with a boto3 session, region, and EC2 resource."""
         self.resource = resource
-        self.ec2_client = resource.meta.client
+        self.client = resource.meta.client
 
     def list_instances(self):
         """List all EC2 instances, grouped by running and stopped."""
@@ -54,7 +54,7 @@ class EC2Controller:
             
             # Wait for the instance to enter the 'running' state
             print(f"Starting '{instance_id}' ...")
-            waiter = self.ec2_client.get_waiter('instance_running')
+            waiter = self.client.get_waiter('instance_running')
             waiter.wait(InstanceIds=[instance_id])
             print(f"Started '{instance_id}'")
             
@@ -72,7 +72,7 @@ class EC2Controller:
             
             # Wait for the instance to enter the 'stopped' state
             print(f"Stopping '{instance_id}' ...")
-            waiter = self.ec2_client.get_waiter('instance_stopped')
+            waiter = self.client.get_waiter('instance_stopped')
             waiter.wait(InstanceIds=[instance_id])
             print(f"Stopped '{instance_id}'")
             
@@ -90,7 +90,7 @@ class EC2Controller:
             
             # Wait for the instance to be terminated
             print(f"Stopping '{instance_id}' ...")
-            waiter = self.ec2_client.get_waiter('instance_terminated')
+            waiter = self.client.get_waiter('instance_terminated')
             waiter.wait(InstanceIds=[instance_id])
             print(f"Deleted '{instance_id}'")
             
@@ -113,7 +113,7 @@ class EC2Controller:
                 print("No AMIs detected.")
             else:
                 for image in images:
-                    print(f"\t{image}")
+                    print(image)
         
         except Exception as e:
             print(e)
@@ -138,7 +138,7 @@ class EC2Controller:
             
             # Use a waiter to wait until the AMI is available
             print(f"Creating '{ami_id}' ...")
-            waiter = self.ec2_client.get_waiter('image_available')
+            waiter = self.client.get_waiter('image_available')
             waiter.wait(ImageIds=[ami_id])
             print(f"Created '{ami_id}'")
             
