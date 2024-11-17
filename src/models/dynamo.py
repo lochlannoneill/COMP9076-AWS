@@ -136,7 +136,19 @@ class DynamoDBController:
         except Exception as e:
             print(e)
         
-    # TODO  
+    # COMPLETED  
     def delete_item(self):
-        print("Not Implemented Yet")
-    
+        """Delete an item from a table in DynamoDB."""
+        table_name = read_nonempty_string("\nEnter table name to delete item: ")
+        item_id = read_nonempty_string("Enter item ID to delete: ")
+        try:
+            response = self.client.delete_item(
+                TableName=table_name,
+                Key={
+                    'id': {'S': item_id}
+                }
+            )
+            print(f"Deleted item '{item_id}' from '{table_name}'")
+            
+        except Exception as e:
+            print(e)
