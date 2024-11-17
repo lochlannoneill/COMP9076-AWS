@@ -65,7 +65,7 @@ class AWSMenu:
             
             # Dynamo Relational DB
             if choice == self.options["Dynamo Relational DB"]:
-                dynamo = DynamoDBControllerController(
+                dynamo = DynamoDBController(
                     self.res.get_dynamodb_resource()
                 )
                 DynamoDBMenu().handle(dynamo)
