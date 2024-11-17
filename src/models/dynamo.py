@@ -88,7 +88,7 @@ class DynamoDBController:
         except Exception as e:
             print(e)
             
-    # TODO
+    # COMPLETED
     def get_item(self):
         """Retrieve an item from a table in Dynamo"""
         table_name = read_nonempty_string("\nEnter table name: ")

@@ -4,9 +4,9 @@ class CWMenu:
     def __init__(self):
         self.options = {
             "Get Metric Statistics": 1,
-            "Set Alarm": 2,
-            "Delete Alarm": 3,
-            "Free Tier AWS Services": 4,
+            "List Alarms": 2,
+            "Set Alarm": 3,
+            "Delete Alarm": 4,
             "Back": 5
         }
     
@@ -23,6 +23,10 @@ class CWMenu:
             # Get Metric Statistics
             if choice == self.options["Get Metric Statistics"]:
                 service.get_metric_statistics()
+                
+            # List Alarms
+            if choice == self.options["List Alarms"]:
+                service.list_alarms()
             
             # Set Alarm
             if choice == self.options["Set Alarm"]:
@@ -31,10 +35,6 @@ class CWMenu:
             # Delete Alarm
             if choice == self.options["Delete Alarm"]:
                 service.delete_alarm()
-            
-            # Free Tier AWS Services
-            if choice == self.options["Free Tier AWS Services"]:
-                service.free_tier_aws_services()
             
             # Back
             if choice == self.options["Back"]:

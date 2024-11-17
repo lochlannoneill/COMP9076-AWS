@@ -40,6 +40,21 @@ class CWController:
             except Exception as e:
                 print(f"Error getting metric statistics: {e}")
 
+    def list_alarms(self):
+        try:
+            alarms = self.client.describe_alarms()
+            
+            print("\nAlarms:")
+            if not alarms['MetricAlarms']:
+                print("No alarms found.")
+                return
+            else:
+                for alarm in alarms['MetricAlarms']:
+                    print(f"\t{alarm['AlarmName']}")
+        
+        except Exception as e:
+            print(e)
+    
     # COMPLETED
     def set_alarm(self):
         instance_id = read_nonempty_string("\nEnter Instance ID to set alarm: ")
@@ -95,7 +110,3 @@ class CWController:
         
         except Exception as e:
             print(e)
-
-    # TODO 
-    def free_tier_aws_services(self):
-        print("Not implemented yet.")

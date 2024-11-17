@@ -1,7 +1,7 @@
 # Ignore all __pycache__ directories
 __pycache__/
 
-# Ignore passwords.json in the config directory
+# Ignore everything in the config directory
 config/
 
 # Ignore the todo.txt file
