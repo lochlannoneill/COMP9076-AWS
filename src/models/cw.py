@@ -94,7 +94,7 @@ class CWController:
             print(f"Deleted '{alarm}'")
         
         except Exception as e:
-            print(f"Error deleting alarm: {e}")
+            print(e)
 
     # TODO 
     def free_tier_aws_services(self):
