@@ -27,7 +27,7 @@ class DynamoDBController:
         """Create a table in DynamoDB."""
         try:
             table_name = read_nonempty_string("\nEnter table name: ")
-            primary_key = read_nonempty_string("Enter primary key: ")
+            primary_key = 'id'
 
             response = self.client.create_table(
                 TableName=table_name,
@@ -93,18 +93,20 @@ class DynamoDBController:
         """Retrieve an item from a table in Dynamo"""
         table_name = read_nonempty_string("\nEnter table name: ")
         item_id = read_nonempty_string("Enter item ID: ")
+        
         try:
             response = self.client.get_item(
                 TableName=table_name,
                 Key={
-                    'ID': {'S': item_id}
+                    'id': {'S': item_id}
                 }
             )
             item = response.get('Item', {})
+            print(f"\nRetrieved item:")
             if not item:
-                print(f"No item found with ID '{item_id}'.")
+                print(f"No item found with ID '{item_id}'")
             else:
-                print(f"Retrieved item: {item}")
+                print(item)
                 
         except Exception as e:
             print(e)
