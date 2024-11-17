@@ -37,6 +37,26 @@ class DynamoDBController:
             print(e)
         
     # COMPLETED
+    def get_items_in_table(self):
+        """Retrieve all items from a table in DynamoDB."""
+        table_name = read_nonempty_string("\nEnter table name: ")
+        try:
+            response = self.client.scan(
+                TableName=table_name
+            )
+            items = response.get('Items', [])
+            
+            print("Retrieved items: ")
+            if not items:
+                print(f"No items found in table '{table_name}'.")
+            else:
+                for item in items:
+                    print(f"{item}")
+                
+        except Exception as e:
+            print(e)
+            
+    # COMPLETED
     def get_item(self):
         """Retrieve an item from a table in Dynamo"""
         table_name = read_nonempty_string("\nEnter table name: ")

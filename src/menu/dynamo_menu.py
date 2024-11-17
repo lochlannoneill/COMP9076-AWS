@@ -4,10 +4,11 @@ class DynamoDBMenu:
     def __init__(self):
         self.options = {
             "Create Table": 1,
-            "Get Item": 2,
-            "Add Item": 3,
-            "Delete Item": 4,
-            "Back": 5
+            "Get All Items in Table": 2,
+            "Get Item": 3,
+            "Add Item": 4,
+            "Delete Item": 5,
+            "Back": 6
         }
     
     def _display(self):
@@ -20,14 +21,18 @@ class DynamoDBMenu:
             self._display()
             choice = read_range_integer("Select from menu: ", 1, len(self.options))
             
-            # Get Item
-            if choice == self.options["Get Item"]:
-                service.get_item()
-            
             # Create Table
             if choice == self.options["Create Table"]:
                 service.create_table()
-                
+            
+            # Get All Items in Table
+            elif choice == self.options["Get All Items in Table"]:
+                service.get_items_in_table()
+            
+            # Get Item
+            elif choice == self.options["Get Item"]:
+                service.get_item()
+            
             # Add Item
             elif choice == self.options["Add Item"]:
                 service.add_item()
