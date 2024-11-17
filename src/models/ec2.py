@@ -70,6 +70,11 @@ class EC2Controller:
         try:
             instance = self.ec2_resource.Instance(instance_id)
             instance.stop()
+            
+            print(f"Stopping '{instance_id}' ...")
+            waiter = self.ec2_client.get_waiter('instance_stopped')
+            waiter.wait(InstanceIds=[instance_id])
+            
             print(f"Stopped '{instance_id}'")
             
         except Exception as e:
@@ -90,7 +95,6 @@ class EC2Controller:
     def list_amis(self):
         """List all AMIs from an EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to list associated AMIs: ")
-        print(f"Searching associated AMIs of '{instance_id}' ...")
         
         # Search for images associated with the instance
         try:
@@ -99,12 +103,9 @@ class EC2Controller:
             ])
             
             # Display images
-            if images:
-                print(f"Associated AMIs for Instance ID '{instance_id}':")
-                for image in images:
-                    print(f"{image}")
-            else:
-                print(f"No associated AMIs found for instance '{instance_id}'.")
+            print(f"\nAMIs of '{instance_id}':")
+            for image in images:
+                print(f"\t{image}")
         
         except Exception as e:
             print(f"Error: {e}")
