@@ -20,7 +20,7 @@ class AWSMenu:
             "EBS Storage": 2,
             "S3 Storage": 3,
             "CloudWatch Monitoring": 4,
-            "Dynamo Relational DB": 5,
+            "DynamoDB": 5,
             "Back": 6
         }
 
@@ -63,8 +63,8 @@ class AWSMenu:
                 )
                 CWMenu().handle(cw)
             
-            # Dynamo Relational DB
-            if choice == self.options["Dynamo Relational DB"]:
+            # DynamoDB
+            if choice == self.options["DynamoDB"]:
                 dynamo = DynamoDBController(
                     self.res.get_dynamodb_client()  # DynamoDB client
                 )
