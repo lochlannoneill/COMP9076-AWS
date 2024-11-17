@@ -1,5 +1,4 @@
 import datetime
-import tabulate
 from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string, read_nonnegative_float
 
 class CWController:

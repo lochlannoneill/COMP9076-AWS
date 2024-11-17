@@ -1,5 +1,4 @@
 import botocore
-from tabulate import tabulate
 from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string, read_range_integer
 
 class EBSController:
@@ -46,14 +45,16 @@ class EBSController:
         # Display In-Use Volumes
         print("\nIn-Use Volumes:")
         if in_use_volumes:
-            print(tabulate(in_use_volumes, headers="keys", tablefmt="pretty"))
+            for volume in in_use_volumes:
+                print(volume)
         else:
             print("No in-use volumes detected.")
 
         # Display Available Volumes
-        print("Available Volumes:")
+        print("\nAvailable Volumes:")
         if available_volumes:
-            print(tabulate(available_volumes, headers="keys", tablefmt="pretty"))
+            for volume in available_volumes:
+                print(volume)
         else:
             print("No available volumes detected.")
             
@@ -145,22 +146,12 @@ class EBSController:
     def list_snapshots(self):
         """List all snapshots."""
         snapshots = self.resource.snapshots.filter(OwnerIds=['self'])
-        print("\nSnapshots:")
         
         # Display snapshots
+        print("\nSnapshots:")
         if snapshots:
-            headers = ["Snapshot ID", "Volume ID", "Size (GiB)", "Description", "Creation Date"]
-            table_data = [
-                [
-                    snapshot.id,
-                    snapshot.volume_id,
-                    snapshot.volume_size,
-                    snapshot.description,
-                    snapshot.start_time.strftime("%Y-%m-%d %H:%M:%S")
-                ]
-                for snapshot in snapshots
-            ]
-            print(tabulate(table_data, headers=headers, tablefmt="pretty"))
+            for snapshot in snapshots:
+                print(snapshot)
         else:
             print("No snapshots found.")
    

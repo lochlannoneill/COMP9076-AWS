@@ -1,4 +1,3 @@
-from tabulate import tabulate
 from datetime import datetime
 from src.utils.reading_from_user import read_nonempty_string
 
@@ -31,14 +30,16 @@ class EC2Controller:
         # Display running instances
         print("\nRunning Instances:")
         if running_instances:
-            print(tabulate(running_instances, headers="keys", tablefmt="pretty"))
+            for instance in running_instances:
+                print(instance)
         else:
             print("No running instances detected.")
 
         # Display stopped instances
         print("\nStopped Instances:")
         if stopped_instances:
-            print(tabulate(stopped_instances, headers="keys", tablefmt="pretty"))
+            for instance in stopped_instances:
+                print(instance)
         else:
             print("No stopped instances detected.")
 
@@ -99,21 +100,14 @@ class EC2Controller:
             
             # Display images
             if images:
-                headers = ["AMI ID", "Name", "Creation Date"]
-                table_data = [
-                    [
-                        image.id,
-                        image.name,
-                        image.creation_date.strftime("%Y-%m-%d %H:%M:%S")
-                    ]
-                    for image in images
-                ]
-                print(tabulate(table_data, headers=headers, tablefmt="pretty"))
+                print(f"Associated AMIs for Instance ID '{instance_id}':")
+                for image in images:
+                    print(f"{image}")
             else:
                 print(f"No associated AMIs found for instance '{instance_id}'.")
         
         except Exception as e:
-            print(e)
+            print(f"Error: {e}")
 
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""

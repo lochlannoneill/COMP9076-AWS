@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from tabulate import tabulate
 from src.utils.reading_from_user import read_nonempty_string, read_range_integer
 
 class S3Controller:
@@ -27,7 +26,8 @@ class S3Controller:
         if not bucket_info:
             print("\nNo buckets found.")
         else:
-            print(tabulate(bucket_info, headers='keys', tablefmt='pretty'))
+            for bucket in bucket_info:
+                print(bucket)
 
     def delete_bucket(self):
         """Delete a bucket after validation."""
