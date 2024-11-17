@@ -9,7 +9,7 @@ class DynamoDBController:
     def create_table(self):
         """Create a table in DynamoDB."""
         try:
-            table_name = read_nonempty_string("Enter table name: ")
+            table_name = read_nonempty_string("\nEnter table name: ")
             primary_key = read_nonempty_string("Enter primary key: ")
             read_capacity_units = 5
             write_capacity_units = 5
@@ -38,9 +38,26 @@ class DynamoDBController:
         except Exception as e:
             print(e)
         
-    # TODO
+    # COMPLETED
     def get_item(self):
-        print("Not Implemented Yet")
+        """Retrieve an item from a table in Dynamo"""
+        table_name = read_nonempty_string("\nEnter table name: ")
+        item_id = read_nonempty_string("Enter item ID: ")
+        try:
+            response = self.client.get_item(
+                TableName=table_name,
+                Key={
+                    'ID': {'S': item_id}
+                }
+            )
+            item = response.get('Item', {})
+            if not item:
+                print(f"No item found with ID '{item_id}'.")
+            else:
+                print(f"Retrieved item: {item}")
+                
+        except Exception as e:
+            print(f"Error retrieving item: {e}")
         
     # TODO
     def add_item(self):
