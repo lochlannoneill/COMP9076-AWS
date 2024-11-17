@@ -98,7 +98,7 @@ class EC2Controller:
             print(e)
 
     def list_amis(self):
-        """List all AMIs from an EC2 instance."""
+        """List all AMIs of a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to list associated AMIs: ")
         
         # Search for images associated with the instance
