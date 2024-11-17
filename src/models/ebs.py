@@ -97,7 +97,7 @@ class EBSController:
         
         # Get the mount point from user input
         device_index = read_range_integer("Select mount-point index: ", 1, len(available_devices))
-        device = available_devices[device_index]
+        device = available_devices[device_index - 1]  # Adjust for 0-based index
 
         # Attach the volume to the instance
         try:
@@ -123,14 +123,17 @@ class EBSController:
         """Modify a volume's size."""
         volume_id = read_nonempty_string("\nEnter Volume ID to modify: ")
         new_size = read_nonnegative_integer("Enter new size (GiB) of volume: ")
-        
-        # Modify the volume
+
         try:
-            volume = self.resource.Volume(volume_id)
-            volume.modify_attribute(Size=new_size)
-            print(f"Modified '{volume.id}' to {new_size} GiB")
-        except self.resource.meta.client.exceptions.ClientError as e:
-            print(e)
+            # Use the EC2 client to modify the volume
+            self.client.modify_volume(
+                VolumeId=volume_id,
+                Size=new_size
+            )
+            print(f"Modified '{volume_id}' to {new_size} GiB")
+            
+        except botocore.exceptions.ClientError as e:
+            print(f"Error: {e}")
 
     def delete_volume(self):
         """Delete a volume."""
