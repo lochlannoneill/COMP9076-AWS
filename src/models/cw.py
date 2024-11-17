@@ -10,7 +10,7 @@ class CWController:
     # COMPLETED
     def get_metric_statistics(self):
             """Display the EBSReadBytes and EBSByteBalance% performance metrics for a particular EC2 instance, averaged over the last 20 minutes."""
-            instance_id = read_nonempty_string("\nEnter Instance ID to get metrics= statistics: ")
+            instance_id = read_nonempty_string("\nEnter Instance ID to get metric statistics: ")
             metrics = ['EBSReadBytes', 'EBSByteBalance%']
             minutes = 20
             end_time = datetime.datetime.utcnow()
@@ -43,7 +43,7 @@ class CWController:
     # COMPLETED
     def set_alarm(self):
         instance_id = read_nonempty_string("\nEnter Instance ID to set alarm: ")
-        alarm_name = read_nonempty_string("Enter alarm name: ")
+        alarm = read_nonempty_string("Enter alarm name: ")
         threshold = 1000
         region = self.client.meta.region_name  # Get the region from the client
         
@@ -55,7 +55,7 @@ class CWController:
                 return
             
             self.client.put_metric_alarm(
-                AlarmName=f'{alarm_name}',
+                AlarmName=f'{alarm}',
                 ComparisonOperator='GreaterThanOrEqualToThreshold',
                 EvaluationPeriods=1,
                 MetricName='NetworkPacketsOut',
@@ -76,7 +76,7 @@ class CWController:
                     f"arn:aws:automate:{region}:ec2:stop"  # Add an EC2 Stop action when the alarm triggers
                 ]
             )
-            print(f"Alarm created for '{instance_id}' if NetworkPacketsOut >= {threshold}")
+            print(f"Created '{alarm}' for '{instance_id}' if NetworkPacketsOut >= {threshold}")
         
         except Exception as e:
             print(e)
