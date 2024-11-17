@@ -3,9 +3,10 @@ import tabulate
 from src.utils.reading_from_user import read_nonnegative_integer, read_nonempty_string, read_nonnegative_float
 
 class CWController:
-    def __init__(self, client):
+    def __init__(self, client, ec2_resource):
         """Initialize with a boto3 session."""
         self.client = client
+        self.ec2_resource = ec2_resource
 
     # COMPLETED
     def get_metric_statistics(self):
@@ -48,6 +49,12 @@ class CWController:
         region = self.client.meta.region_name  # Get the region from the client
         
         try:
+            # Check if the instance exists with EC2 resource
+            instances = list(self.ec2_resource.instances.filter(InstanceIds=[instance_id]))  # Convert to a list
+            if not instances:
+                print(f"Instance '{instance_id}' does not exist.")  # TODO - not being printed, skipping to exception instead
+                return
+            
             self.client.put_metric_alarm(
                 AlarmName=f'{alarm_name}',
                 ComparisonOperator='GreaterThanOrEqualToThreshold',
@@ -73,7 +80,7 @@ class CWController:
             print(f"Alarm created for '{instance_id}' if NetworkPacketsOut >= {threshold}")
         
         except Exception as e:
-            print(f"Error creating alarm: {e}")
+            print(e)
             
     # COMPLETED
     def delete_alarm(self):
