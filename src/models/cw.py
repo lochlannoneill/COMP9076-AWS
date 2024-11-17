@@ -44,6 +44,8 @@ class CWController:
     def set_alarm(self):
         instance_id = read_nonempty_string("\nEnter Instance ID to set alarm: ")
         alarm = read_nonempty_string("Enter alarm name: ")
+        comparison_operator = 'GreaterThanOrEqualToThreshold'
+        metric = 'NetworkPacketsOut'
         threshold = 1000
         region = self.client.meta.region_name  # Get the region from the client
         
@@ -56,15 +58,15 @@ class CWController:
             
             self.client.put_metric_alarm(
                 AlarmName=f'{alarm}',
-                ComparisonOperator='GreaterThanOrEqualToThreshold',
+                ComparisonOperator=comparison_operator,
                 EvaluationPeriods=1,
-                MetricName='NetworkPacketsOut',
+                MetricName=metric,
                 Namespace='AWS/EC2',
                 Period=300,    #INSUFFICIENT_DATA error if lower than the metric period
                 Statistic='Average',
                 Threshold=1000,  # Trigger alarm if NetworkPacketsOut >= 1,000
                 ActionsEnabled=True,
-                AlarmDescription=f'Alarm to stop instance if NetworkPacketsOut >= {threshold}',
+                AlarmDescription=f"Alarm to stop instance if '{metric}' {comparison_operator} {threshold}",
                 Dimensions=[
                     {
                         'Name': 'InstanceId',
@@ -76,7 +78,7 @@ class CWController:
                     f"arn:aws:automate:{region}:ec2:stop"  # Add an EC2 Stop action when the alarm triggers
                 ]
             )
-            print(f"Created '{alarm}' for '{instance_id}' if NetworkPacketsOut >= {threshold}")
+            print(f"Created '{alarm}' alarm for '{instance_id}' with '{metric}' using '{comparison_operator}' set to '{threshold}'")
         
         except Exception as e:
             print(e)
