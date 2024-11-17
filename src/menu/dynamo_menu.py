@@ -4,7 +4,7 @@ class DynamoDBMenu:
     def __init__(self):
         self.options = {
             "Create Table": 1,
-            "Get All Items in Table": 2,
+            "Get All Items In Table": 2,
             "Get Item": 3,
             "Add Item": 4,
             "Delete Item": 5,
@@ -25,8 +25,8 @@ class DynamoDBMenu:
             if choice == self.options["Create Table"]:
                 service.create_table()
             
-            # Get All Items in Table
-            elif choice == self.options["Get All Items in Table"]:
+            # Get All Items In Table
+            elif choice == self.options["Get All Items In Table"]:
                 service.get_items_in_table()
             
             # Get Item
