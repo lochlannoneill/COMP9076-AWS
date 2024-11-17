@@ -94,3 +94,14 @@ Upload Object:
 
 Download Object:  
 ![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/s3/object_download.png)
+
+### AWS Menu - CloudWatch Monitoring: 
+
+Get Metric Statistics:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/cw/metrics_get.png)
+
+Set Alarm:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/cw/alarm_set.png)
+
+Delete Alarm:  
+![image](https://github.com/lochlannoneill/COMP9076-CloudAutomationAndOrchestration-AWS/blob/main/screenshots/cw/alarm_delete.png)
