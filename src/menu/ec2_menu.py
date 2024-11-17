@@ -23,8 +23,8 @@ class EC2Menu:
             self._display()
             choice = read_range_integer("Select from menu: ", 1, len(self.options))
 
-            # List All Instances
-            if choice == self.options["List All Instances"]:
+            # List Instances
+            if choice == self.options["List Instances"]:
                 service.list_instances()
             
             # Start Instance
