@@ -30,12 +30,12 @@ class CWController:
                     )
 
                     datapoints = response.get('Datapoints', [])
-                    if datapoints:
+                    if not datapoints:
+                        print(f"\t{metric:<24s}No data available")
+                    else:
                         # Calculate the average from the data points over the 20 minutes
                         average = sum([dp['Average'] for dp in datapoints]) / len(datapoints)
                         print(f"\t{metric:<24s}{average:.2f}")
-                    else:
-                        print(f"\t{metric:<24s}No data available")
                         
             except Exception as e:
                 print(f"Error getting metric statistics: {e}")

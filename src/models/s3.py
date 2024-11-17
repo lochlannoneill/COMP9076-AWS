@@ -47,12 +47,12 @@ class S3Controller:
                 # Confirm deletion of all objects
                 confirm = input(f"\nDelete all objects in '{bucket_name}' (yes/no): ")
                 
-                # YES
-                if confirm.lower() != 'yes':
+                # NO
+                if confirm.lower() == 'no':
                     print(f"'{bucket_name}' was not deleted")
                     return
                 
-                # NO
+                # YES
                 for obj in objects:
                     print(f"\tDeleting '{obj.key}'")
                     obj.delete()
@@ -74,12 +74,12 @@ class S3Controller:
             objects = list(bucket.objects.all())
             
             # Display objects
-            if objects:
+            if not objects:
+                print(f"No objects found in bucket '{bucket_name}'.")
+            else:
                 print(f"Objects in bucket '{bucket_name}':")
                 for obj in objects:
                     print(f"\t{obj.key}")
-            else:
-                print(f"No objects found in bucket '{bucket_name}'.")
                 
         except Exception as e:
             print(e)

@@ -22,26 +22,26 @@ class EC2Controller:
                 "Region": instance.placement['AvailabilityZone'],
                 "Launch Time": instance.launch_time.strftime("%Y-%m-%d %H:%M:%S")
             }
-            if instance.state['Name'] == 'running':
-                running_instances.append(instance_info)
-            else:
+            if not instance.state['Name'] == 'running':
                 stopped_instances.append(instance_info)
+            else:
+                running_instances.append(instance_info)
 
         # Display running instances
         print("\nRunning Instances:")
-        if running_instances:
+        if not running_instances:
+            print("No running instances detected.")
+        else:
             for instance in running_instances:
                 print(instance)
-        else:
-            print("No running instances detected.")
 
         # Display stopped instances
         print("\nStopped Instances:")
-        if stopped_instances:
+        if not stopped_instances:
+            print("No stopped instances detected.")
+        else:
             for instance in stopped_instances:
                 print(instance)
-        else:
-            print("No stopped instances detected.")
 
     def start_instance(self):
         """Start a specified EC2 instance."""
@@ -88,6 +88,11 @@ class EC2Controller:
         try:
             instance = self.ec2_resource.Instance(instance_id)
             instance.terminate()
+            
+            print(f"Stopping '{instance_id}' ...")
+            waiter = self.ec2_client.get_waiter('instance_terminated')
+            waiter.wait(InstanceIds=[instance_id])
+            
             print(f"Deleted '{instance_id}'")
         except Exception as e:
             print(e)
@@ -103,7 +108,7 @@ class EC2Controller:
             ])
             
             # Display images
-            print(f"\nAMIs of '{instance_id}':")
+            print(f"AMIs of '{instance_id}':")
             for image in images:
                 print(f"\t{image}")
         

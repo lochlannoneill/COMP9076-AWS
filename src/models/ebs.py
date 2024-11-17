@@ -44,19 +44,19 @@ class EBSController:
 
         # Display In-Use Volumes
         print("\nIn-Use Volumes:")
-        if in_use_volumes:
+        if not in_use_volumes:
+            print("No in-use volumes detected.")
+        else:
             for volume in in_use_volumes:
                 print(volume)
-        else:
-            print("No in-use volumes detected.")
 
         # Display Available Volumes
         print("\nAvailable Volumes:")
-        if available_volumes:
+        if not available_volumes:
+            print("No available volumes detected.")
+        else:
             for volume in available_volumes:
                 print(volume)
-        else:
-            print("No available volumes detected.")
             
     def create_volume(self):
         """Create a new EBS volume."""
@@ -149,11 +149,11 @@ class EBSController:
         
         # Display snapshots
         print("\nSnapshots:")
-        if snapshots:
+        if not snapshots:
+            print("No snapshots found.")
+        else:
             for snapshot in snapshots:
                 print(snapshot)
-        else:
-            print("No snapshots found.")
    
     def create_snapshot(self):
         """Create a snapshot of a volume."""
