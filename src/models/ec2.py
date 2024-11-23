@@ -7,6 +7,7 @@ class EC2Controller:
         self.resource = resource
         self.client = resource.meta.client
 
+    # COMPLETED
     def list_instances(self):
         """List all EC2 instances, grouped by running and stopped."""
         running_instances = []
@@ -43,6 +44,7 @@ class EC2Controller:
             for instance in stopped_instances:
                 print(instance)
 
+    # COMPLETED
     def start_instance(self):
         """Start a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to start: ")
@@ -61,6 +63,7 @@ class EC2Controller:
         except Exception as e:
             print(e)
 
+    # COMPLETED
     def stop_instance(self):
         """Stop a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to stop: ")
@@ -79,6 +82,7 @@ class EC2Controller:
         except Exception as e:
             print(e)
 
+    # COMPLETED
     def delete_instance(self):
         """Delete a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to delete: ")
@@ -97,6 +101,7 @@ class EC2Controller:
         except Exception as e:
             print(e)
 
+    # COMPLETED
     def list_amis_of_instance(self):
         """List all AMIs of a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to list associated AMIs: ")
@@ -118,6 +123,7 @@ class EC2Controller:
         except Exception as e:
             print(e)
 
+    # COMPLETED
     def create_ami(self):
         """Create an AMI from a specified EC2 instance."""
         instance_id = read_nonempty_string("\nEnter Instance ID to create AMI: ")
@@ -145,6 +151,7 @@ class EC2Controller:
         except Exception as e:
             print(e)
 
+    # COMPLETED
     def delete_ami(self):
         """Delete a specified AMI."""
         ami_id = read_nonempty_string("\nEnter AMI ID to delete: ")

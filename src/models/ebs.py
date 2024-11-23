@@ -7,6 +7,7 @@ class EBSController:
         self.resource = resource
         self.client = resource.meta.client
 
+    # COMPLETED
     def list_volumes(self):
         """List all EBS volumes."""
         try:
@@ -58,7 +59,8 @@ class EBSController:
         else:
             for volume in available_volumes:
                 print(volume)
-            
+
+    # COMPLETED   
     def create_volume(self):
         """Create a new EBS volume."""
         size = read_nonnegative_integer("\nEnter size (GiB) of volume to create: ")
@@ -84,6 +86,7 @@ class EBSController:
         except botocore.exceptions.ClientError as e:
             print(e)
 
+    # COMPLETED
     def attach_volume(self):
         """Attach a volume to an EC2 instance."""
         volume_id = read_nonempty_string("\nEnter Volume ID to attach: ")
@@ -107,6 +110,7 @@ class EBSController:
         except botocore.exceptions.ClientError as e:
             print(e)
 
+    # COMPLETED
     def detach_volume(self):
         """Detach a volume from an EC2 instance."""
         volume_id = read_nonempty_string("\nEnter Volume ID to detach: ")
@@ -119,6 +123,7 @@ class EBSController:
         except self.resource.meta.client.exceptions.ClientError as e:
             print(e)
 
+    # COMPLETED
     def modify_volume(self):
         """Modify a volume's size."""
         volume_id = read_nonempty_string("\nEnter Volume ID to modify: ")
@@ -135,6 +140,7 @@ class EBSController:
         except botocore.exceptions.ClientError as e:
             print(f"Error: {e}")
 
+    # COMPLETED
     def delete_volume(self):
         """Delete a volume."""
         volume_id = read_nonempty_string("\nEnter Volume ID to delete: ")
@@ -147,6 +153,7 @@ class EBSController:
         except self.resource.meta.client.exceptions.ClientError as e:
             print(e)
 
+    # COMPLETED
     def list_snapshots(self):
         """List all snapshots."""
         snapshots = self.resource.snapshots.filter(OwnerIds=['self'])
@@ -159,6 +166,7 @@ class EBSController:
             for snapshot in snapshots:
                 print(snapshot)
    
+    # COMPLETED
     def create_snapshot(self):
         """Create a snapshot of a volume."""
         volume_id = read_nonempty_string("\nEnter available Volume ID to snapshot: ")
@@ -172,6 +180,7 @@ class EBSController:
         except self.resource.meta.client.exceptions.ClientError as e:
             print(e)
 
+    # COMPLETED
     def delete_snapshot(self):
         """Delete a snapshot."""
         snapshot_id = read_nonempty_string("\nEnter Snapshot ID to delete: ")
@@ -184,6 +193,7 @@ class EBSController:
         except self.resource.meta.client.exceptions.ClientError as e:
             print(e)
 
+    # COMPLETED
     def create_volume_from_snapshot(self):
         """Create a volume from a snapshot."""
         snapshot_id = read_nonempty_string("\nEnter Snapshot ID to create volume: ")

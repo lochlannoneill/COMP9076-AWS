@@ -6,6 +6,7 @@ class Resource:
         self.key_id = user_credentials["access_key"]
         self.secret_key = user_credentials["secret_key"]
 
+    # COMPLETED
     def get_ec2_resource(self):
         # Create and return a Resource for interacting with EC2 instances
         try:
@@ -18,6 +19,7 @@ class Resource:
             print(e)
             return None
 
+    # COMPLETED
     def get_s3_resource(self):
         # Create and return a Resource for interacting with S3
         try:
@@ -30,6 +32,7 @@ class Resource:
             print(e)
             return None
 
+    # COMPLETED
     def get_cw_client(self):  # TODO - change to resource
         # Create and return a Client for interacting with CloudWatch
         try:
@@ -42,6 +45,7 @@ class Resource:
             print(e)
             return None
 
+    # COMPLETED
     def get_dynamodb_client(self):
         """Create and return a DynamoDB client."""
         try:

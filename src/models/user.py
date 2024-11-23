@@ -7,6 +7,7 @@ class UserManager:
         self.line_tabcount = 4  # Number of fields in each line in passwords.txt
         self.users = self.load()
 
+    # COMPLETED
     def load(self):
         """Load existing users from the passwords.txt file."""
         users = {}
@@ -33,6 +34,7 @@ class UserManager:
 
         return users
 
+    # COMPLETED
     def login(self):
         """Authenticate an existing user."""
         while True:
@@ -45,6 +47,7 @@ class UserManager:
                 return self.users[username]
             print("Invalid username or password. Please try again.")
 
+    # COMPLETED
     def register(self):
         """Register a new user and add them to the passwords.txt file."""
         username = read_nonempty_string("\nEnter a new username: ")

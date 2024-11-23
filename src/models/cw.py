@@ -40,6 +40,7 @@ class CWController:
             except Exception as e:
                 print(f"Error getting metric statistics: {e}")
 
+    # COMPLETED
     def list_alarms(self):
         try:
             alarms = self.client.describe_alarms()

@@ -7,6 +7,7 @@ class S3Controller:
         """Initialize with a boto3 resource session."""
         self.s3_resource = resource
 
+    # COMPLETED
     def list_buckets(self):
         """List all S3 buckets."""
         buckets = self.s3_resource.buckets.all()
@@ -29,6 +30,7 @@ class S3Controller:
             for bucket in bucket_info:
                 print(bucket)
 
+    # COMPLETED
     def delete_bucket(self):
         """Delete a bucket after validation."""
         bucket_name = read_nonempty_string("\nEnter bucket name to delete: ")
@@ -64,6 +66,7 @@ class S3Controller:
         except Exception as e:
             print(f"Unexpected error: {e}")
 
+    # COMPLETED
     def list_objects(self):
         """List all objects in a specified bucket."""
         bucket_name = read_nonempty_string("\nEnter bucket name to list objects: ")
@@ -84,6 +87,7 @@ class S3Controller:
         except Exception as e:
             print(e)
 
+    # COMPLETED
     def upload_object(self):
         """Upload a file to a specified bucket."""
         bucket_name = read_nonempty_string("\nEnter bucket name: ")
@@ -103,6 +107,7 @@ class S3Controller:
         except Exception as e:
             print(f"An error occurred: {e}")
 
+    # COMPLETED
     def download_object(self):
         """Download a file from a specified bucket to the 'Downloads' folder."""
         bucket_name = read_nonempty_string("\nEnter bucket name to download object: ")
@@ -137,7 +142,8 @@ class S3Controller:
 
         except Exception as e:
             print(f"Error: {e}")
-            
+       
+    # COMPLETED     
     def delete_object(self):
         """Delete an object from a specified bucket."""
         bucket_name = read_nonempty_string("\nEnter bucket name to delete object: ")
