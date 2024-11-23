@@ -18,6 +18,7 @@ class CWController:
 
             print(f"Average metrics over {minutes} minutes for '{instance_id}':")
             try:
+                # Get the metric statistics for the instance
                 for metric in metrics:
                     response = self.client.get_metric_statistics(
                         Period=300,

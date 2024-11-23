@@ -73,6 +73,7 @@ class DynamoDBController:
         """Retrieve all items from a table in DynamoDB."""
         table_name = read_nonempty_string("\nEnter table name: ")
         try:
+            # Scan the table to retrieve all items
             response = self.client.scan(
                 TableName=table_name
             )
